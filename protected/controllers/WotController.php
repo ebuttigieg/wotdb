@@ -2,7 +2,7 @@
 
 class WotController extends Controller
 {
-	public $layout='column2';
+	public $layout='column1';
 
 	/**
 	 * @var CActiveRecord the currently loaded data model instance.
@@ -15,7 +15,7 @@ class WotController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+	//		'accessControl', // perform access control for CRUD operations
 		);
 	}
 
@@ -28,7 +28,7 @@ class WotController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to access 'index' and 'view' actions.
-				'actions'=>array('index','view'),
+				'actions'=>array('index','jqgriddata'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated users to access all actions
@@ -46,84 +46,46 @@ class WotController extends Controller
 	 */
 	public function actionIndex()
 	{
-		echo WotReport::report('');
+		$this->render('index');
 	}
 
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
+	public function actionPlayers()
 	{
-		$model=new Post('search');
-		if(isset($_GET['Post']))
-			$model->attributes=$_GET['Post'];
-		$this->render('admin',array(
-			'model'=>$model,
+		$this->render('players');
+	}	
+	
+	public function actionMedals()
+	{
+		$this->render('medals');
+	}
+	
+	public function actionTanks()
+	{
+		$this->render('tanks');
+	}
+	
+	
+	public function actionJqgrid() {
+		$this->render('testjqgrid');
+	}
+	 
+	public function actionJqgriddata() {
+		$rowsCount=$_GET['rows']==0?10:$_GET['rows'];
+		$page=$_GET['page']==0?1:$_GET['page'];
+		$dataProvider=new CActiveDataProvider('WotPlayer', array(
+			'pagination'=>array(
+				'pageSize'=>$rowsCount,
+				'currentPage'=>$page-1,
+			),
 		));
-	}
-
-	/**
-	 * Suggests tags based on the current user input.
-	 * This is called via AJAX when the user is entering the tags input.
-	 */
-	public function actionSuggestTags()
-	{
-		if(isset($_GET['q']) && ($keyword=trim($_GET['q']))!=='')
-		{
-			$tags=Tag::model()->suggestTags($keyword);
-			if($tags!==array())
-				echo implode("\n",$tags);
+		$responce->page = $page;
+		$responce->records = $dataProvider->getTotalItemCount();
+		$responce->total = ceil($responce->records / $rowsCount);
+		$rows = $dataProvider->getData();
+		foreach ($rows as $i=>$row) {
+			$responce->rows[$i]['id']=$row->getPrimaryKey();
+			$responce->rows[$i]['cell']=array($row->player_id,$row->player_name);
 		}
-	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 */
-	public function loadModel()
-	{
-		if($this->_model===null)
-		{
-			if(isset($_GET['id']))
-			{
-				if(Yii::app()->user->isGuest)
-					$condition='status='.Post::STATUS_PUBLISHED.' OR status='.Post::STATUS_ARCHIVED;
-				else
-					$condition='';
-				$this->_model=Post::model()->findByPk($_GET['id'], $condition);
-			}
-			if($this->_model===null)
-				throw new CHttpException(404,'The requested page does not exist.');
-		}
-		return $this->_model;
-	}
-
-	/**
-	 * Creates a new comment.
-	 * This method attempts to create a new comment based on the user input.
-	 * If the comment is successfully created, the browser will be redirected
-	 * to show the created comment.
-	 * @param Post the post that the new comment belongs to
-	 * @return Comment the comment instance
-	 */
-	protected function newComment($post)
-	{
-		$comment=new Comment;
-		if(isset($_POST['ajax']) && $_POST['ajax']==='comment-form')
-		{
-			echo CActiveForm::validate($comment);
-			Yii::app()->end();
-		}
-		if(isset($_POST['Comment']))
-		{
-			$comment->attributes=$_POST['Comment'];
-			if($post->addComment($comment))
-			{
-				if($comment->status==Comment::STATUS_PENDING)
-					Yii::app()->user->setFlash('commentSubmitted','Thank you for your comment. Your comment will be posted once it is approved.');
-				$this->refresh();
-			}
-		}
-		return $comment;
+		echo json_encode($responce);
 	}
 }
