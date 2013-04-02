@@ -8,7 +8,7 @@
 
 date_default_timezone_set('Europe/Moscow');
 
-return array(
+return CMap::mergeArray(array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Yii Blog Demo',
 
@@ -45,4 +45,4 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>require(dirname(__FILE__).'/params.php'),
-);
+),require(dirname(__FILE__).'/db.php'));
