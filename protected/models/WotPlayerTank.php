@@ -39,6 +39,7 @@ class WotPlayerTank extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('battle_count, win_count, spotted, damageDealt, survivedBattles, frags', 'numerical', 'integerOnly'=>true),
 		);
 	}
 
