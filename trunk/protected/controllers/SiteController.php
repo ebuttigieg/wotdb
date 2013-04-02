@@ -91,4 +91,9 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+	
+	public function actionScan()
+	{
+		WotService::scanClan(10633);
+	}
 }
