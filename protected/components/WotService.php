@@ -10,7 +10,7 @@ class WotService
 	//https://gist.github.com/2724734
 
 	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
-	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.5/?source_token=WG-WoT_Assistant-1.2.2";
+	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
 
 
 	static private function doRequestJSON($url)
@@ -73,25 +73,26 @@ class WotService
 			$clan->clan_descr_html=$jsonData['data']['description_html'];
 			$clan->clan_created=date('Y-m-d', $jsonData['data']['created_at']);
 			$clan->clan_ico=$jsonData['data']['emblems']['large'];
+			$clan->clan_motto=$jsonData['data']['motto'];
 			$clan->save(false);
 
 			$members=array();
 			foreach ($jsonData['data']['members'] as $member) {
 				$members[$member['account_id']]=$member;
 			}
-			
+
 			$tran=Yii::app()->db->beginTransaction();
-			
+
 			$clanPlayers=$clan->playersRec;
 			foreach ($clanPlayers as $playerId=>$clanPlayerRec){
 				if(!isset($members[$playerId]))// Покинул клан
 				{
 					$clanPlayerRec->escape_date=new CDbExpression('now()');
-					$playerClan->save(false);
+					$clanPlayerRec->save(false);
 					continue;
 				}
 				if($clanPlayerRec->clan_role_id!=$members[$playerId]['role']){
-					$clanPlayerRec->clan_role=$players[$playerId]['role'];
+					$clanPlayerRec->clan_role=$members[$playerId]['role'];
 					$clanPlayerRec->save(false);
 				}
 			}
@@ -113,7 +114,7 @@ class WotService
 					$playerClan->save(false);
 				}
 			}
-			
+
 			$tran->commit();
 		}
 		else
@@ -125,33 +126,26 @@ class WotService
 		$jsonString=file_get_contents(str_replace('{playerId}', $player->player_id, self::$wotApiPlayerUrl));
 		$jsonData=json_decode($jsonString,true);
 		if($jsonData['status']=='ok'){
-			
+
 			$tran=Yii::app()->db->beginTransaction();
-			
-			foreach ($jsonData['data']['achievements'] as $achievement=>$value){
-				$player->$achievement=$value;
-			}
-			foreach ($jsonData['data']['ratings'] as $rate=>$value){
-				$player->$rate=$value['value'];
-			}
+
+			$player->achievements=serialize($jsonData['data']['achievements']);
+			$player->attributes=$jsonData['data']['battles'];
+			$player->attributes=$jsonData['data']['summary'];
+			$player->attributes=$jsonData['data']['experience'];
+			$player->updated_at=date('Y-m-d H:i',$jsonData['data']['updated_at']);
+			$player->created_at=date('Y-m-d H:i',$jsonData['data']['created_at']);
+			$player->player_name=$jsonData['data']['name'];
+
 			foreach ($jsonData['data']['vehicles'] as $vehicle){
 				$tank=WotTank::getTank($vehicle['name'],$vehicle['localized_name'],$vehicle['level'],$vehicle['nation'],$vehicle['class'],$vehicle['image_url']);
-				unset($vehicle['name']);
-				unset($vehicle['localized_name']);
-				unset($vehicle['level']);
-				unset($vehicle['nation']);
-				unset($vehicle['class']);
-				unset($vehicle['image_url']);
 				$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $tank->tank_id);
-				foreach ($vehicle as $param=>$value){
-					$playerTank->$param=$value;
-				}
+				$playerTank->attributes=$vehicle;
+				$playerTank->updated_at=$player->updated_at;
 				$playerTank->save(false);
 			}
-			$player->prev_updated_at=$player->updated_at;
-			$player->updated_at=date('Y-m-d H:i',$jsonData['data']['updated_at']);
 			$player->save(false);
-			
+
 			$tran->commit();
 		}
 		else
