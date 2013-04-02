@@ -53,7 +53,7 @@ class WotPlayer extends CActiveRecord
 	}
 
 	
-	public function calcRating()
+	public static function calcRating()
 	{
 		$sql=<<<SQL
 update wot_player wp
@@ -80,7 +80,7 @@ JOIN (SELECT pt.player_id
        log(1.732, wp.capture_points / wp.battles_count + 1) * 150 +
        wp.dropped_capture_points / wp.battles_count * 150
 SQL;
-		$this->getDbConnection()->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
+		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
 	}
 	
 }
