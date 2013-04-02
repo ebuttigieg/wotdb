@@ -9,7 +9,7 @@
 $config=require(dirname(__FILE__).'/common.php');
 
 $config=CMap::mergeArray($config,array(
-	'name'=>'Пираты',
+	'name'=>'[THE-P] Pirates',
 		// preloading 'log' component
 	'preload'=>array('log'),
 	
@@ -33,6 +33,7 @@ $config=CMap::mergeArray($config,array(
 		),
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName'=>false,
 			'rules'=>array(
 				'post/<id:\d+>/<title:.*?>'=>'post/view',
 				'posts/<tag:.*?>'=>'post/index',
@@ -47,11 +48,11 @@ $config=CMap::mergeArray($config,array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				
+				/*
 				 array(
 				 		'class'=>'CWebLogRoute',
 				 ),
-
+*/
 			),
 		),
 	),
