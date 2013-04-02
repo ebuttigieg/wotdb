@@ -165,7 +165,7 @@ class WotService
 		foreach ($clan->players as $player){
 			self::updatePlayerInfo($player);
 		}
-
+		WotPlayer::calcRating();
 	}
 
 	static public function updateClanPlayers($clan)
