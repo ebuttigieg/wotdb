@@ -24,10 +24,10 @@ return array(
 	// application components
 	'components'=>array(
 		 'db'=>array(
-	 		'connectionString' => 'mysql:host=localhost:3307;dbname=wotdb',
+	 		'connectionString' => 'mysql:host=localhost;dbname=DBNAME',
 	 		'emulatePrepare' => true,
-	 		'username' => 'wotdb',
-	 		'password' => 'HNzcRfKN7Fcwfn4w',
+	 		'username' => 'USERNAME',
+	 		'password' => 'PASSWORD',
 	 		'charset' => 'utf8',
 	 		'tablePrefix' => 'tbl_',
 		 ),
