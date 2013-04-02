@@ -44,3 +44,7 @@ $this->breadcrumbs=array(
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+<h2>Нажмите на иконку для входа через один из сайтов:</h2>
+<?php
+	$this->widget('ext.eauth.EAuthWidget', array('action' => 'site/login'));
+?>
