@@ -4,7 +4,7 @@ class CronCommand extends CConsoleCommand
 {
 	public function actionScan()
 	{
-		WotService::scanClan('10633');
+		WotService::scanClan(WotClan::$clanId);
 	}
 
 	public function actionIndex()
