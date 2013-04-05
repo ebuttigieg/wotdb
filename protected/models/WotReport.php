@@ -146,4 +146,31 @@ SQL;
 	}
 
 
+	public static function newMembers()
+	{
+		$sql=<<<SQL
+select wp.player_id, wp.player_name, wpc.entry_date
+  from wot_player_clan wpc
+  join wot_player wp on wp.player_id=wpc.player_id
+  where clan_id=:clan and wpc.escape_date is null and wpc.entry_date > date_add(now(), interval -1 week)
+  order by wpc.entry_date desc
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+
+
+	public static function escapedMembers()
+	{
+		$sql=<<<SQL
+select wp.player_id, wp.player_name, wpc.escape_date, datediff(wpc.escape_date,wpc.entry_date) days
+  from wot_player_clan wpc
+  join wot_player wp on wp.player_id=wpc.player_id
+  where clan_id=:clan and wpc.escape_date > date_add(now(), interval -1 week)
+  order by wpc.escape_date desc, days desc
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+
 }
