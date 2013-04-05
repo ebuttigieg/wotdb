@@ -6,23 +6,38 @@
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
+
 $config=require(dirname(__FILE__).'/common.php');
 
 $config=CMap::mergeArray($config,array(
 	'name'=>'[THE-P] Pirates',
 		// preloading 'log' component
 	'preload'=>array('log'),
-	
+
+	'theme'=>'bootstrap',
+
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
 	),
-	
+
 	'defaultController'=>'wot',
-	
+
+	'modules'=>array(
+		'gii'=>array(
+			'generatorPaths'=>array(
+				'bootstrap.gii',
+			),
+		),
+	),
+
 	// application components
 	'components'=>array(
+		'bootstrap'=>array(
+			'class'=>'bootstrap.components.Bootstrap',
+		),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
