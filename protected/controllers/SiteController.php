@@ -62,6 +62,34 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
+
+		$service = Yii::app()->request->getQuery('service');
+		if (isset($service)) {
+			$authIdentity = Yii::app()->eauth->getIdentity($service);
+			$authIdentity->redirectUrl = Yii::app()->user->returnUrl;
+			$authIdentity->cancelUrl = $this->createAbsoluteUrl('site/login');
+
+			if ($authIdentity->authenticate()) {
+				$identity = new ServiceUserIdentity($authIdentity);
+
+				// Успешный вход
+				if ($identity->authenticate()) {
+					Yii::app()->user->login($identity);
+
+					// Специальный редирект с закрытием popup окна
+					$authIdentity->redirect();
+				}
+				else {
+					// Закрываем popup окно и перенаправляем на cancelUrl
+					$authIdentity->cancel();
+				}
+			}
+
+			// Что-то пошло не так, перенаправляем на страницу входа
+			$this->redirect(array('site/login'));
+		}
+
+
 		$model=new LoginForm;
 
 		// if it is ajax validation request
@@ -90,10 +118,5 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
-	}
-	
-	public function actionScan()
-	{
-		WotService::scanClan(10633);
 	}
 }
