@@ -58,32 +58,14 @@ SELECT p.player_name
      , p.wins
      , p.wins / p.battles_count * 100 AS wp
      , p.max_xp
-     , datediff(now(), ifnull(l.updated_at, p.updated_at)) updated_at
+     , datediff(now(), p.updated_at) updated_at
      , p.player_id
-     ,  p.damage_dealt/p.battles_count * (10 / (a.midl/p.battles_count+ 2)) * (0.23 + 2*a.midl/p.battles_count/ 100)+
-        250 * p.frags / p.battles_count +
-        p.spotted / p.battles_count * 150+
-      log(1.732, p.capture_points / p.battles_count + 1) * 150+
-      p.dropped_capture_points / p.battles_count * 150 effect
-     , (1240-1040/power(LEAST(a.midl/p.battles_count,6),0.164))*p.frags/p.battles_count+
-      p.damage_dealt/p.battles_count*530/(184*exp(0.24*a.midl/p.battles_count)+130)+
-      p.spotted/p.battles_count*125+
-      least(p.dropped_capture_points/p.battles_count,2.2)*100+
-      ((185/(0.17+exp((p.wins/p.battles_count*100-35)*-0.134)))-500)*0.45+
-      (6-least(a.midl/p.battles_count,6))*-60 wn6
-FROM wot_player p
-JOIN wot_player_clan pc ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
-LEFT JOIN (SELECT pth.player_id
-                , max(pth.updated_at) AS updated_at
-           FROM wot_player_tank_history pth
-           GROUP BY pth.player_id) l ON l.player_id = p.player_id
-JOIN (SELECT pt.player_id
-           , sum(t.tank_level * pt.battle_count) midl
-      FROM
-        wot_player_tank pt
-      JOIN wot_tank t ON t.tank_id = pt.tank_id
-      GROUP BY pt.player_id
-  ) a ON a.player_id = p.player_id
+     , p.effect
+     , p.wn6
+FROM
+  wot_player p
+JOIN wot_player_clan pc
+ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
