@@ -2,7 +2,7 @@
 
 class WotController extends Controller
 {
-	public $layout='column1';
+	public $layout='grid';
 
 	/**
 	 * @var CActiveRecord the currently loaded data model instance.
