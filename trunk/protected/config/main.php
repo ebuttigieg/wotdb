@@ -55,6 +55,18 @@ $config=CMap::mergeArray($config,array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
+		'loid' => array(
+			'class' => 'ext.lightopenid.loid',
+		),
+		'eauth' => array(
+			'class' => 'ext.eauth.EAuth',
+			'popup' => true, // Use the popup window instead of redirecting.
+			'services' => array( // You can change the providers and their classes.
+				'wot' => array(
+					'class' => 'ext.eauth.services.WotOpenIDService',
+				),
+			),
+		),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
