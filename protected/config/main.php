@@ -15,7 +15,7 @@ $config=CMap::mergeArray($config,array(
 		// preloading 'log' component
 	'preload'=>array('log'),
 
-	'theme'=>'bootstrap',
+//	'theme'=>'bootstrap',
 
 	// autoloading model and component classes
 	'import'=>array(
