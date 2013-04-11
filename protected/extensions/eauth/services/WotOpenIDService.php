@@ -32,12 +32,5 @@ class WotOpenIDService extends EOpenIDService {
 		$this->attributes['url']=$this->attributes['id'];
 		if(preg_match('/https:\/\/ru.wargaming.net\/id\/(\d+)-.*?\//', $this->attributes['id'],$matches))
 			$this->attributes['id']=$matches[1];
-		echo '<pre>';
-		var_dump($this);
-//		var_dump($this);
-//		$this->attributes['name']
-//		$this->attributes['name']
-		die();
-//		$this->attributes['fullname'] = $this->attributes['name'].' '.$this->attributes['lastname'];
 	}
 }
