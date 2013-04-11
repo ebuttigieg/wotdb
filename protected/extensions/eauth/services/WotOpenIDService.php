@@ -17,13 +17,7 @@ class WotOpenIDService extends EOpenIDService {
 
 	protected $url = 'https://ru.wargaming.net/id';
 	protected $requiredAttributes = array(
-//		'name' => array('firstname', 'namePerson/first'),
 		'name' => array( 'nickname', 'namePerson/friendly'),
-//		'lastname' => array('lastname', 'namePerson/last'),
-//		'email' => array('email', 'contact/email'),
-//		'language' => array('language', 'pref/language'),
-
-
 	);
 
 
