@@ -45,3 +45,7 @@ $this->breadcrumbs=array(
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<?php
+	$this->widget('ext.eauth.EAuthWidget', array('action' => 'site/login'));
+?>
