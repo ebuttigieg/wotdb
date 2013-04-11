@@ -1,5 +1,23 @@
 <?php
- 
+
+$this->beginWidget('bootstrap.widgets.TbCollapse');
+
+$this->widget('bootstrap.widgets.TbGridView',array(
+		'type'=>array('condensed','striped','bordered'),
+		'dataProvider'=>new CArrayDataProvider(WotReport::newMembers(),array(
+				'keyField'=>'player_id',
+		)),
+		'filter'=>$model,
+		'columns'=>array(
+				'player_name',
+				'player_id',
+		),
+		'htmlOptions'=>array('class'=>'span4'),
+		'template'=>"{items}\n{pager}",
+));
+
+$this->endWidget();
+/*
 $this->widget('ext.jqgrid.JQGrid', 
 	array('options'=>array(
 		'url'=> $this->createUrl('wot/jqgriddata'),
@@ -33,3 +51,4 @@ $this->widget('ext.jqgrid.JQGrid',
 		//	'groupSummary'=>array(false, false),
 		),
 )));
+*/
