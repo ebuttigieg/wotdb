@@ -131,11 +131,18 @@ SQL;
 	public static function newMembers()
 	{
 		$sql=<<<SQL
-select wp.player_id, wp.player_name, wpc.entry_date
-  from wot_player_clan wpc
-  join wot_player wp on wp.player_id=wpc.player_id
-  where clan_id=:clan and wpc.escape_date is null and wpc.entry_date > date_add(now(), interval -1 week)
-  order by wpc.entry_date desc
+SELECT
+  wp.player_id,
+  wp.player_name,
+  wpc.entry_date,
+  wcr.clan_role_name
+FROM wot_player_clan wpc
+  JOIN wot_player wp ON wp.player_id = wpc.player_id
+  JOIN wot_clan_role wcr ON wcr.clan_role_id = wpc.clan_role_id
+WHERE clan_id = :clan
+AND wpc.escape_date IS NULL
+AND wpc.entry_date > DATE_ADD(NOW(), INTERVAL - 1 WEEK)
+ORDER BY wpc.entry_date DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;

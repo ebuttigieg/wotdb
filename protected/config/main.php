@@ -82,6 +82,18 @@ $config=CMap::mergeArray($config,array(
 */
 			),
 		),
+		'widgetFactory' => array(
+			'class'=>'CWidgetFactory',
+			'widgets' => array(
+				'CBreadcrumbs' => array(
+					'tagName'=>'ul',
+					'activeLinkTemplate'=>'<li><a href="{url}">{label}</a></li>',
+					'inactiveLinkTemplate'=>'<li><span>{label}</span></li>',
+					'separator'=>'<span class="divider">/</span>',
+					'htmlOptions'=>array('class'=>'breadcrumb'),
+				),
+			),
+		),
 	),
 ));
 
