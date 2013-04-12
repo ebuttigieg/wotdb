@@ -7,7 +7,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 		'dataProvider'=>new CArrayDataProvider(WotReport::newMembers(),array(
 				'keyField'=>'player_id',
 		)),
-		'filter'=>$model,
+	//	'filter'=>$model,
 		'columns'=>array(
 				'player_name',
 				'player_id',
@@ -18,7 +18,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 
 $this->endWidget();
 /*
-$this->widget('ext.jqgrid.JQGrid', 
+$this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'url'=> $this->createUrl('wot/jqgriddata'),
 		'datatype'=>'local',
