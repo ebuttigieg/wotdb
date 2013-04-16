@@ -271,7 +271,7 @@
  				// not just as 'controller' even if default acion is used.
  				array('label'=>'Home', 'url'=>array('site/index')),
  				// 'Products' menu item will be selected no matter which tag parameter value is since it's not specified.
- 				array('label'=>'Products<span class="arrow"></span>', 'url'=>'javascript:;', 'template'=>'{menu}<span class="arrow"></span>' , 'items'=>array(
+ 				array('label'=>'Products', 'url'=>'javascript:;', 'items'=>array(
  					array('label'=>'New Arrivals', 'url'=>array('product/new', 'tag'=>'new')),
  					array('label'=>'Most Popular', 'url'=>array('product/index', 'tag'=>'popular')),
  				)),
