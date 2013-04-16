@@ -82,6 +82,31 @@ $config=CMap::mergeArray($config,array(
 */
 			),
 		),
+		'clientScript' => array(
+		//	'scriptMap' => array(
+		//		'jquery-ui.css' => '/css/ff/jquery-ui-1.9.1.custom.min.css',
+		//		'jquery-ui.min.js' => '/css/ff/jquery-ui-1.9.2.custom.min.js',
+		//		'jquery-ui-i18n.min.js' => '/css/ff/jquery-ui-i18n.min.js',
+		//	),
+			'packages' => array(
+				'font-awesome'=>array(
+						'basePath'=>'ext.conquer.font-awesome.assets',
+					//	'js'=>array('modernizr.custom.js'),
+						'css'=>array('css/font-awesome.min.css'),
+					//	'depends'=>array(),
+				),
+				'scrollTo'=>array(
+						'basePath'=>'ext.ScrollTo',
+						'js'=>array('jquery.scrollTo-min.js'),
+						'depends'=>array('jquery'),
+				),
+				'extJs'=>array(
+						'basePath'=>'ext.ExtJs.assets',
+						'js'=>array(YII_DEBUG?'ext-all-debug.js':'ext-all.js'),
+						'css'=>array('resources/css/ext-all.css'),
+				),
+			),
+		),
 		'widgetFactory' => array(
 			'class'=>'CWidgetFactory',
 			'widgets' => array(
@@ -89,8 +114,12 @@ $config=CMap::mergeArray($config,array(
 					'tagName'=>'ul',
 					'activeLinkTemplate'=>'<li><a href="{url}">{label}</a></li>',
 					'inactiveLinkTemplate'=>'<li><span>{label}</span></li>',
-					'separator'=>'<span class="divider">/</span>',
+					'separator'=>'<span class="icon-angle-right"></span>',
 					'htmlOptions'=>array('class'=>'breadcrumb'),
+				),
+				'CMenu' => array(
+					'submenuHtmlOptions'=>array('class'=>'sub'),
+				//	'linkLabelWrapper'=>'<a href="{}">{}<span class="arrow open"></span></a>'
 				),
 			),
 		),
