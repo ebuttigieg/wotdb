@@ -9,8 +9,7 @@ class Sidebar extends CMenu
 
 	public $hasSubmenuCssClass = 'has-sub';
 
-	public $linkLabelWrapper = '<a href="{}">{}<span class="arrow open"></span></a>';
-
+	public $hasSubmenulinkLabelWrapper = '<a href="{url}">{label}<span class="arrow"></span></a>';
 
 	protected function renderMenuRecursive($items)
 	{
@@ -65,8 +64,15 @@ class Sidebar extends CMenu
 	{
 		if(isset($item['url']))
 		{
-			$label=$this->linkLabelWrapper===null ? $item['label'] : '<'.$this->linkLabelWrapper.'>'.$item['label'].'</'.$this->linkLabelWrapper.'>';
-			return CHtml::link($label,$item['url'],isset($item['linkOptions']) ? $item['linkOptions'] : array());
+			if(isset($item['items']) && count($item['items']))
+			{
+				return strtr($this->hasSubmenulinkLabelWrapper,array('{label}'=>$item['label'],'{url}'=>$item['url']));
+			}
+			else
+			{
+				$label=$this->linkLabelWrapper===null ? $item['label'] : '<'.$this->linkLabelWrapper.'>'.$item['label'].'</'.$this->linkLabelWrapper.'>';
+				return CHtml::link($label,$item['url'],isset($item['linkOptions']) ? $item['linkOptions'] : array());
+			}
 		}
 		else
 			return CHtml::tag('span',isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
