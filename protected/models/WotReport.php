@@ -161,5 +161,64 @@ SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
 	}
+	
+	public static function top5effect()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, wp.effect FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  ORDER BY wp.effect DESC
+  LIMIT 5
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
 
+	public static function top5damage()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, ROUND(wp.damage_dealt/wp.battles_count,2) AS dmg FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  ORDER BY dmg DESC
+  LIMIT 5
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+	
+	public static function top5spotted()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, ROUND(wp.spotted/wp.battles_count,2) AS spotted FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  ORDER BY spotted DESC
+  LIMIT 5
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+	
+	public static function top5capture()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, ROUND(wp.capture_points/wp.battles_count,2) AS capture FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  ORDER BY capture DESC
+  LIMIT 5
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+	
+	public static function top5defense()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, ROUND(wp.dropped_capture_points/wp.battles_count,2) AS defense FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  ORDER BY defense DESC
+  LIMIT 5
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
 }
