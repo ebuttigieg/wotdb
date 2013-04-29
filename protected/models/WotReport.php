@@ -135,7 +135,8 @@ SELECT
   wp.player_id,
   wp.player_name,
   wpc.entry_date,
-  wcr.clan_role_name
+  wcr.clan_role_name,
+  DATEDIFF(NOW(),wpc.entry_date) days
 FROM wot_player_clan wpc
   JOIN wot_player wp ON wp.player_id = wpc.player_id
   JOIN wot_clan_role wcr ON wcr.clan_role_id = wpc.clan_role_id
@@ -157,6 +158,26 @@ select wp.player_id, wp.player_name, wpc.escape_date, datediff(wpc.escape_date,w
   join wot_player wp on wp.player_id=wpc.player_id
   where clan_id=:clan and wpc.escape_date > date_add(now(), interval -1 week)
   order by wpc.escape_date desc, days desc
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+	
+	public static function career()
+	{
+		$sql=<<<SQL
+SELECT
+  wp.player_name,
+  wcr.clan_role_name,
+  wcr1.clan_role_name new_role,
+  wpch.clan_history_date
+FROM wot_player_clan_history wpch
+  JOIN wot_clan_role wcr ON wcr.clan_role_id = wpch.clan_role_id
+  JOIN wot_player wp ON wp.player_id = wpch.player_id
+  JOIN wot_player_clan wpc ON wpc.clan_id = wpch.clan_id AND wpc.player_id = wp.player_id
+  JOIN wot_clan_role wcr1 ON wcr1.clan_role_id = wpc.clan_role_id
+WHERE wpch.clan_history_date>DATE_ADD(CURDATE(), INTERVAL - 1 WEEK) AND wpch.clan_id = :clan
+ORDER BY wpch.clan_history_date DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -221,4 +242,22 @@ SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
 	}
+	
+	public static function newTanks()
+	{
+		$sql=<<<SQL
+SELECT wp.player_name, wt.tank_localized_name, wt.tank_image, wt.tank_level   
+  FROM wot_player_tank_history wpth
+  JOIN wot_player_clan wpc ON wpc.player_id=wpth.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  JOIN wot_tank wt ON wt.tank_id=wpth.tank_id
+  JOIN wot_player wp ON wp.player_id=wpth.player_id
+  WHERE wpth.battle_count<40
+  GROUP BY wp.player_name, wt.tank_localized_name, wt.tank_image, wt.tank_level
+  HAVING MIN(wpth.updated_at)>DATE_ADD(CURDATE(),INTERVAL -1 DAY)
+  ORDER BY MIN(wpth.updated_at) DESC
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+	
 }
