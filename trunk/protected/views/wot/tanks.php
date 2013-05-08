@@ -1,6 +1,6 @@
 <?php
- 
-$this->widget('ext.jqgrid.JQGrid', 
+
+$this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'url'=> $this->createUrl('wot/jqgriddata'),
 		'datatype'=>'local',
@@ -29,4 +29,6 @@ $this->widget('ext.jqgrid.JQGrid',
 			'groupOrder'=>array('asc'),
 		//	'groupSummary'=>array(false, false),
 		),
-)));
+	),
+	'theme'=>'conquer',
+));

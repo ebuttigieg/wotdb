@@ -1,5 +1,7 @@
-<?php 
-$this->widget('ext.jqgrid.JQGrid', 
+<div class="row-fluid">
+	<div class="span4">
+<?php
+$this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'datatype'=>'local',
 		'data'=>WotReport::players(),
@@ -25,4 +27,9 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Игроки клана',
 		'viewrecords'=> true,
-)));
+	),
+	'theme'=>'conquer',
+));
+?>
+	</div>
+</div>
