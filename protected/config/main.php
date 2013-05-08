@@ -105,6 +105,12 @@ $config=CMap::mergeArray($config,array(
 						'js'=>array(YII_DEBUG?'ext-all-debug.js':'ext-all.js'),
 						'css'=>array('resources/css/ext-all.css'),
 				),
+				'breakpoints'=>array(
+						'basePath'=>'ext.conquer.plugins.breakpoints',
+						'js'=>array('breakpoints.js'),
+						// 'css'=>array('css/font-awesome.min.css'),
+						'depends'=>array('jquery'),
+				),
 			),
 		),
 		'widgetFactory' => array(
