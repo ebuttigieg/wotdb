@@ -5,12 +5,12 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 class JQGrid extends CJuiWidget
 {
 	private static $baseUrl;
-	
-	
-	public $scriptFile=array('jquery-ui-custom.min.js','jquery.jqGrid.min.js','i18n/grid.locale-ru.js');
+
+
+	public $scriptFile=array('jquery.jqGrid.min.js','i18n/grid.locale-ru.js');
 
 	public $cssFile=array('jquery-ui-custom.css','ui.jqgrid.css');
-	
+
 	protected function resolvePackagePath()
 	{
 		if(empty(self::$baseUrl)){
@@ -25,21 +25,21 @@ class JQGrid extends CJuiWidget
 				$this->themeUrl=self::$baseUrl.'/themes';
 		}
 	}
-	
-	
+
+
 	public function run()
 	{
 		$id=$this->getId();
-		
-		echo "<table id=\"{$id}\"></table><div id=\"{$id}_pager\"></div>"; 
-	
+
+		echo "<table id=\"{$id}\"></table><div id=\"{$id}_pager\"></div>";
+
 		$this->options['pager']="#{$id}_pager";
 		$options=CJavaScript::encode($this->options);
-	
+
 		$js = "jQuery('#{$id}').jqGrid($options);";
-	
+
 		$cs = Yii::app()->getClientScript();
 		$cs->registerScript(__CLASS__.'#'.$id, $js);
 	}
-	
+
 }
