@@ -90,7 +90,7 @@ $config=CMap::mergeArray($config,array(
 		//	),
 			'packages' => array(
 				'font-awesome'=>array(
-						'basePath'=>'ext.conquer.font-awesome.assets',
+						'basePath'=>'ext.conquer.plugins.font-awesome',
 					//	'js'=>array('modernizr.custom.js'),
 						'css'=>array('css/font-awesome.min.css'),
 					//	'depends'=>array(),
