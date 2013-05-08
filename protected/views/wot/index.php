@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 			<div class="widget-title">
 				<h4 style="white-space: nowrap;"><i class="icon-reorder"></i>Топ 5 по эффективности</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 	//	'type'=>array('condensed','striped','bordered'),
 		'itemsCssClass'=>'table table-condensed table-striped',
@@ -36,7 +36,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4><i class="icon-reorder"></i>Топ 5 по урону</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::top5damage(),array(
@@ -59,8 +59,8 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4><i class="icon-reorder"></i>Топ 5</h4>
 			</div>
-			
-			
+
+
 			<div class="widget-body">
 				<div class="tabbable portlet-tabs">
 					<ul class="nav nav-tabs">
@@ -69,7 +69,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 						<li class="active"><a href="#portlet_tab1" data-toggle="tab">По защите</a></li>
 					</ul>
 					<div class="tab-content">
-					<?php 
+					<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::top5defense(),array(
@@ -87,7 +87,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 ));
 			?>
 
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::top5capture(),array(
@@ -104,8 +104,8 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
-			
-						<?php 
+
+						<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::top5spotted(),array(
@@ -122,11 +122,11 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
-			
+
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </div>
@@ -136,7 +136,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4><i class="icon-reorder"></i>Новые игроки</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::newMembers(),array(
@@ -153,7 +153,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'template'=>"{items}",
 		'hideHeader'=>true,
 ));
-			?>	
+			?>
 		</div>
 	</div>
 	<div class="span4">
@@ -161,7 +161,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4><i class="icon-reorder"></i>Ушедшие игроки</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::escapedMembers(),array(
@@ -178,7 +178,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'template'=>"{items}",
 		'hideHeader'=>true,
 ));
-			?>				
+			?>
 		</div>
 	</div>
 	<div class="span4">
@@ -186,7 +186,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4><i class="icon-reorder"></i>Карьера</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(WotReport::career(),array(
@@ -194,14 +194,14 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		)),
 	//	'filter'=>$model,
 		'columns'=>array(
-				'player_name',
-				'clan_history_date',
-				'clan_role_name',
-				'new_role',
+				array('name'=>'player_name','header'=>'Имя'),
+				array('name'=>'clan_history_date','header'=>'Дата'),
+				array('name'=>'clan_role_name','header'=>'Был'),
+				array('name'=>'new_role','header'=>'Стал'),
 		),
 		'htmlOptions'=>array('class'=>'widget-body'),
 		'template'=>"{items}",
-		'hideHeader'=>true,
+	//	'hideHeader'=>true,
 ));
 			?>
 		</div>
@@ -215,7 +215,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<div class="widget-title">
 				<h4 style="white-space: nowrap;"><i class="icon-reorder"></i>Топ 5 по эффективности</h4>
 			</div>
-			<?php 
+			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 	//	'type'=>array('condensed','striped','bordered'),
 		'itemsCssClass'=>'table table-condensed table-striped',

@@ -5,23 +5,28 @@
 <!-- BEGIN HEAD -->
 <head>
    <meta charset="utf-8" />
-   <title>Conquer | Data Tables - Basic Tables</title>
+   <title><?php echo CHtml::encode($this->pageTitle); ?></title>
    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
    <meta content="" name="description" />
    <meta content="" name="author" />
+
+   <!-- BEGIN GLOBAL MANDATORY STYLES -->
    <link href="css/bootstrap.min.css" rel="stylesheet" />
    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" />
+
    <!--  link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" /-->
    <link href="css/style.css" rel="stylesheet" />
    <link href="css/style_responsive.css" rel="stylesheet" />
-   <link href="css/style_default.css" rel="stylesheet" id="style_color" />
+   <link href="css/themes/default.css" rel="stylesheet" id="style_color" />
+   <!-- link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" /-->
    <link href="#" rel="stylesheet" id="style_metro" />
-   <!--  link href="assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" /-->
-   <!--  link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" /-->
+   <!-- END GLOBAL MANDATORY STYLES -->
 
   <?php Yii::app()->clientScript->registerCoreScript('font-awesome'); ?>
+  <?php // Yii::app()->clientScript->registerCoreScript('uniform'); ?>
 </head>
 <!-- END HEAD -->
+
 <!-- BEGIN BODY -->
 <body class="fixed-top">
    <!-- BEGIN HEADER -->
@@ -265,7 +270,7 @@
          <!-- END RESPONSIVE QUICK SEARCH FORM -->
          <!-- BEGIN SIDEBAR MENU -->
          <?php
-		$this->widget('ext.conquer.sidebar.Sidebar', array(
+	/*	$this->widget('ext.conquer.sidebar.Sidebar', array(
  			'items'=>array(
  				// Important: you need to specify url as 'controller/action',
  				// not just as 'controller' even if default acion is used.
@@ -277,7 +282,7 @@
  				)),
  				array('label'=>'Login', 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),
  			),
- 		)); ?>
+ 		)); */ ?>
          <ul>
             <li>
                <a href="index.html">
@@ -415,9 +420,9 @@
             </div>
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
-            
-            <?php echo $content;?>   
-            
+
+            <?php echo $content;?>
+
             <!-- END PAGE CONTENT-->
          </div>
          <!-- END PAGE CONTAINER-->
