@@ -3,8 +3,10 @@ $this->pageTitle=Yii::app()->name . ' - Error';
 $this->breadcrumbs=array(
 	'Error',
 );
-?>
 
+Yii::app()->clientScript->registerCssFile('/css/pages/error.css');
+
+?>
 <div class="span12">
 <?php if(strncmp($code,'4',1)==0): ?>
 	<div class="row-fluid page-404">
