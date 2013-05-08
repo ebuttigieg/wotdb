@@ -51,24 +51,25 @@ class WotController extends Controller
 
 	public function actionPlayers()
 	{
+	//	$this->layout='column1';
 		$this->render('players');
-	}	
-	
+	}
+
 	public function actionMedals()
 	{
 		$this->render('medals');
 	}
-	
+
 	public function actionTanks()
 	{
 		$this->render('tanks');
 	}
-	
-	
+
+
 	public function actionJqgrid() {
 		$this->render('testjqgrid');
 	}
-	 
+
 	public function actionJqgriddata() {
 		$rowsCount=$_GET['rows']==0?10:$_GET['rows'];
 		$page=$_GET['page']==0?1:$_GET['page'];
