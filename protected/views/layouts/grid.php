@@ -11,13 +11,14 @@
    <meta content="" name="author" />
 
    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-   <link href="css/bootstrap.min.css" rel="stylesheet" />
-   <link href="css/bootstrap-responsive.min.css" rel="stylesheet" />
+   <link href="/css/bootstrap.min.css" rel="stylesheet" />
+   <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
 
    <!--  link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" /-->
-   <link href="css/style.css" rel="stylesheet" />
-   <link href="css/style_responsive.css" rel="stylesheet" />
-   <link href="css/themes/default.css" rel="stylesheet" id="style_color" />
+   <link href="/css/style.css" rel="stylesheet" />
+   <link href="/css/style_responsive.css" rel="stylesheet" />
+   <link href="/css/themes/default.css" rel="stylesheet" id="style_color" />
+   <link href="/css/jqgrid-bs.css" rel="stylesheet" />
    <!-- link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" /-->
    <link href="#" rel="stylesheet" id="style_metro" />
    <!-- END GLOBAL MANDATORY STYLES -->
@@ -36,7 +37,7 @@
          <div class="container-fluid">
             <!-- BEGIN LOGO -->
             <a class="brand" href="index.html">
-            <img src="img/logo.png" alt="Conquer" />
+            <img src="/img/logo.png" alt="Conquer" />
             </a>
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -438,26 +439,36 @@
       </div>
    </div>
    <!-- END FOOTER -->
-   <!-- BEGIN JAVASCRIPTS -->
-   <!-- Load javascripts at bottom, this will reduce page load time -->
-   <!--  script src="assets/js/jquery-1.8.3.min.js"></script-->
-   <script src="js/bootstrap.min.js"></script>
-   <!--  script src="assets/js/jquery.blockui.js"></script-->
-   <!-- ie8 fixes -->
+
+   <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+   <!-- BEGIN CORE PLUGINS -->
+   <!--  script src="assets/plugins/jquery-1.8.3.min.js" type="text/javascript"></script-->
+   <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+   <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+   <script src="/js/bootstrap.min.js" type="text/javascript"></script>
    <!--[if lt IE 9]>
-   <script src="js/excanvas.js"></script>
-   <script src="js/respond.js"></script>
+   <script src="/js/excanvas.js"></script>
+   <script src="/js/respond.js"></script>
    <![endif]-->
-   <!--  script type="text/javascript" src="assets/uniform/jquery.uniform.min.js"></script-->
-   <!--  script type="text/javascript" src="assets/data-tables/jquery.dataTables.js"></script-->
-   <!--  script type="text/javascript" src="assets/data-tables/DT_bootstrap.js"></script-->
-   <script src="js/app.js"></script>
+   <script src="/js/breakpoints.js" type="text/javascript"></script>
+   <!-- IMPORTANT! jquery.slimscroll.min.js depends on jquery-ui-1.10.1.custom.min.js -->
+   <script src="/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+   <script src="/js/jquery.blockui.js" type="text/javascript"></script>
+   <script src="/js/jquery.cookie.js" type="text/javascript"></script>
+   <script src="/js/jquery.uniform.min.js" type="text/javascript" ></script>
+   <!-- END CORE PLUGINS -->
+   <!-- BEGIN PAGE LEVEL PLUGINS -->
+   <!--  script type="text/javascript" src="assets/plugins/data-tables/jquery.dataTables.js"></script -->
+   <!-- script type="text/javascript" src="assets/plugins/data-tables/DT_bootstrap.js"></script -->
+   <!-- END PAGE LEVEL PLUGINS -->
+   <!-- BEGIN PAGE LEVEL SCRIPTS -->
+   <script src="/js/app.js"></script>
    <script>
       jQuery(document).ready(function() {
-         // initiate layout and plugins
          App.init();
       });
    </script>
+   <!-- END JAVASCRIPTS-->
 </body>
 <!-- END BODY -->
 </html>
