@@ -120,8 +120,9 @@ $config=CMap::mergeArray($config,array(
 					'tagName'=>'ul',
 					'activeLinkTemplate'=>'<li><a href="{url}">{label}</a></li>',
 					'inactiveLinkTemplate'=>'<li><span>{label}</span></li>',
-					'separator'=>'<span class="icon-angle-right"></span>',
+					'separator'=>'',//<i class="icon-angle-right"></i>
 					'htmlOptions'=>array('class'=>'breadcrumb'),
+					'homeLink'=>'<li><i class="icon-home"></i><a href="/">Главная</a><i class="icon-angle-right"></i></li>',
 				),
 				'CMenu' => array(
 					'submenuHtmlOptions'=>array('class'=>'sub'),
