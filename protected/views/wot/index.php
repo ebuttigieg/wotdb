@@ -208,49 +208,8 @@ $this->widget('zii.widgets.grid.CGridView',array(
 	</div>
 </div>
 
-<div class="row-fluid">
-	<div class="span6">
-		<!-- BEGIN SAMPLE TABLE widget-->
-		<div class="widget">
-			<div class="widget-title">
-				<h4 style="white-space: nowrap;"><i class="icon-reorder"></i>Топ 5 по эффективности</h4>
-			</div>
-			<?php
-$this->widget('zii.widgets.grid.CGridView',array(
-	//	'type'=>array('condensed','striped','bordered'),
-		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5effect(),array(
-				'keyField'=>'player_name',
-		)),
-	//	'filter'=>$model,
-		'columns'=>array(
-				'player_name',
-				'effect',
-		),
-		'htmlOptions'=>array('class'=>'widget-body'),
-		'template'=>"{items}",
-		'hideHeader'=>true,
-));
-			?>
-		</div>
-	<!-- END SAMPLE TABLE widget-->
-	</div>
-</div>
 
 <?php
-$this->widget('bootstrap.widgets.TbGridView',array(
-		'type'=>array('condensed','striped','bordered'),
-		'dataProvider'=>new CArrayDataProvider(WotReport::newMembers(),array(
-				'keyField'=>'player_id',
-		)),
-	//	'filter'=>$model,
-		'columns'=>array(
-				'player_name',
-				'player_id',
-		),
-		'htmlOptions'=>array('class'=>'span4'),
-		'template'=>"{items}\n{pager}",
-));
 
 /*
 $this->widget('ext.jqgrid.JQGrid',
