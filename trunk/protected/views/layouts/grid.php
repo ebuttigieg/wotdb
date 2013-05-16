@@ -30,7 +30,7 @@
 
 <!-- BEGIN BODY -->
 <body class="fixed-top">
- 
+
    <!-- BEGIN CONTAINER -->
    <div id="container" class="row-fluid">
       <!-- BEGIN SIDEBAR -->
@@ -76,6 +76,12 @@
                <a href="<?php echo Yii::app()->createUrl('wot/effect'); ?>">
                <i class="icon-user"></i>
                <span class="title">Эффективность</span>
+               </a>
+            </li>
+            <li class="">
+               <a href="<?php echo Yii::app()->createUrl('wot/progress'); ?>">
+               <i class="icon-user"></i>
+               <span class="title">Прогресс</span>
                </a>
             </li>
             <li class="">
@@ -125,11 +131,11 @@
                      <?php echo CHtml::encode($this->pageTitle); ?>
                      <small></small>
                   </h3>
-                  
+
 					<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 						'links'=>$this->breadcrumbs,
 					)); ?><!-- breadcrumbs -->
-                  
+
                   <!-- END PAGE TITLE & BREADCRUMB-->
                </div>
             </div>
