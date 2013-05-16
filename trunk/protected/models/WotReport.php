@@ -293,6 +293,8 @@ SQL;
 		$sql=<<<SQL
 SELECT wp.player_id
   ,wp.player_name
+  ,wp.battles_count-wph.battles_count battles_count
+  ,wph.updated_at
   ,wp.effect
   ,wp.effect-wph.effect heffect
   ,wp.wn6
@@ -301,10 +303,10 @@ SELECT wp.player_id
   ,wp.wins/wp.battles_count*100 - wph.wins/wph.battles_count*100 hwinp
   ,wp.capture_points/wp.battles_count cp
   ,wp.capture_points/wp.battles_count-wph.capture_points/wph.battles_count hcp
-  ,wp.spotted/wp.battles_count sptted
+  ,wp.spotted/wp.battles_count spotted
   ,wp.spotted/wp.battles_count-wph.spotted/wph.battles_count hspotted
-  ,wp.hits_percents/wp.battles_count hitp
-  ,wp.hits_percents/wp.battles_count-wph.hits_percents/wph.battles_count hhitp
+  ,wp.hits_percents hitp
+  ,wp.hits_percents-wph.hits_percents hhitp
   ,wp.dropped_capture_points/wp.battles_count dcp
   ,wp.dropped_capture_points/wp.battles_count-wph.dropped_capture_points/wph.battles_count hdcp
   ,wp.survived_battles/wp.battles_count sb
