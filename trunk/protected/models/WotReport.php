@@ -110,8 +110,8 @@ SQL;
 	public static function members()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, wp.player_id, wpc.entry_date,
-  datediff(now(),wpc.entry_date), wcr.clan_role_name, wp.updated_at
+SELECT wp.player_name, wp.player_id, wpc.entry_date, wp.created_at,
+  datediff(now(),wpc.entry_date) dcnt, wcr.clan_role_name, wp.updated_at
   from wot_player_clan wpc
   join wot_player wp on wp.player_id=wpc.player_id
   join wot_clan_role wcr on wcr.clan_role_id=wpc.clan_role_id
