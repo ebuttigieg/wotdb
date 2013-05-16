@@ -15,6 +15,7 @@ SELECT
   pth.battle_count hbattle_count,
   pt.win_count,
   pth.win_count hwin_count,
+  (pt.win_count - pth.win_count)/(pt.battle_count - pth.battle_count) dwin_count,
   pt.win_count / pt.battle_count * 100 wp,
   pt.win_count / pt.battle_count * 100 - pth.win_count / pth.battle_count * 100 dwp
 FROM wot_player_tank pt
