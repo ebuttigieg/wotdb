@@ -14,7 +14,7 @@ js:function(rowId, val, rawObject, cm, rdata) {
 //	return 'title="'+rawObject.Name+' ('+ rawObject.Category+', '+rawObject.Subcategory+')"';
 	var dv=rawObject['h'+cm.name];
 	if(dv>0)
-		return 'style="color:green" title="'+val+' ('+ dv +')"';
+		return 'style="color:green" title="'+val+' (+'+ dv +')"';
 	else if(dv<0)
 		return 'style="color:red" title="'+val+' ('+ dv +')"';
 	else
