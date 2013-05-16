@@ -5,43 +5,35 @@ class WotReport
 	public static function report()
 	{
 		$sql=<<<SQL
-SELECT pt.battle_count - pth.battle_count b
-     , p.player_name
-     , t.tank_localized_name
-     , pt.updated_at
-     , pth.updated_at hupdated_at
-     , pt.battle_count
-     , pth.battle_count hbattle_count
-     , pt.win_count
-     , pth.win_count hwin_count
-     , pt.win_count / pt.battle_count * 100 wp
-FROM
-  wot_player_tank pt
-JOIN wot_player p
-ON p.player_id = pt.player_id
-  join wot_player_clan pc on pc.player_id=p.player_id and pc.escape_date is NULL and pc.clan_id=:clan
-JOIN wot_tank t
-ON t.tank_id = pt.tank_id
-JOIN
-  (SELECT pt.player_id
-        , pt.tank_id
-        , (SELECT min(pth.updated_at)
-           FROM
-             wot_player_tank_history pth
-           WHERE
-             pth.updated_at > date_add(pt.updated_at, INTERVAL -2 DAY)
-             AND pth.player_id = pt.player_id
-             AND pth.tank_id = pt.tank_id) last_updated_at
-   FROM
-     wot_player_tank pt) a
-ON a.player_id = pt.player_id AND a.tank_id = pt.tank_id
-JOIN wot_player_tank_history pth
-ON pth.player_id = a.player_id AND pth.tank_id = a.tank_id AND pth.updated_at = a.last_updated_at
-WHERE
-  pt.updated_at > date_add(now(), INTERVAL -1 WEEK)
-ORDER BY
-  pt.player_id
-, pt.battle_count - pth.battle_count DESC
+SELECT
+  pt.battle_count - pth.battle_count b,
+  p.player_name,
+  t.tank_localized_name,
+  pt.updated_at,
+  pth.updated_at hupdated_at,
+  pt.battle_count,
+  pth.battle_count hbattle_count,
+  pt.win_count,
+  pth.win_count hwin_count,
+  pt.win_count / pt.battle_count * 100 wp,
+  pt.win_count / pt.battle_count * 100 - pth.win_count / pth.battle_count * 100 dwp
+FROM wot_player_tank pt
+  JOIN wot_player p ON p.player_id = pt.player_id
+  JOIN wot_player_clan pc ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
+  JOIN wot_tank t ON t.tank_id = pt.tank_id
+  JOIN (SELECT
+    pt.player_id,
+    pt.tank_id,
+    (SELECT
+      MIN(pth.updated_at)
+    FROM wot_player_tank_history pth
+    WHERE pth.updated_at > DATE_ADD(pt.updated_at, INTERVAL - 2 DAY)
+    AND pth.player_id = pt.player_id
+    AND pth.tank_id = pt.tank_id) last_updated_at
+  FROM wot_player_tank pt) a ON a.player_id = pt.player_id AND a.tank_id = pt.tank_id
+  JOIN wot_player_tank_history pth ON pth.player_id = a.player_id AND pth.tank_id = a.tank_id AND pth.updated_at = a.last_updated_at
+WHERE pt.updated_at > DATE_ADD(NOW(), INTERVAL - 1 WEEK)
+ORDER BY pt.player_id, pt.battle_count - pth.battle_count DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
