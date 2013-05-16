@@ -288,5 +288,47 @@ SQL;
 		return $data;
 	}
 
+	public static function progress()
+	{
+		$sql=<<<SQL
+SELECT wp.player_id
+  ,wp.player_name
+  ,wp.effect
+  ,wp.effect-wph.effect heffect
+  ,wp.wn6
+  ,wp.wn6-wph.wn6 hwn6
+  ,wp.wins/wp.battles_count*100 winp
+  ,wp.wins/wp.battles_count*100 - wph.wins/wph.battles_count*100 hwinp
+  ,wp.capture_points/wp.battles_count cp
+  ,wp.capture_points/wp.battles_count-wph.capture_points/wph.battles_count hcp
+  ,wp.spotted/wp.battles_count sptted
+  ,wp.spotted/wp.battles_count-wph.spotted/wph.battles_count hspotted
+  ,wp.hits_percents/wp.battles_count hitp
+  ,wp.hits_percents/wp.battles_count-wph.hits_percents/wph.battles_count hhitp
+  ,wp.dropped_capture_points/wp.battles_count dcp
+  ,wp.dropped_capture_points/wp.battles_count-wph.dropped_capture_points/wph.battles_count hdcp
+  ,wp.survived_battles/wp.battles_count sb
+  ,wp.survived_battles/wp.battles_count-wph.survived_battles/wph.battles_count hsb
+  ,wp.damage_dealt/wp.battles_count damage
+  ,wp.damage_dealt/wp.battles_count-wph.damage_dealt/wph.battles_count hdamage
+  ,wp.battle_avg_xp
+  ,wp.battle_avg_xp-wph.battle_avg_xp hbattle_avg_xp
+  ,wp.frags/wp.battles_count frags
+  ,wp.frags/wp.battles_count-wph.frags/wph.battles_count hfrags
+  ,wp.max_xp
+  ,wp.max_xp-wph.max_xp hmax_xp
+  FROM wot_player wp
+  JOIN (
+SELECT MIN(wph.updated_at) updated_at, wph.player_id
+  FROM wot_player_history wph
+  JOIN wot_player_clan wpc ON wpc.player_id=wph.player_id AND wpc.clan_id=:clan
+  WHERE wph.updated_at>DATE_ADD(NOW(), INTERVAL -2 day)
+  GROUP BY wph.player_id) s ON s.player_id=wp.player_id
+  JOIN wot_player_history wph ON wph.updated_at=s.updated_at AND wph.player_id=s.player_id
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+
 
 }
