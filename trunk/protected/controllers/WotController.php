@@ -60,7 +60,7 @@ class WotController extends Controller
 		//	$this->layout='column1';
 		$this->render('effect');
 	}
-	
+
 	public function actionMedals()
 	{
 		$this->render('medals');
@@ -75,12 +75,17 @@ class WotController extends Controller
 	{
 		$this->render('hangars');
 	}
-	
+
 	public function actionActivity()
 	{
 		$this->render('activity');
 	}
-	
+
+	public function actionProgress()
+	{
+		$this->render('progress');
+	}
+
 	public function actionJqgrid() {
 		$this->render('testjqgrid');
 	}
