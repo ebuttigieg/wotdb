@@ -9,18 +9,33 @@ $this->breadcrumbs=array(
 	<div class="span4">
 <?php
 
+$cs = Yii::app()->clientScript;
+
 $cellAttr=<<<FUNC
-js:function(rowId, val, rawObject, cm, rdata) {
-//	return 'title="'+rawObject.Name+' ('+ rawObject.Category+', '+rawObject.Subcategory+')"';
-	var dv=rawObject['h'+cm.name];
-	if(dv>0)
-		return 'style="color:green" title="'+val+' (+'+ dv +')"';
-	else if(dv<0)
-		return 'style="color:red" title="'+val+' ('+ dv +')"';
+function jqcCellattr(rowId, val, rawObject, cm, rdata) {
+	var v=rawObject[cm.name.substr(1)], val=rawObject[cm.name];
+	if(val>0)
+		return 'style="color:green" title="'+v+' (+'+ val +')"';
+	else if(val<0)
+		return 'style="color:red" title="'+v+' ('+ val +')"';
 	else
 		return 'title="'+val+'"';
 }
 FUNC;
+
+$formatter=<<<FUNCF
+function jqcFormatter(cellvalue, options, rowObject)
+{
+	if(cellvalue>0)
+		cellvalue='+'+cellvalue;
+	var v=rowObject[options.colModel.name.substr(1)];
+	return parseFloat(v).toFixed(2) +'('+cellvalue+')';
+}
+FUNCF;
+
+	$cs->registerScript(__CLASS__. $this->getId().'1', $cellAttr, CClientScript::POS_READY);
+	$cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
+
 
 $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
@@ -35,18 +50,18 @@ $this->widget('ext.jqgrid.JQGrid',
 //			array('name'=>'tank_localized_name','index'=>'tank_localized_name','width'=>100),
 //			array('name'=>'hupdated_at','index'=>'hupdated_at','width'=>90,'sorttype'=>'datetime', 'datefmt'=>'Y-m-d H:i','align'=>'right','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y H:i')),
 //			array('name'=>'updated_at','index'=>'updated_at','width'=>90,'sorttype'=>'datetime', 'datefmt'=>'Y-m-d H:i','align'=>'right','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y H:i')),
-			array('name'=>'effect','index'=>'effect','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'wn6','index'=>'wn6','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'winp','index'=>'winp','width'=>80,'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'battle_avg_xp','index'=>'battle_avg_xp','width'=>60,'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'damage','index'=>'damage','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'frags','index'=>'frags','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'spotted','index'=>'spotted','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'cp','index'=>'cp','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'dcp','index'=>'dcp','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'sb','index'=>'sb','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'hitp','index'=>'hitp','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
-			array('name'=>'max_xp','index'=>'max_xp','width'=>100, 'align'=>'right','sorttype'=>'number','formatter'=>'number','cellattr'=>$cellAttr),
+			array('name'=>'heffect','index'=>'heffect','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'), //'formatter'=>'number',
+			array('name'=>'hwn6','index'=>'hwn6','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hwinp','index'=>'hwinp','width'=>80,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hbattle_avg_xp','index'=>'hbattle_avg_xp','width'=>60,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hdamage','index'=>'hdamage','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hfrags','index'=>'hfrags','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hspotted','index'=>'hspotted','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hcp','index'=>'hcp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hdcp','index'=>'hdcp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hsb','index'=>'hsb','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hhitp','index'=>'hhitp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hmax_xp','index'=>'hmax_xp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 		),
 		'rowNum'=>1000,
 	//	'rowList'=>array( 10, 20, 30 ),
