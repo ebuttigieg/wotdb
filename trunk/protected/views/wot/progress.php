@@ -31,6 +31,13 @@ function jqcFormatter(cellvalue, options, rowObject)
 	var v=rowObject[options.colModel.name.substr(1)];
 	return parseFloat(v).toFixed(2) +'('+cellvalue+')';
 }
+function jqcFormatter1(cellvalue, options, rowObject)
+{
+	if(cellvalue>0)
+		cellvalue='+'+cellvalue;
+	var v=rowObject[options.colModel.name.substr(1)];
+	return parseFloat(v).toFixed(0) +'('+cellvalue+')';
+}
 FUNCF;
 
 	$cs->registerScript(__CLASS__. $this->getId().'1', $cellAttr, CClientScript::POS_READY);
@@ -53,15 +60,15 @@ $this->widget('ext.jqgrid.JQGrid',
 			array('name'=>'heffect','index'=>'heffect','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'), //'formatter'=>'number',
 			array('name'=>'hwn6','index'=>'hwn6','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hwinp','index'=>'hwinp','width'=>80,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
-			array('name'=>'hbattle_avg_xp','index'=>'hbattle_avg_xp','width'=>60,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hbattle_avg_xp','index'=>'hbattle_avg_xp','width'=>60,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter1'),
 			array('name'=>'hdamage','index'=>'hdamage','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hfrags','index'=>'hfrags','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hspotted','index'=>'hspotted','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hcp','index'=>'hcp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hdcp','index'=>'hdcp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
 			array('name'=>'hsb','index'=>'hsb','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
-			array('name'=>'hhitp','index'=>'hhitp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
-			array('name'=>'hmax_xp','index'=>'hmax_xp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'hhitp','index'=>'hhitp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter1'),
+			array('name'=>'hmax_xp','index'=>'hmax_xp','width'=>100, 'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter1'),
 		),
 		'rowNum'=>1000,
 	//	'rowList'=>array( 10, 20, 30 ),
