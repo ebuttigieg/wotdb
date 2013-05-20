@@ -241,14 +241,13 @@ SQL;
 	{
 		$sql=<<<SQL
 SELECT wp.player_name, wt.tank_localized_name, wt.tank_image, wt.tank_level
-  FROM wot_player_tank_history wpth
-  JOIN wot_player_clan wpc ON wpc.player_id=wpth.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  JOIN wot_tank wt ON wt.tank_id=wpth.tank_id
-  JOIN wot_player wp ON wp.player_id=wpth.player_id
-  WHERE wpth.battle_count<40
-  GROUP BY wp.player_name, wt.tank_localized_name, wt.tank_image, wt.tank_level
-  HAVING MIN(wpth.updated_at)>DATE_ADD(CURDATE(),INTERVAL -1 DAY)
-  ORDER BY MIN(wpth.updated_at) DESC
+  FROM wot_player_tank wpt
+  JOIN wot_player_clan wpc ON wpc.player_id=wpt.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  JOIN wot_tank wt ON wt.tank_id=wpt.tank_id
+  JOIN wot_player wp ON wp.player_id=wpt.player_id
+  WHERE wpt.battle_count<40 AND wpt.created_at>DATE_ADD(NOW(),INTERVAL -2 day)
+  -- HAVING MIN(wpt.updated_at)>DATE_ADD(CURDATE(),INTERVAL -1 DAY)
+  ORDER BY wpt.created_at DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
