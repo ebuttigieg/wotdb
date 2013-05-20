@@ -326,5 +326,42 @@ SQL;
 		return $data;
 	}
 
+	public static function clanProgress()
+	{
+		$sql=<<<SQL
+SELECT DATE_FORMAT(wph.updated_at,'%Y%m%d'), avg(wph.effect), avg(wph.wn6), MAX(wph.wins/wph.battles_count*100), a.wp, a.a6, a.ae, a.pc,
+  (a.ae*a.pc-wp.effect+wph.effect)/a.pc deffect,
+  (a.a6*a.pc-wp.wn6+wph.wn6)/a.pc dwn6,
+  (a.wp*a.pc-wp.wins/wp.battles_count*100+wph.wins/wph.battles_count*100)/a.pc dwp
+  FROM wot_player_history wph
+  JOIN wot_player_clan wpc ON wpc.player_id=wph.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  JOIN wot_player wp ON wp.player_id=wph.player_id
+  JOIN (SELECT AVG(wp.effect) ae, AVG(wp.wn6) a6, AVG(wp.wins/wp.battles_count)*100 wp, COUNT(1) pc
+          FROM wot_player wp JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan ) a
+  WHERE wph.effect>0
+  GROUP BY  DATE_FORMAT(wph.updated_at,'%Y%m%d')
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
+		return $data;
+	}
+
+	public static function playerProgress($playerId)
+	{
+		$sql=<<<SQL
+SELECT wph.player_id, DATE_FORMAT(wph.updated_at,'%Y%m%d') dd, MAX(wph.effect) effect, MAX(wph.wn6) wn6, MAX(wph.wins/wph.battles_count*100) wp
+  FROM wot_player_history wph
+  WHERE wph.player_id=:player AND wph.effect>0
+  GROUP BY  DATE_FORMAT(wph.updated_at,'%Y%m%d'), wph.player_id
+UNION
+  (SELECT wp.player_id, DATE_FORMAT(wp.updated_at,'%Y%m%d'), wp.effect,wp.wn6, wp.wins/wp.battles_count*100
+    FROM wot_player wp
+    WHERE wp.player_id=:player
+  ORDER BY  wp.updated_at DESC LIMIT 1)
+ORDER BY dd
+SQL;
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('player'=>$playerId));
+		return $data;
+	}
+
 
 }
