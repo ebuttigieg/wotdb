@@ -119,4 +119,25 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+	public function actionTs()
+	{
+		$sql="update client_properties set value=:value where ident='client_description' AND value IS NOT NULL";
+		$s='qerwerwwww 123123 oxoxox qweqwe: п»їРџСЂРёРІРµС‚ РёР· РЅРѕРІРѕРіРё РјРёСЂР°!';
+
+
+		$string = 'Привет мир!';
+
+		$string = mb_convert_encoding($string,'UTF8', 'CP1252');
+
+	//	$string = mb_convert_encoding($string, 'CP1252', 'UTF8');
+	//	$string = mb_convert_encoding($string, 'UTF8', 'CP1251');
+
+		echo $string;
+
+	//	$s=iconv("UTF-8", "UTF-8//IGNORE", $s);
+//		$s=iconv("UTF-8", "CP1252", $s);
+//	echo $s;
+		Yii::app()->dbts->createCommand($sql)->execute(array('value'=>$string));
+	}
 }
