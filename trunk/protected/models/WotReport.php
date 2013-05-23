@@ -365,22 +365,12 @@ SQL;
 	public static function playerPresense()
 	{
 		$sql=<<<SQL
- SELECT q.dte, q.player_id, q.player_name, q.battles_count, q.bc FROM
- (SELECT b.dte, wp.player_id, wp.player_name, wp.battles_count, a.bc
-  FROM
-(SELECT DATE_ADD(CURDATE(), INTERVAL -a -b -1 DAY) dte
-FROM
- (SELECT 0 a UNION SELECT 1 a UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 ) d,
- (SELECT 0 b UNION SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40) m
-WHERE DATE_ADD(CURDATE(), INTERVAL -a -b -1 DAY)> DATE_ADD(CURDATE(), INTERVAL -1 MONTH)) b
- JOIN wot_player_clan wpc ON wpc.escape_date IS NULL AND wpc.clan_id=:clan
- JOIN wot_player wp ON wp.player_id=wpc.player_id
- LEFT JOIN
- (SELECT wph.player_id, date(wph.updated_at) dte, MIN(wph.battles_count) bc
-              FROM wot_player_history wph
-             GROUP BY wph.player_id, DATE(wph.updated_at)) a ON b.dte=a.dte AND a.player_id=wpc.player_id
-) q
-  ORDER BY q.player_name, q.dte
+SELECT wph.player_id, wp.player_name, DATE(wph.updated_at) dte, MIN(wph.battles_count) bc
+FROM wot_player_history wph
+  JOIN wot_player wp ON wph.player_id = wp.player_id
+  JOIN wot_player_clan wpc ON wph.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  WHERE wph.updated_at>DATE_ADD(CURDATE(), INTERVAL -2 WEEK)
+GROUP BY wph.player_id, DATE(wph.updated_at)
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		$result=array();
