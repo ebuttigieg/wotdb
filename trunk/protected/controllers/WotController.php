@@ -86,6 +86,11 @@ class WotController extends Controller
 		$this->render('progress');
 	}
 
+	public function actionPresense()
+	{
+		$this->render('presense');
+	}
+
 	public function actionJqgrid() {
 		$this->render('testjqgrid');
 	}
