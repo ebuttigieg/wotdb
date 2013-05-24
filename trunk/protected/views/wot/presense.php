@@ -40,7 +40,7 @@ FUNCF;
 	);
 	$colNames=array('Игрок');
 	foreach ($data['dates'] as $date){
-		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>80,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter');
+		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>75,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter');
 		$colNames[]=$date;
 	}
 

@@ -102,6 +102,12 @@
                <span class="title">Активность по танкам</span>
                </a>
             </li>
+            <li class="">
+               <a href="<?php echo Yii::app()->createUrl('wot/presense'); ?>">
+               <i class="icon-user"></i>
+               <span class="title">Посещаемость</span>
+               </a>
+            </li>
          </ul>
          <!-- END SIDEBAR MENU -->
 
