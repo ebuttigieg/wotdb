@@ -372,21 +372,33 @@ FROM wot_player_history wph
   WHERE wph.updated_at>DATE_ADD(CURDATE(), INTERVAL -2 WEEK)
 GROUP BY wph.player_id, DATE(wph.updated_at)
 SQL;
+
+
+		$dates=array();
+		for ($i = 14; $i >0; $i--) {
+			$date = date_create('now');
+			date_add($date, date_interval_create_from_date_string("-$i days"));
+			$dates[]=date_format($date, 'Y-m-d');
+		}
+
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		$result=array();
 		$names=array();
-		$dates=array();
+
 		foreach ($data as $row){
-			$result[$row['player_id']][$row['dte']]=$row['bc']>0?1:0;
-			if(!isset($names[$row['player_id']]))
-				$names[$row['player_id']]=$row['player_name'];
-			if(count($result)==1)
-				$dates[]=$row['dte'];
+			if(!isset($result[$row['player_id']])){
+				$result[$row['player_id']]=array('player_name'=>$row['player_name']);
+				foreach ($dates as $date){
+					$result[$row['player_id']][$date]=0;
+				}
+			}
+			$result[$row['player_id']][$row['dte']]=1;
 		}
-		foreach ($result as $key=>&$row){
-			$row['player_name']=$names[$key];
+		$res=array();
+		foreach ($result as $row){
+			$res[]=$row;
 		}
-		return array('data'=>$result,'dates'=>$dates);
+		return array('data'=>$res,'dates'=>$dates);
 	}
 
 }
