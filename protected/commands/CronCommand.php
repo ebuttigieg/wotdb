@@ -46,7 +46,7 @@ SQL;
 		}
 	}
 
-	public function presense()
+	public function actionPresense()
 	{
 		Yii::import('ext.teamspeak.libraries.TeamSpeak3.*',true);//cFsOcmiR
 		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
