@@ -13,17 +13,21 @@ $cs = Yii::app()->clientScript;
 
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
+	if(val=='++')
+		return 'style="background-color:#91cc8e" title="Был онлайн и в ТС"';
 	if(val=='+')
-		return 'style="background-color:#91cc8e" title=""';
+		return 'style="background-color:#DADE64" title="Был онлайн"';
 	else
-		return 'style="background-color:#bd7187" title=""';
+		return 'style="background-color:#bd7187" title="Не играл"';
 }
 FUNC;
 
 $formatter=<<<FUNCF
 function jqcFormatter(cellvalue, options, rowObject)
 {
-	if(cellvalue>0)
+	if(cellvalue==2)
+		return '++';
+	else if(cellvalue==1)
 		return '+';
 	else
 		return '-';
