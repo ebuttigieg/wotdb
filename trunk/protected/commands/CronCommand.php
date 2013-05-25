@@ -46,4 +46,26 @@ SQL;
 		}
 	}
 
+	public function presense()
+	{
+		Yii::import('ext.teamspeak.libraries.TeamSpeak3.*',true);//cFsOcmiR
+		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
+		$ts3_VirtualServer = TeamSpeak3::factory("serverquery://servertool:LJA3t2EI@127.0.0.1:10011/?server_port=9987");
+		$arr_ClientList = $ts3_VirtualServer->clientList();
+		foreach ($arr_ClientList as $client){
+			$info =$client->getInfo();
+			$client=Clients::model()->findByPk($info['client_database_id']);
+			if(!empty($client)){
+				$player_id=$client->player_id;
+				if(!empty($player_id)){
+					$wts=new WotTeamspeak();
+					$wts->updated_at=new CDbExpression('now()');
+					$wts->player_id=$player_id;
+					$wts->client_id=$info['client_database_id'];
+					$wts->save(true);
+				}
+			}
+		}
+	}
+	
 }
