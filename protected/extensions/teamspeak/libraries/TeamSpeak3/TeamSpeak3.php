@@ -534,11 +534,13 @@ class TeamSpeak3
       throw new LogicException("autoload functions are not available in this PHP installation");
     }
 
+    Yii::registerAutoloader(array(__CLASS__, "autoload"), true);
+/*    
     if(!class_exists("TeamSpeak3_Helper_Profiler"))
     {
       spl_autoload_register(array(__CLASS__, "autoload"));
     }
-
+*/
     TeamSpeak3_Helper_Profiler::start();
   }
 
