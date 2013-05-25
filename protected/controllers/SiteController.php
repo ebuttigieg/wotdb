@@ -119,12 +119,4 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
-
-	public function actionTs()
-	{
-		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
-		$ts3_VirtualServer = TeamSpeak3::factory("serverquery://username:password@127.0.0.1:10011/?server_port=9987");
-		// build and display HTML treeview using custom image paths
-		$ts3_VirtualServer->getViewer(new TeamSpeak3_Viewer_Html("images/viewericons/", "images/countryflags/"));
-	}
 }
