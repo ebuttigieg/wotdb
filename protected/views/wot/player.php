@@ -80,7 +80,6 @@ $this->widget('zii.widgets.grid.CGridView',array(
 <?php
 	$script=<<<SCRIPT
 function chart(playerId,playerName){
-	$('#user').text(playerName);
 	var s1=[],s2=[],s3=[];
 	$.ajax({
 		url: '/wot/playerdata',
@@ -133,6 +132,7 @@ function chart(playerId,playerName){
 					legend: {show: true,  position: "nw", backgroundOpacity:0}
 				}
 			);
+			$('#user').text(playerName);
 		}
 	});
 }
