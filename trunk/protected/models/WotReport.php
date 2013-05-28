@@ -60,6 +60,7 @@ FROM
   wot_player p
 JOIN wot_player_clan pc
 ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
+ORDER BY p.player_name
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
