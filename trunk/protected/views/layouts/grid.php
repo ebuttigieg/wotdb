@@ -25,6 +25,7 @@
 
   <?php Yii::app()->clientScript->registerCoreScript('font-awesome'); ?>
   <?php // Yii::app()->clientScript->registerCoreScript('uniform'); ?>
+  <?php  Yii::app()->clientScript->registerCoreScript('flot'); ?>
 </head>
 <!-- END HEAD -->
 
