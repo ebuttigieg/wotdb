@@ -91,6 +91,16 @@ class WotController extends Controller
 		$this->render('presense');
 	}
 
+	public function actionPlayer()
+	{
+		$this->render('player');
+	}
+
+	public function actionPlayerdata($id)
+	{
+		echo json_encode(WotReport::playerProgress($id));
+	}
+
 	public function actionJqgrid() {
 		$this->render('testjqgrid');
 	}
@@ -114,7 +124,7 @@ class WotController extends Controller
 		}
 		echo json_encode($responce);
 	}
-	
+
 	public function actionTs()
 	{
 		//	header('Content-Type: text/html; charset=UTF-8');
@@ -124,6 +134,6 @@ class WotController extends Controller
 		// build and display HTML treeview using custom image paths
 		$this->renderText($ts3_VirtualServer->getViewer(new TeamSpeak3_Viewer_Html("/images/viewer/", "/images/flags/")));
 		//echo $ts3_VirtualServer->getViewer(new TeamSpeak3_Viewer_Html("/images/viewer/", "/images/flags/"));
-	
+
 	}
 }
