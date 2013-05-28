@@ -110,6 +110,12 @@
                </a>
             </li>
             <li class="">
+               <a href="<?php echo Yii::app()->createUrl('wot/player'); ?>">
+               <i class="icon-user"></i>
+               <span class="title">Динамика игрока</span>
+               </a>
+            </li>
+            <li class="">
                <a href="<?php echo Yii::app()->createUrl('wot/ts'); ?>">
                <i class="icon-user"></i>
                <span class="title">Teamspeak</span>
