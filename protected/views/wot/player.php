@@ -46,13 +46,28 @@ $this->widget('zii.widgets.grid.CGridView',array(
 					<div class="span12">
 						<div class="widget">
 							<div class="widget-title">
-								<h4><i class="icon-reorder"></i>Динамика эффективности</h4>
+								<h4><i class="icon-reorder"></i>Динамика эффективности wot-news</h4>
 								<span class="tools">
 									<a href="javascript:;" class="icon-refresh"></a>
 								</span>
 							</div>
 							<div class="widget-body">
-								<div id="chart_1" class="chart"></div>
+								<div id="chart_1" class="chart" style="height: 150px"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span12">
+						<div class="widget">
+							<div class="widget-title">
+								<h4><i class="icon-reorder"></i>Динамика эффективности WN6</h4>
+								<span class="tools">
+									<a href="javascript:;" class="icon-refresh"></a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div id="chart_2" class="chart" style="height: 150px"></div>
 							</div>
 						</div>
 					</div>
@@ -67,7 +82,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 								</span>
 							</div>
 							<div class="widget-body">
-								<div id="chart_2" class="chart"></div>
+								<div id="chart_3" class="chart" style="height: 150px"></div>
 							</div>
 						</div>
 					</div>
@@ -93,7 +108,7 @@ function chart(playerId,playerName){
 				s3.push([value.dd*1000,value.wp]);
 			});
 			$.plot($("#chart_1"),
-				[{data: s1, label: "рейтинг Wot-News" }, { data: s2, label: "рейтинг WN6" }],
+				[{data: s1, label: "рейтинг Wot-News" }],//, { data: s2, label: "рейтинг WN6" }
 				{
 					series: {
 						lines: {
@@ -109,10 +124,30 @@ function chart(playerId,playerName){
 							colors: ["#fff", "#eee"]
 						}
 					},
-					legend: {show: true,  position: "nw", backgroundOpacity:0}
+					legend: {show: false,  position: "nw", backgroundOpacity:0}
 				}
 			);
 			$.plot($("#chart_2"),
+				[{data: s2, label: "Эффективность WN6" }],
+				{
+					series: {
+						lines: {
+							show: true
+						},
+						points: {
+							show: true
+						}
+					},
+					xaxis: { mode: "time", timeformat: "%0d.%0m.%y"},
+					grid: {
+						backgroundColor: {
+							colors: ["#fff", "#eee"]
+						}
+					},
+					legend: {show: false,  position: "nw", backgroundOpacity:0}
+				}
+			);
+			$.plot($("#chart_3"),
 				[{data: s3, label: "% побед" }],
 				{
 					series: {
@@ -129,7 +164,7 @@ function chart(playerId,playerName){
 							colors: ["#fff", "#eee"]
 						}
 					},
-					legend: {show: true,  position: "nw", backgroundOpacity:0}
+					legend: {show: false,  position: "nw", backgroundOpacity:0}
 				}
 			);
 			$('#user').text(playerName);
