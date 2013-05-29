@@ -132,7 +132,9 @@ function chart(playerId,playerName){
 					grid: {
 						backgroundColor: {
 							colors: ["#fff", "#eee"]
-						}
+						},
+						hoverable: true,
+						clickable: true
 					},
 					legend: {show: false,  position: "nw", backgroundOpacity:0}
 				}
@@ -154,7 +156,7 @@ function showTooltip(x, y, contents) {
 	}).appendTo("body").fadeIn(200);
 }
 var previousPoint = null;
-$("#chart_1").bind("plothover", function (event, pos, item) {
+$("#chart_1,#chart_2").bind("plothover", function (event, pos, item) {
 	$("#x").text(pos.x.toFixed(2));
 	$("#y").text(pos.y.toFixed(2));
 
@@ -175,7 +177,7 @@ $("#chart_1").bind("plothover", function (event, pos, item) {
 	}
 });
 
-$("#chart_1").bind("plotclick", function (event, pos, item) {
+$("#chart_1,#chart_2").bind("plotclick", function (event, pos, item) {
 	if (item) {
 		var x = item.datapoint[0].toFixed(2)/1000;
 		$("#tooltip").remove();
