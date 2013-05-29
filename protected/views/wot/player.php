@@ -61,7 +61,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 					<div class="span12">
 						<div class="widget">
 							<div class="widget-title">
-								<h4><i class="icon-reorder"></i>Динамика эффективности WN6</h4>
+								<h4><i class="icon-reorder"></i>Динамика процента побед</h4>
 								<span class="tools">
 									<a href="javascript:;" class="icon-refresh"></a>
 								</span>
