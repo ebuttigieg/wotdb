@@ -79,7 +79,9 @@ $this->widget('zii.widgets.grid.CGridView',array(
 
 <?php
 	$script=<<<SCRIPT
+var currentId;
 function chart(playerId,playerName){
+	currentId=playerId;
 	var s1=[],s2=[],s3=[];
 	$.ajax({
 		url: '/wot/playerdata',
@@ -108,7 +110,9 @@ function chart(playerId,playerName){
 					grid: {
 						backgroundColor: {
 							colors: ["#fff", "#eee"]
-						}
+						},
+						hoverable: true,
+						clickable: true
 					},
 					legend: {show: true,  position: "nw", backgroundOpacity:0}
 				}
@@ -137,6 +141,59 @@ function chart(playerId,playerName){
 		}
 	});
 }
+function showTooltip(x, y, contents) {
+	$('<div id="tooltip">' + contents + '</div>').css( {
+		position: 'absolute',
+		display: 'none',
+		top: y + 5,
+		left: x + 5,
+		border: '1px solid #fdd',
+		padding: '2px',
+		'background-color': '#fee',
+		opacity: 0.80
+	}).appendTo("body").fadeIn(200);
+}
+var previousPoint = null;
+$("#chart_1").bind("plothover", function (event, pos, item) {
+	$("#x").text(pos.x.toFixed(2));
+	$("#y").text(pos.y.toFixed(2));
+
+	if (item) {
+		if (previousPoint != item.seriesIndex) {
+			previousPoint = item.seriesIndex;
+
+			$("#tooltip").remove();
+			var x = item.datapoint[0].toFixed(2),
+				y = item.datapoint[1].toFixed(2);
+
+			showTooltip(item.pageX, item.pageY, item.series.label + " = " + y);
+		}
+	}
+	else {
+		$("#tooltip").remove();
+		previousPoint = null;
+	}
+});
+
+$("#chart_1").bind("plotclick", function (event, pos, item) {
+	if (item) {
+		var x = item.datapoint[0].toFixed(2)/1000;
+		$("#tooltip").remove();
+		$.ajax({
+			url: '/wot/playertankdata',
+			method: 'GET',
+			dataType: 'json',
+			data: {playerId:currentId,date:x},
+			success: function(data){
+				var content="";
+				$.each(data,function(index,value){
+					content=content+"<b>"+value.tank_localized_name+"</b> боев: "+value.bc+" побед: "+value.wc+"("+parseFloat(value.pw).toFixed(1)+"%)<br/>";
+				});
+				showTooltip(item.pageX, item.pageY, content);
+			}
+		});
+	}
+});
 SCRIPT;
 	$cs=Yii::app()->clientScript;
 	$cs->registerScript(__CLASS__.$this->getId(), $script,CClientScript::POS_END);
