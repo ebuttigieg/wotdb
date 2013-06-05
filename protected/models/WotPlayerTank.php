@@ -3,6 +3,8 @@
 class WotPlayerTank extends CActiveRecord
 {
 
+	public static $attrs=array('battle_count', 'win_count', 'spotted', 'damageDealt', 'survivedBattles', 'frags');
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return CActiveRecord the static model class
