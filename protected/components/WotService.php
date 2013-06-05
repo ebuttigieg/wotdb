@@ -149,7 +149,8 @@ class WotService
 				$tran->commit();
 			}
 			else
-				var_dump($jsonData);
+				Yii::log($jsonString,'error');
+				//var_dump($jsonData);
 		}
 	}
 
@@ -182,7 +183,8 @@ class WotService
 				$tran->commit();
 			}
 			else
-				var_dump($jsonData);
+				Yii::log($jsonString,'error');
+			//	var_dump($jsonData);
 		}
 	}
 
