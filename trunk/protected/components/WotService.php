@@ -13,6 +13,38 @@ class WotService
 	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
 
 
+	static private $retryCnt=0;
+
+	static private function tryContent($url)
+	{
+		$ch=curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		$content=curl_exec($ch);
+		if (curl_errno($ch)) {
+			$content=false;
+		}
+		curl_close($ch);
+		return $content;
+	}
+
+	static private function getContent($url)
+	{
+		self::$retryCnt=0;
+		$result=self::tryContent($url);
+		while(($result==false)&&(self::$retryCnt<3)){
+			self::$retryCnt++;
+			sleep(3);
+			$result=self::tryContent($url);
+		}
+		if($result==false){
+			Yii::log('Ошибка получения статистики','error');
+		}
+		return $result;
+	}
+
+
 	static private function doRequestJSON($url)
 	{
 		$host=self::$host;
