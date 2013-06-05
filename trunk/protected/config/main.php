@@ -80,6 +80,11 @@ $config=CMap::mergeArray($config,array(
 				 		'class'=>'CWebLogRoute',
 				 ),
 */
+				array(
+					'class'=>'CEmailLogRoute',
+					'levels'=>'error',
+					'emails'=>'borodulin@gmail.com',
+				),
 			),
 		),
 		'clientScript' => array(
