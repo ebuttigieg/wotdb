@@ -174,7 +174,9 @@ class WotService
 				foreach ($jsonData['data']['vehicles'] as $vehicle){
 					$tank=WotTank::getTank($vehicle['name'],$vehicle['localized_name'],$vehicle['level'],$vehicle['nation'],$vehicle['class'],$vehicle['image_url']);
 					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $tank->tank_id);
-					$playerTank->attributes=$vehicle;
+					foreach (WotPlayerTank::$attrs as $attr) {
+						$playerTank->$attr=$vehicle[$attr];
+					}
 					$playerTank->updated_at=$player->updated_at;
 					$playerTank->save(false);
 				}
