@@ -12,6 +12,13 @@ class WotPlayer extends CActiveRecord
 		return parent::model($className);
 	}
 
+
+	public static function isClanPlayer($playerId)
+	{
+		$player=WotPlayerClan::model()->findByAttributes(array('clan_id'=>WotClan::$clanId,'player_id'=>$playerId),'escape_date is null');
+		return !empty($player);
+	}
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -52,7 +59,7 @@ class WotPlayer extends CActiveRecord
 		);
 	}
 
-	
+
 	public static function calcRating()
 	{
 		$sql=<<<SQL
@@ -82,5 +89,5 @@ JOIN (SELECT pt.player_id
 SQL;
 		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
 	}
-	
+
 }
