@@ -42,6 +42,10 @@ $config=CMap::mergeArray($config,array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+		'authManager'=>array(
+			'class'=>'CDbAuthManager',
+			'defaultRoles'=>array('authenticated', 'admin'),
+		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',

@@ -15,7 +15,7 @@ class WotController extends Controller
 	public function filters()
 	{
 		return array(
-	//		'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 		);
 	}
 
@@ -28,11 +28,12 @@ class WotController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to access 'index' and 'view' actions.
-				'actions'=>array('index','jqgriddata'),
+				'actions'=>array('index','players', 'effect'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated users to access all actions
 				'users'=>array('@'),
+				'expression'=>'WotPlayer::isClanPlayer($user->id)',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
