@@ -41,10 +41,11 @@ FUNCF;
 	$data=WotReport::playerPresense();
 	$colModel=array(
 		array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),
+		array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>140,'align'=>'left'),
 	);
-	$colNames=array('Игрок');
+	$colNames=array('Игрок', 'Должность');
 	foreach ($data['dates'] as $date){
-		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>75,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter');
+		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>75,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter','firstsortorder'=>'desc');
 		$colNames[]=$date;
 	}
 
