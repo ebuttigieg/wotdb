@@ -366,17 +366,25 @@ SQL;
 	public static function playerPresense()
 	{
 		$sql=<<<SQL
-SELECT a.player_id, a.player_name, a.dte, b.dts
-FROM (SELECT wph.player_id, wp.player_name, DATE(wph.updated_at) dte, MIN(wph.battles_count) bc
-	FROM wot_player_history wph
-	  JOIN wot_player wp
-	    ON wph.player_id = wp.player_id
-	  JOIN wot_player_clan wpc
-	    ON wph.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
-	WHERE wph.updated_at > DATE_ADD(CURDATE(), INTERVAL - 2 WEEK)
-	GROUP BY wph.player_id,
-         DATE(wph.updated_at)) a
-LEFT JOIN (SELECT wt.player_id, DATE(wt.updated_at) dts
+SELECT
+  wp.player_id,
+  wp.player_name,
+  a.dte,
+  b.dts
+FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  LEFT JOIN (SELECT
+    wph.player_id,
+    DATE(wph.updated_at) dte,
+    MIN(wph.battles_count) bc
+  FROM wot_player_history wph
+    JOIN wot_player wp ON wph.player_id = wp.player_id
+    JOIN wot_player_clan wpc ON wph.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  WHERE wph.updated_at > DATE_ADD(CURDATE(), INTERVAL - 2 WEEK)
+  GROUP BY wph.player_id, DATE(wph.updated_at)) a ON a.player_id = wp.player_id
+  LEFT JOIN (SELECT
+    wt.player_id,
+    DATE(wt.updated_at) dts
   FROM wot_teamspeak wt
   WHERE TIME(wt.updated_at) BETWEEN TIME('20:00') AND TIME('24:00')
   GROUP BY wt.player_id, DATE(wt.updated_at)) b ON a.player_id = b.player_id AND a.dte = b.dts
