@@ -369,10 +369,12 @@ SQL;
 SELECT
   wp.player_id,
   wp.player_name,
+  wcr.clan_role_name,
   a.dte,
   b.dts
 FROM wot_player wp
   JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  JOIN wot_clan_role wcr ON wpc.clan_role_id = wcr.clan_role_id
   LEFT JOIN (SELECT
     wph.player_id,
     DATE(wph.updated_at) dte,
@@ -403,7 +405,7 @@ SQL;
 
 		foreach ($data as $row){
 			if(!isset($result[$row['player_id']])){
-				$result[$row['player_id']]=array('player_name'=>$row['player_name']);
+				$result[$row['player_id']]=array('player_name'=>$row['player_name'],'clan_role_name'=>$row['clan_role_name']);
 				foreach ($dates as $date){
 					$result[$row['player_id']][$date]=0;
 				}
