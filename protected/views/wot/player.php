@@ -144,11 +144,12 @@ function chart(playerId,playerName){
 	});
 }
 function showTooltip(x, y, contents) {
-	$('<div id="tooltip">' + contents + '</div>').css( {
+	var tooltip = $('<div id="tooltip">' + contents + '</div>');
+	tooltip.css( {
 		position: 'absolute',
 		display: 'none',
-		top: y + 5,
-		left: x + 5,
+		top: y + 20,
+		left: x - 200,
 		border: '1px solid #fdd',
 		padding: '2px',
 		'background-color': '#fee',
