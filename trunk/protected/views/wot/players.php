@@ -1,13 +1,26 @@
 <div class="row-fluid">
 	<div class="span4">
 <?php
+
+$cs = Yii::app()->clientScript;
+
+$formatter=<<<FUNCF
+function linkFormatter(cellvalue, options, rowObject)
+{
+	return '<a href="http://wot-news.com/index.php/stat/single/ru/'+cellvalue+'" target="_blank" style="text-decoration: underline;">'+cellvalue+'</a>'
+}
+FUNCF;
+
+$cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
+
+
 $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'datatype'=>'local',
 		'data'=>WotReport::members(),
 		'colNames'=>array('Игрок', 'Начал играть', 'Дней в клане', 'Должность','Обновлено'),
 		'colModel'=>array(
-			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),
+			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left','formatter'=>'js:linkFormatter'),
 			array('name'=>'created_at','index'=>'created_at','width'=>100,'sorttype'=>'date','align'=>'right','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y')),//d.m.Y H:i
 			array('name'=>'dcnt','index'=>'dcnt','width'=>100,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc'),
 		//	array('name'=>'wins','index'=>'wins','width'=>80,'align'=>'right','sorttype'=>'number'),
