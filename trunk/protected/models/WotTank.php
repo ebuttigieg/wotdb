@@ -4,7 +4,7 @@ class WotTank extends CActiveRecord
 {
 
 	private static $_models;
-	
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return CActiveRecord the static model class
@@ -40,6 +40,23 @@ class WotTank extends CActiveRecord
 			$tank->tank_image=$imageUrl;
 			$tank->save(false);
 			self::$_models=self::model()->findAll(array('index'=>'tank_name'));
+		}
+		else
+		{
+			$tank=self::$_models[$name];
+			if(($tank->tank_level!=$level)||
+					($tank->tank_nation_id!=$nation)||
+					($tank->tank_class_id!=$class)||
+					($tank->tank_localized_name!=$lname)||
+					($tank->tank_image!=$imageUrl))
+			{
+				$tank->tank_nation_id=$nation;
+				$tank->tank_name=$name;
+				$tank->tank_localized_name=$lname;
+				$tank->tank_level=$level;
+				$tank->tank_image=$imageUrl;
+				$tank->save(false);
+			}
 		}
 		return self::$_models[$name];
 	}
