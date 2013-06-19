@@ -16,6 +16,10 @@ class WotTank extends CActiveRecord
 
 	public static function getTank($name,$lname=null,$level=0,$nation=null,$class=null,$imageUrl=null)
 	{
+
+		if (preg_match("/#(.*?):(.*)/",$lname,$mathes)){
+			$lname=$mathes[2];
+		}
 		if(empty(self::$_models))
 			self::$_models=self::model()->findAll(array('index'=>'tank_name'));
 		if(!isset(self::$_models[$name])){
