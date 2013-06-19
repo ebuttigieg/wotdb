@@ -102,7 +102,7 @@ ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
 JOIN wot_player_tank pt
 ON pt.player_id = p.player_id
 JOIN wot_tank t
-ON t.tank_id = pt.tank_id AND ((t.tank_level = 10 AND t.tank_class_id IN ('AT-SPG', 'heavyTank', 'mediumTank')) OR (t.tank_level = 8) AND t.tank_class_id = 'SPG')
+ON t.tank_id = pt.tank_id AND t.tank_level = 10
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
