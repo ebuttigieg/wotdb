@@ -50,7 +50,7 @@ SQL;
 	{
 		Yii::import('ext.teamspeak.libraries.TeamSpeak3.*',true);//cFsOcmiR
 		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
-		$ts3_VirtualServer = TeamSpeak3::factory("serverquery://servertool:LJA3t2EI@127.0.0.1:10011/?server_port=9987");
+		$ts3_VirtualServer = TeamSpeak3::factory(Yii::app()->params['tsUri']);
 		$arr_ClientList = $ts3_VirtualServer->clientList();
 		foreach ($arr_ClientList as $client){
 			$info =$client->getInfo();
@@ -67,5 +67,5 @@ SQL;
 			}
 		}
 	}
-	
+
 }
