@@ -315,7 +315,7 @@ SELECT wp.player_id
   JOIN (
 SELECT MIN(wph.updated_at) updated_at, wph.player_id
   FROM wot_player_history wph
-  JOIN wot_player_clan wpc ON wpc.player_id=wph.player_id AND wpc.clan_id=:clan
+  JOIN wot_player_clan wpc ON wpc.player_id=wph.player_id AND wpc.clan_id=:clan AND wpc.escape_date IS NULL
   WHERE wph.updated_at>DATE_ADD(NOW(), INTERVAL -2 day)
   GROUP BY wph.player_id) s ON s.player_id=wp.player_id
   JOIN wot_player_history wph ON wph.updated_at=s.updated_at AND wph.player_id=s.player_id
