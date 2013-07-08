@@ -38,6 +38,12 @@ return CMap::mergeArray(array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
+				array(
+						'class'=>'CEmailLogRoute',
+						'levels'=>'error',
+						'emails'=>'borodulin@gmail.com',
+						'except'=>'exception.CHttpException.*',
+				),
 			),
 		),
 	),
