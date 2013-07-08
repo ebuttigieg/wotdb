@@ -56,6 +56,7 @@ SELECT p.player_name
      , p.player_id
      , p.effect
      , p.wn6
+     , p.damage_dealt/p.battles_count damage
 FROM
   wot_player p
 JOIN wot_player_clan pc
