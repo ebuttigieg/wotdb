@@ -71,27 +71,6 @@ $config=CMap::mergeArray($config,array(
 				),
 			),
 		),
-		'log'=>array(
-			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				 array(
-				 		'class'=>'CWebLogRoute',
-				 ),
-*/
-				array(
-					'class'=>'CEmailLogRoute',
-					'levels'=>'error',
-					'emails'=>'borodulin@gmail.com',
-					'except'=>'exception.CHttpException.*',
-				),
-			),
-		),
 		'clientScript' => array(
 		//	'scriptMap' => array(
 		//		'jquery-ui.css' => '/css/ff/jquery-ui-1.9.1.custom.min.css',
