@@ -88,6 +88,7 @@ $config=CMap::mergeArray($config,array(
 					'class'=>'CEmailLogRoute',
 					'levels'=>'error',
 					'emails'=>'borodulin@gmail.com',
+					'except'=>'exception.CHttpException.*',
 				),
 			),
 		),
