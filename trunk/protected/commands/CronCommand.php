@@ -37,11 +37,13 @@ SQL;
 
 		foreach ($clientProperties as $cp) {
 			$wotPlayer=WotPlayer::model()->findByPk($cp->player_id);
-			$wins=number_format($wotPlayer->wins/$wotPlayer->battles_count*100,2);
-			$s="$wotPlayer->player_name\nWins: $wins%\nEffect: $wotPlayer->effect\nWN6: $wotPlayer->wn6";
-			$s=mb_convert_encoding($s,'UTF8','CP1252');
-		//	echo $s;
-			$cp->dbConnection->createCommand($sql)->execute(array('id'=>$cp->id,'value'=>$s));
+			if($wotPlayer->battles_count>0){
+				$wins=number_format($wotPlayer->wins/$wotPlayer->battles_count*100,2);
+				$s="$wotPlayer->player_name\nWins: $wins%\nEffect: $wotPlayer->effect\nWN6: $wotPlayer->wn6";
+				$s=mb_convert_encoding($s,'UTF8','CP1252');
+			//	echo $s;
+				$cp->dbConnection->createCommand($sql)->execute(array('id'=>$cp->id,'value'=>$s));
+			}
 			//	break;
 		}
 	}
