@@ -349,7 +349,7 @@ SQL;
 		$sql=<<<SQL
 SELECT wph.player_id, UNIX_TIMESTAMP(DATE(wph.updated_at)) dd, MAX(wph.effect) effect, MAX(wph.wn6) wn6, MAX(wph.wins/wph.battles_count*100) wp
   FROM wot_player_history wph
-  WHERE wph.player_id=:player AND wph.effect>0
+  WHERE wph.player_id=:player AND wph.effect>0 AND DATE(wph.updated_at)<curdate() AND DATE(wph.updated_at)>date_add(curdate(), interval - 3 month)
   GROUP BY  DATE(wph.updated_at), wph.player_id
 UNION
   (SELECT wp.player_id, UNIX_TIMESTAMP(DATE(wp.updated_at)), wp.effect,wp.wn6, wp.wins/wp.battles_count*100
