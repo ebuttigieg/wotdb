@@ -137,11 +137,19 @@ class WotService
 							$player->player_name=$playerData['account_name'];
 							$player->save(false);
 						}
-						$playerClan=new WotPlayerClan();
-						$playerClan->clan_id=$clan->clan_id;
-						$playerClan->player_id=$playerId;
-						$playerClan->entry_date=date('Y-m-d' ,$playerData['created_at']);
-						$playerClan->clan_role=$playerData['role'];
+						$playerClan = WotPlayerClan::model()->findByPk(array('player_id'=>$playerId,'clan_id'=>$clan->clan_id,'entry_date'=>date('Y-m-d' ,$playerData['created_at'])));
+						if(empty($playerClan)){
+							$playerClan=new WotPlayerClan();
+							$playerClan->clan_id=$clan->clan_id;
+							$playerClan->player_id=$playerId;
+							$playerClan->entry_date=date('Y-m-d' ,$playerData['created_at']);
+							$playerClan->clan_role=$playerData['role'];
+						}
+						else
+						{
+							if(!empty($playerClan->escape_date))
+								$playerClan->escape_date=null;
+						}
 						$playerClan->save(false);
 					}
 				}
