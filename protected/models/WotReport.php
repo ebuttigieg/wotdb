@@ -381,7 +381,7 @@ FROM wot_player wp
   FROM wot_player_history wph
     JOIN wot_player wp ON wph.player_id = wp.player_id
     JOIN wot_player_clan wpc ON wph.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
-  WHERE wph.updated_at > DATE_ADD(CURDATE(), INTERVAL - 2 WEEK)
+  WHERE wph.updated_at > DATE_ADD(CURDATE(), INTERVAL - 1 MONTH)
   GROUP BY wph.player_id, DATE(wph.updated_at)) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
     wt.player_id,
