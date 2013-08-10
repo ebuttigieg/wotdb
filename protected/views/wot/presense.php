@@ -13,12 +13,14 @@ $cs = Yii::app()->clientScript;
 
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
-	if(val=='++')
-		return 'style="background-color:#91cc8e" title="Был онлайн и в ТС"';
+	if(val=='++'){
+		console.log(cm, rdata);
+		return 'style="background-color:#91cc8e" title="'+cm.index+' Был онлайн и в ТС"';
+	}
 	if(val=='+')
-		return 'style="background-color:#DADE64" title="Был онлайн"';
+		return 'style="background-color:#DADE64" title="'+cm.index+' Был онлайн"';
 	else
-		return 'style="background-color:#bd7187" title="Не играл"';
+		return 'style="background-color:#bd7187" title="'+cm.index+' Не играл"';
 }
 FUNC;
 
@@ -45,8 +47,8 @@ FUNCF;
 	);
 	$colNames=array('Игрок', 'Должность');
 	foreach ($data['dates'] as $date){
-		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>75,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter','firstsortorder'=>'desc');
-		$colNames[]=$date;
+		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>20,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter','firstsortorder'=>'desc');
+		$colNames[]=date('d', strtotime($date));
 	}
 
 $this->widget('ext.jqgrid.JQGrid',
@@ -61,7 +63,7 @@ $this->widget('ext.jqgrid.JQGrid',
 		'sortname'=>'player_name',
 	//	'sortorder'=>'desc',
 		'height'=>'auto',
-		'caption'=>'Посещаемость за 2 недели',
+		'caption'=>'Посещаемость за месяц',
 		'viewrecords'=> true,
 	),
 	'theme'=>'conquer',
