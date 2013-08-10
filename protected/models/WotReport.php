@@ -392,7 +392,7 @@ FROM wot_player wp
 SQL;
 
 		$dates=array();
-		for ($i = 14; $i >0; $i--) {
+		for ($i = date('t'); $i >0; $i--) {
 			$date = date_create('now');
 			date_add($date, date_interval_create_from_date_string("-$i days"));
 			$dates[]=date_format($date, 'Y-m-d');
