@@ -51,7 +51,7 @@ class WotClan extends CActiveRecord
 		return array(
 			'players'=>array(self::MANY_MANY,'WotPlayer','wot_player_clan(player_id,clan_id)','condition'=>'escape_date is null', 'index'=>'player_id'),
 			'playersRec'=>array(self::HAS_MANY,'WotPlayerClan','clan_id','condition'=>'escape_date is null', 'index'=>'player_id'),
-			'clanProvinces'=>array(self::HAS_MANY,'WotClanProvince','clan_id', 'condition'=>'date_end is null', 'with'=>array('province'), 'index'=>'province.province_name'),
+			'clanProvinces'=>array(self::HAS_MANY,'WotClanProvince','clan_id', 'condition'=>'date_end is null', 'with'=>array('province'), 'index'=>'province->province_name'),
 		);
 	}
 
