@@ -31,7 +31,7 @@ class WotMap extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'wot_province';
+		return 'wot_map';
 	}
 
 	/**

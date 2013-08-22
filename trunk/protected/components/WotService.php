@@ -51,10 +51,11 @@ class WotService
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				"X-Requested-With: XMLHttpRequest",
-				"Accept: text/html, */*",
-				"User-Agent: Mozilla/3.0 (compatible; easyhttp)",
+				"Accept:application/json, text/javascript, */*",
+			//	"Accept: text/html, */*",
+				"User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36",
 				"Connection: Keep-Alive",
+				"X-Requested-With: XMLHttpRequest",
 		));
 		$data = curl_exec($ch);
 		$err = curl_errno($ch);
@@ -303,7 +304,7 @@ class WotService
 	static public function updateClanProvinces($clan)
 	{
 		$clanId=$clan->clan_id.'-'.$clan->clan_name;
-		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/$clanId/provinces/list");
+		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/$clanId/provinces/list/");
 		$currentProvinces=array();
 		if(!empty($data)){
 			if($data['result']=='success'){
