@@ -42,6 +42,31 @@ class WotService
 		return $result;
 	}
 
+	
+	static private function ajaxRequest($url)
+	{
+		$ch = curl_init();
+		$timeout = 10;
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				"X-Requested-With: XMLHttpRequest",
+				"Accept: text/html, */*",
+				"User-Agent: Mozilla/3.0 (compatible; easyhttp)",
+				"Connection: Keep-Alive",
+		));
+		$data = curl_exec($ch);
+		$err = curl_errno($ch);
+		$errmsg = curl_error($ch) ;
+		curl_close($ch);
+		if($err == 0){
+			return (json_decode(trim($data), true));
+		}else{
+			return array();
+		}
+	}
+	
 
 	static private function doRequestJSON($url)
 	{
@@ -91,6 +116,10 @@ class WotService
 		return $data;
 	}
 
+	/**
+	 * 
+	 * @param WotClan $clan
+	 */
 	static public function updateClanInfo($clan)
 	{
 		$jsonString= self::getContent(str_replace('{clanId}', $clan->clan_id, self::$wotApiClanUrl));
@@ -162,6 +191,10 @@ class WotService
 		}
 	}
 
+	/**
+	 * 
+	 * @param WotPlayer $player
+	 */
 	static public function updatePlayerInfo($player)
 	{
 		$jsonString=self::getContent(str_replace('{playerId}', $player->player_id, self::$wotApiPlayerUrl));
@@ -214,6 +247,10 @@ class WotService
 		WotPlayer::calcRating();
 	}
 
+	/**
+	 * 
+	 * @param WotClan $clan
+	 */
 	static public function updateClanPlayers($clan)
 	{
 		$data=self::doRequestJSON(str_replace('{clanId}', $clan->clan_id, self::$clanUrlJson));
@@ -258,4 +295,51 @@ class WotService
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * @param WotClan $clan
+	 */
+	static public function updateClanProvinces($clan)
+	{
+		$clanId=$clan->clan_id.'-'.$clan->clan_name;
+		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/$clanId/provinces/list");
+		$currentProvinces=array();
+		if(!empty($data)){
+			if($data['result']=='success'){
+				foreach ($data['request_data']['items'] as $item){
+					$province=WotProvince::getByAttributes($item['name'], $item['id']);
+					$map=WotMap::getByName($item['arena_name']);
+					$currentProvinces[$item['name']]=$item['id'];
+					$clanProvince=WotClanProvince::model()->findByAttributes(array(
+						'province_id'=>$province->province_id,
+						'clan_id'=>$clan->clan_id,
+						'date_end'=>null,
+					));
+					if(empty($clanProvince)){
+						$clanProvince=new WotClanProvince();
+						$clanProvince->clan_id=$clan->clan_id;
+						$clanProvince->province_id=$province->province_id;
+						$clanProvince->prime_time=$item['prime_time'];
+						$clanProvince->map_id=$map->map_id;
+						$clanProvince->revenue=$item['revenue'];
+						$clanProvince->type=$item['type'];
+						$days=intval($item['occupancy_time']);
+						if($days>0)
+							$clanProvince->date_start=new CDbExpression("date_add(curdate(), interval -$days DAY)");
+						else
+							$clanProvince->date_start=new CDbExpression('curdate()');
+						$clanProvince->save(false);
+					}
+				}
+				foreach ($clan->clanProvinces as $clanProvince){
+					if(!isset($currentProvinces[$clanProvince->province->name])){
+						$clanProvince->date_end=new CDbExpression('now()');
+						$clanProvince->save(false);
+					}
+				}
+			}
+		}
+	}
+	
 }
