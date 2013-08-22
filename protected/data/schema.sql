@@ -37,6 +37,17 @@ AVG_ROW_LENGTH = 2730
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+CREATE TABLE wot_map (
+  map_id int(11) NOT NULL AUTO_INCREMENT,
+  map_name varchar(50) NOT NULL,
+  PRIMARY KEY (map_id)
+)
+ENGINE = INNODB
+AUTO_INCREMENT = 3
+AVG_ROW_LENGTH = 8192
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
 CREATE TABLE wot_player (
   player_id int(11) NOT NULL,
   player_name varchar(100) NOT NULL,
@@ -67,6 +78,18 @@ AVG_ROW_LENGTH = 5576
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+CREATE TABLE wot_province (
+  province_id int(11) NOT NULL AUTO_INCREMENT,
+  province_name varchar(50) NOT NULL,
+  territory_id varchar(10) NOT NULL,
+  PRIMARY KEY (province_id)
+)
+ENGINE = INNODB
+AUTO_INCREMENT = 4
+AVG_ROW_LENGTH = 5461
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
 CREATE TABLE wot_tank_class (
   tank_class_id varchar(50) NOT NULL,
   tank_class_name varchar(20) NOT NULL,
@@ -84,6 +107,48 @@ CREATE TABLE wot_tank_nation (
 )
 ENGINE = INNODB
 AVG_ROW_LENGTH = 3276
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+CREATE TABLE wot_clan_battles (
+  clan_id int(11) NOT NULL AUTO_INCREMENT,
+  battle_time int(11) NOT NULL,
+  province_id int(11) NOT NULL,
+  map_id int(11) NOT NULL,
+  PRIMARY KEY (clan_id, province_id),
+  CONSTRAINT FK_wot_clan_battles_wot_clan_clan_id FOREIGN KEY (clan_id)
+  REFERENCES wot_clan (clan_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_wot_clan_battles_wot_map_map_id FOREIGN KEY (map_id)
+  REFERENCES wot_map (map_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_wot_clan_battles_wot_province_province_id FOREIGN KEY (province_id)
+  REFERENCES wot_province (province_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE = INNODB
+AUTO_INCREMENT = 1
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+CREATE TABLE wot_clan_province (
+  clan_id int(11) NOT NULL,
+  province_id int(11) NOT NULL,
+  date_start datetime NOT NULL,
+  date_end datetime DEFAULT NULL,
+  map_id int(11) NOT NULL,
+  revenue int(11) NOT NULL,
+  prime_time int(11) NOT NULL,
+  type enum ('normal', 'gold') NOT NULL,
+  c_time datetime NOT NULL,
+  PRIMARY KEY (clan_id, province_id, date_start),
+  INDEX IDX_wot_clan_province_date_end (date_end),
+  CONSTRAINT FK_wot_clan_province_wot_clan_clan_id FOREIGN KEY (clan_id)
+  REFERENCES wot_clan (clan_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_wot_clan_province_wot_map_map_id FOREIGN KEY (map_id)
+  REFERENCES wot_map (map_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_wot_clan_province_wot_province_province_id FOREIGN KEY (province_id)
+  REFERENCES wot_province (province_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE = INNODB
+AVG_ROW_LENGTH = 5461
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -166,7 +231,7 @@ CREATE TABLE wot_tank (
   REFERENCES wot_tank_nation (tank_nation_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 688
+AUTO_INCREMENT = 691
 AVG_ROW_LENGTH = 344
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
@@ -180,7 +245,7 @@ CREATE TABLE wot_teamspeak (
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 55
+AVG_ROW_LENGTH = 163
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -195,7 +260,7 @@ CREATE TABLE wot_player_clan_history (
   REFERENCES wot_player_clan (entry_date, player_id, clan_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 65
+AVG_ROW_LENGTH = 62
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -244,7 +309,9 @@ COLLATE utf8_general_ci;
 
 DELIMITER $$
 
-CREATE TRIGGER tr_wot_player_clan_update
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_player_clan_update
 AFTER UPDATE
 ON wot_player_clan
 FOR EACH ROW
@@ -256,7 +323,9 @@ BEGIN
 END
 $$
 
-CREATE TRIGGER tr_wot_player_tank_update
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_player_tank_update
 AFTER UPDATE
 ON wot_player_tank
 FOR EACH ROW
@@ -284,7 +353,9 @@ BEGIN
 END
 $$
 
-CREATE TRIGGER tr_wot_player_update
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_player_update
 AFTER UPDATE
 ON wot_player
 FOR EACH ROW
