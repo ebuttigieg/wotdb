@@ -142,4 +142,9 @@ class WotController extends Controller
 		//echo $ts3_VirtualServer->getViewer(new TeamSpeak3_Viewer_Html("/images/viewer/", "/images/flags/"));
 
 	}
+	
+	public function actionGk()
+	{
+		WotService::updateClanProvinces(WotClan::currentClan());
+	}
 }
