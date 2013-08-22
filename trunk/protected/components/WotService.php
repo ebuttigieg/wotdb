@@ -334,7 +334,7 @@ class WotService
 					}
 				}
 				foreach ($clan->clanProvinces as $clanProvince){
-					if(!isset($currentProvinces[$clanProvince->province->name])){
+					if(!isset($currentProvinces[$clanProvince->province->province_name])){
 						$clanProvince->date_end=new CDbExpression('now()');
 						$clanProvince->save(false);
 					}
