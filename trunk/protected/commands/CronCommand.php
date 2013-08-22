@@ -69,5 +69,10 @@ SQL;
 			}
 		}
 	}
+	
+	public function actionGk()
+	{
+		WotService::updateClanProvinces(WotClan::currentClan());
+	}
 
 }
