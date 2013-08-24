@@ -147,4 +147,13 @@ class WotController extends Controller
 	{
 		WotService::updateClanProvinces(WotClan::currentClan());
 	}
+	
+	public function actionPost()
+	{
+		if(isset($_GET['new'])){
+			
+		}
+		$this->render('post');
+	}
+	
 }
