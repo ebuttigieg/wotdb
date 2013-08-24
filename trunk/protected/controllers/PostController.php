@@ -2,7 +2,8 @@
 
 class PostController extends Controller
 {
-	public $layout='column2';
+	public $layout='grid';
+//s	public $layout='column2';
 
 	/**
 	 * @var CActiveRecord the currently loaded data model instance.
@@ -80,11 +81,15 @@ class PostController extends Controller
 	public function actionUpdate()
 	{
 		$model=$this->loadModel();
-		if(isset($_POST['Post']))
+		if(isset($_POST['WotPost']))
 		{
-			$model->attributes=$_POST['Post'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST['WotPost'];
+			$model->image=CUploadedFile::getInstance($model,'image');
+			if($model->save()){
+				$ext=pathinfo($model->image, PATHINFO_EXTENSION);
+				$model->image->saveAs(Yii::getPathOfAlias('webroot.images.upload').'/'.$model->post_id.'.'.$ext);
+				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -116,19 +121,11 @@ class PostController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$criteria=new CDbCriteria(array(
-			'condition'=>'status='.Post::STATUS_PUBLISHED,
-			'order'=>'update_time DESC',
-			'with'=>'commentCount',
-		));
-		if(isset($_GET['tag']))
-			$criteria->addSearchCondition('tags',$_GET['tag']);
-
-		$dataProvider=new CActiveDataProvider('Post', array(
+		$dataProvider=new CActiveDataProvider('WotPost', array(
 			'pagination'=>array(
 				'pageSize'=>Yii::app()->params['postsPerPage'],
 			),
-			'criteria'=>$criteria,
+		//	'criteria'=>$criteria,
 		));
 
 		$this->render('index',array(
@@ -173,11 +170,11 @@ class PostController extends Controller
 		{
 			if(isset($_GET['id']))
 			{
-				if(Yii::app()->user->isGuest)
-					$condition='status='.Post::STATUS_PUBLISHED.' OR status='.Post::STATUS_ARCHIVED;
-				else
-					$condition='';
-				$this->_model=Post::model()->findByPk($_GET['id'], $condition);
+			//	if(Yii::app()->user->isGuest)
+			//		$condition='status='.Post::STATUS_PUBLISHED.' OR status='.Post::STATUS_ARCHIVED;
+			//	else
+		//			$condition='';
+				$this->_model=WotPost::model()->findByPk($_GET['id']);
 			}
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');

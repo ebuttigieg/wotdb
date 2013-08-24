@@ -21,6 +21,7 @@ $config=CMap::mergeArray($config,array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.forms.*',
 	),
 
 	'defaultController'=>'wot',
@@ -117,6 +118,12 @@ $config=CMap::mergeArray($config,array(
 						//	'jquery.flot.threshold.js'
 					),
 					// 'css'=>array('css/font-awesome.min.css'),
+					'depends'=>array('jquery'),
+				),
+				'wysihtml'=>array(
+					'basePath'=>'ext.conquer.plugins.bootstrap-wysihtml5',
+					'js'=>array('wysihtml5-0.3.0.js','bootstrap-wysihtml5.js'),
+					'css'=>array('wysiwyg-color.css','bootstrap-wysihtml5.css'),
 					'depends'=>array('jquery'),
 				),
 			),

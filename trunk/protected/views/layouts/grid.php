@@ -13,7 +13,8 @@
    <!-- BEGIN GLOBAL MANDATORY STYLES -->
    <link href="/css/bootstrap.min.css" rel="stylesheet" />
    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
-
+   <link rel="stylesheet" type="text/css" href="/css/bootstrap-fileupload.css" />
+   
    <!--  link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" /-->
    <link href="/css/style.css" rel="stylesheet" />
    <link href="/css/style_responsive.css" rel="stylesheet" />
@@ -230,6 +231,8 @@
    <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
    <script src="/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+   <script type="text/javascript" src="/js/bootstrap-fileupload.js"></script>
+   
    <!--[if lt IE 9]>
    <script src="/js/excanvas.js"></script>
    <script src="/js/respond.js"></script>
