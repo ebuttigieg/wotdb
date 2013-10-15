@@ -9,8 +9,12 @@ class WotService
 
 	//https://gist.github.com/2724734
 
-	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
-	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
+//	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
+//	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
+	static private $wotApiClanUrl="http://api.worldoftanks.ru/2.0/clan/info/?application_id=171745d21f7f98fd8878771da1000a31&clan_id={clanId}";
+	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
+	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/2.0/account/tanks/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
+	static private $wotApiTanks="http://api.worldoftanks.ru/2.0/encyclopedia/tanks/?application_id=171745d21f7f98fd8878771da1000a31";
 
 
 	static private function tryContent($url)
@@ -127,20 +131,25 @@ class WotService
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
-				$clan->clan_descr=$jsonData['data']['description'];
-				$clan->updated_at=date('Y-m-d H:i',$jsonData['data']['updated_at']);
-				$clan->clan_name=$jsonData['data']['abbreviation'];
-				$clan->clan_fullname=$jsonData['data']['name'];
-				$clan->clan_descr_html=$jsonData['data']['description_html'];
-				$clan->clan_created=date('Y-m-d', $jsonData['data']['created_at']);
-				$clan->clan_ico=$jsonData['data']['emblems']['large'];
-				$clan->clan_motto=$jsonData['data']['motto'];
-				$clan->save(false);
-
-				$members=array();
-				foreach ($jsonData['data']['members'] as $member) {
-					$members[$member['account_id']]=$member;
+				if(isset($jsonData['data'][$clan->clan_id])){
+					$data=$jsonData['data'][$clan->clan_id];
+					$clan->clan_descr=$data['description'];
+					$clan->updated_at=date('Y-m-d H:i',$data['updated_at']);
+					$clan->clan_name=$data['abbreviation'];
+					$clan->clan_fullname=$dat['name'];
+					$clan->clan_descr_html=$data['description_html'];
+					$clan->clan_created=date('Y-m-d', $data['created_at']);
+					$clan->clan_ico=$data['emblems']['large'];
+					$clan->clan_motto=$data['motto'];
+					$clan->save(false);
+					
+					$members=$data['members'];
+				//	foreach ($data['members'] as $member) {
+				//		$members[$member['account_id']]=$member;
+				//	}
 				}
+				
+				
 
 				$tran=Yii::app()->db->beginTransaction();
 
@@ -204,24 +213,12 @@ class WotService
 			if($jsonData['status']=='ok'){
 
 				$tran=Yii::app()->db->beginTransaction();
-
-				$player->achievements=serialize($jsonData['data']['achievements']);
-				$player->attributes=$jsonData['data']['battles'];
-				$player->attributes=$jsonData['data']['summary'];
-				$player->attributes=$jsonData['data']['experience'];
-				$player->updated_at=date('Y-m-d H:i',$jsonData['data']['updated_at']);
-				$player->created_at=date('Y-m-d H:i',$jsonData['data']['created_at']);
-				$player->player_name=$jsonData['data']['name'];
-
-				foreach ($jsonData['data']['vehicles'] as $vehicle){
-					$tank=WotTank::getTank($vehicle['name'],$vehicle['localized_name'],$vehicle['level'],$vehicle['nation'],$vehicle['class'],$vehicle['image_url']);
-					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $tank->tank_id);
-					foreach (WotPlayerTank::$attrs as $attr) {
-						$playerTank->$attr=$vehicle[$attr];
-					}
-					$playerTank->updated_at=$player->updated_at;
-					$playerTank->save(false);
-				}
+				$data=$jsonData['data'][$player->player_id];
+				$player->achievements=serialize($data['achievements']);
+				$player->attributes=$data['statistics']['all'];
+				$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
+				$player->created_at=date('Y-m-d H:i',$data['created_at']);
+				$player->player_name=$data['nickname'];			
 				$player->save(false);
 
 				$tran->commit();
@@ -231,9 +228,73 @@ class WotService
 			//	var_dump($jsonData);
 		}
 	}
+	
+	static public function updateTanks()
+	{
+		$jsonString=self::getContent(self::$wotApiTanks);
+		if($jsonString!=false){
+			$jsonData=json_decode($jsonString,true);
+			if($jsonData['status']=='ok'){
+				$tran=Yii::app()->db->beginTransaction();
+				foreach ($jsonData['data'] as $data){
+					if (preg_match("/#(.*?):(.*)/",$data['name'],$mathes)){
+						$tankName=$mathes[2];
+					}
+					else
+						$tankName=$data['name'];
+					$tank=WotTank::model()->findByAttributes(array('tank_name'=>$tankName));//Pk($data['tank_id']);
+					if(empty($tank)){
+						$tank=new WotTank();
+						$tank->tank_id=$data['tank_id'];
+					}else{
+						if($tank->tank_id!=$data['tank_id']){
+							$ot=WotTank::model()->findByPk($data['tank_id']);
+							if(!empty($ot)){
+								$ot->tank_id=$ot->tank_id+10000;
+								$ot->save(false);
+							}
+							$tank->tank_id=$data['tank_id'];
+							$tank->save(false);
+						}
+					}
+					$tank->tank_class_id=$data['type'];
+					$tank->tank_nation_id=$data['nation'];
+					$tank->tank_level=$data['level'];
+					$tank->tank_name=$tankName;
+					$tank->is_premium=$data['is_premium'];
+					$tank->tank_localized_name=$tankName;
+					$tank->save(false);
+				}
+				$tran->commit();
+			}
+		}
+	}
+	
+	static public function updatePlayerTanks($player)
+	{
+		$jsonString=self::getContent(str_replace('{playerId}', $player->player_id, self::$wotApiPlayerTanks));
+		if($jsonString!=false){
+			$jsonData=json_decode($jsonString,true);
+			if($jsonData['status']=='ok'){
+				$tran=Yii::app()->db->beginTransaction();
+				foreach ($jsonData['data'][$player->player_id] as $vehicle){
+					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
+					foreach (WotPlayerTank::$attrs as $attr) {
+						$playerTank->$attr=$vehicle[$attr];
+					}
+					$playerTank->attributes=$vehicle['statistics']['all'];
+					$playerTank->updated_at=$player->updated_at;
+					$playerTank->save(false);
+				}
+				$tran->commit();
+			}
+		}
+	}
 
 	static public function scanClan($clanId)
 	{
+		self::updateTanks();
+		
 		$clan=WotClan::model()->findByPk($clanId);
 		if(empty($clan)){
 			$clan=new WotClan();
@@ -244,6 +305,8 @@ class WotService
 		$clan->refresh();
 		foreach ($clan->players as $player){
 			self::updatePlayerInfo($player);
+			self::updatePlayerTanks($player);
+			
 		}
 		WotPlayer::calcRating();
 	}
