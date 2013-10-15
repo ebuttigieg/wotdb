@@ -3,7 +3,7 @@
 class WotPlayerTank extends CActiveRecord
 {
 
-	public static $attrs=array('battle_count', 'win_count', 'spotted', 'damageDealt', 'survivedBattles', 'frags');
+	public static $attrs=array('max_xp', 'wins', 'battles', 'max_frags', 'win_and_survived');
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -41,7 +41,11 @@ class WotPlayerTank extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('battle_count, win_count, spotted, damageDealt, survivedBattles, frags', 'numerical', 'integerOnly'=>true),
+			array(
+				'spotted,hits,battle_avg_xp,draws,wins,losses,capture_points,battles,damage_dealt,hits_percents,damage_received,shots,xp,frags,survived_battles,dropped_capture_points', 
+				'numerical', 
+				'integerOnly'=>true
+			),
 		);
 	}
 

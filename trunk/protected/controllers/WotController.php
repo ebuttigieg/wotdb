@@ -156,4 +156,9 @@ class WotController extends Controller
 		$this->render('post');
 	}
 	
+	public function actionTest()
+	{
+		WotService::scanClan(WotClan::$clanId);
+	}
+	
 }
