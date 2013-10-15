@@ -54,17 +54,19 @@ SQL;
 		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
 		$ts3_VirtualServer = TeamSpeak3::factory(Yii::app()->params['tsUri']);
 		$arr_ClientList = $ts3_VirtualServer->clientList();
+		$players=array();
 		foreach ($arr_ClientList as $client){
 			$info =$client->getInfo();
 			$client=Clients::model()->findByPk($info['client_database_id']);
 			if(!empty($client)){
 				$player_id=$client->player_id;
-				if(!empty($player_id)){
+				if(!empty($player_id)&&!isset($players[$player_id])){
+					$players[$player_id]=true;
 					$wts=new WotTeamspeak();
 					$wts->updated_at=new CDbExpression('now()');
 					$wts->player_id=$player_id;
 					$wts->client_id=$info['client_database_id'];
-					$wts->save(true);
+					$wts->save(false);
 				}
 			}
 		}
