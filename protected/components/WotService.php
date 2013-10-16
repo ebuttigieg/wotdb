@@ -214,8 +214,26 @@ class WotService
 
 				$tran=Yii::app()->db->beginTransaction();
 				$data=$jsonData['data'][$player->player_id];
-				$player->achievements=serialize($data['achievements']);
-				$player->attributes=$data['statistics']['all'];
+				$achievments=$player->achievments;
+				foreach ($data['achievements'] as $key=>$value){
+					if(isset($achievments[$key])){
+						$playerAchievment=$achievments[$key];
+					}else{
+						$achievment=WotAchievment::achievment($key);
+						$playerAchievment=new WotPlayerAchievment();
+						$playerAchievment->achievment_id=$achievment->achievment_id;
+						$playerAchievment->player_id=$player->player_id;
+						
+					}
+					$playerAchievment->cnt=$value;
+					$playerAchievment->save(false);
+				}
+				foreach (array('all', 'clan', 'company') as $statName){
+					$stat=$player->getStatistic($statName);
+					$stat->attributes=$data['statistics'][$statName];
+					$stat->save(false);
+				}
+				$player->max_xp=$data['statistics']['max_xp'];
 				$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
 				$player->created_at=date('Y-m-d H:i',$data['created_at']);
 				$player->player_name=$data['nickname'];			
@@ -236,34 +254,25 @@ class WotService
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
 				$tran=Yii::app()->db->beginTransaction();
+				$tanks=WotTank::model()->findAll(array('index'=>'tank_id'));
 				foreach ($jsonData['data'] as $data){
-					if (preg_match("/#(.*?):(.*)/",$data['name'],$mathes)){
-						$tankName=$mathes[2];
-					}
-					else
-						$tankName=$data['name'];
-					$tank=WotTank::model()->findByAttributes(array('tank_name'=>$tankName));//Pk($data['tank_id']);
-					if(empty($tank)){
+				//	$tank=WotTank::model()->findByPk($data['tank_id']);//Attributes(array('tank_name'=>$tankName));//
+					if(!isset($tanks[$data['tank_id']])){
 						$tank=new WotTank();
 						$tank->tank_id=$data['tank_id'];
-					}else{
-						if($tank->tank_id!=$data['tank_id']){
-							$ot=WotTank::model()->findByPk($data['tank_id']);
-							if(!empty($ot)){
-								$ot->tank_id=$ot->tank_id+10000;
-								$ot->save(false);
-							}
-							$tank->tank_id=$data['tank_id'];
-							$tank->save(false);
+						$tank->tank_class_id=$data['type'];
+						$tank->tank_nation_id=$data['nation'];
+						$tank->tank_level=$data['level'];
+						$tank->is_premium=$data['is_premium'];
+						if (preg_match("/#(.*?):(.*)/",$data['name'],$mathes)){
+							$tankName=$mathes[2];
 						}
+						else
+							$tankName=$data['name'];
+						$tank->tank_name=$tankName;
+						$tank->tank_localized_name=$tankName;
+						$tank->save(false);
 					}
-					$tank->tank_class_id=$data['type'];
-					$tank->tank_nation_id=$data['nation'];
-					$tank->tank_level=$data['level'];
-					$tank->tank_name=$tankName;
-					$tank->is_premium=$data['is_premium'];
-					$tank->tank_localized_name=$tankName;
-					$tank->save(false);
 				}
 				$tran->commit();
 			}
@@ -280,10 +289,18 @@ class WotService
 				foreach ($jsonData['data'][$player->player_id] as $vehicle){
 					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
 					foreach (WotPlayerTank::$attrs as $attr) {
-						$playerTank->$attr=$vehicle[$attr];
+						$playerTank->$attr=$vehicle['statistics'][$attr];
 					}
-					$playerTank->attributes=$vehicle['statistics']['all'];
+					foreach (array('all', 'clan', 'company') as $statName){
+						$stat=$playerTank->getStatistic($statName);
+						$stat->attributes=$vehicle['statistics'][$statName];
+						$stat->save(false);
+					}
 					$playerTank->updated_at=$player->updated_at;
+					if($vehicle['last_battle_time']>0)
+						$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
+					$playerTank->mark_of_mastery=$vehicle['mark_of_mastery'];
+					$playerTank->in_garage=$vehicle['in_garage'];
 					$playerTank->save(false);
 				}
 				$tran->commit();
