@@ -227,6 +227,7 @@ class WotService
 							
 						}
 						if($playerAchievment->cnt!=$value){
+							$playerAchievment->cnt=$value;
 							$playerAchievment->save(false);
 						}
 					}
