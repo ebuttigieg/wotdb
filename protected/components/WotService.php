@@ -216,17 +216,20 @@ class WotService
 				$data=$jsonData['data'][$player->player_id];
 				$achievments=$player->achievments;
 				foreach ($data['achievements'] as $key=>$value){
-					if(isset($achievments[$key])){
-						$playerAchievment=$achievments[$key];
-					}else{
-						$achievment=WotAchievment::achievment($key);
-						$playerAchievment=new WotPlayerAchievment();
-						$playerAchievment->achievment_id=$achievment->achievment_id;
-						$playerAchievment->player_id=$player->player_id;
-						
+					if($value>0){
+						if(isset($achievments[$key])){
+							$playerAchievment=$achievments[$key];
+						}else{
+							$achievment=WotAchievment::achievment($key);
+							$playerAchievment=new WotPlayerAchievment();
+							$playerAchievment->achievment_id=$achievment->achievment_id;
+							$playerAchievment->player_id=$player->player_id;
+							
+						}
+						if($playerAchievment->cnt!=$value){
+							$playerAchievment->save(false);
+						}
 					}
-					$playerAchievment->cnt=$value;
-					$playerAchievment->save(false);
 				}
 				foreach (array('all', 'clan', 'company') as $statName){
 					$stat=$player->getStatistic($statName);
