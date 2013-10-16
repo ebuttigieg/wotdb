@@ -47,9 +47,29 @@ class WotPlayer extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'statistics'=>array(self::HAS_MANY, 'WotPlayerStatistic', 'player_id', 'index'=>'statisticName', 'with'=>array('statistic')),
+			'achievments'=>array(self::HAS_MANY, 'WotPlayerAchievment', 'player_id', 'index'=>'achievmentName', 'with'=>array('achievment')),
 		);
 	}
 
+	public function getStatistic($statName)
+	{
+		$stats=$this->statistics;
+		if(!isset($stats[$statName])){
+			$stat=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
+			if(empty($stat)){
+				throw new CException('statistic is not defined!');
+			}
+			$playerStat = new WotPlayerStatistic();
+			$playerStat->statistic_id=$stat->statistic_id;
+			$playerStat->player_id=$this->player_id;
+			$playerStat->save(false);
+			$this->refresh();
+			return $this->getStatistic($statName);
+		}
+		return $stats[$statName];
+	}
+	
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -65,8 +85,9 @@ class WotPlayer extends CActiveRecord
 		$sql=<<<SQL
 update wot_player wp
 JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+JOIN wot_player_statistic wps ON wps.player_id=wp.player_id AND wps.statistic_id=1
 JOIN (SELECT pt.player_id
-           , sum(t.tank_level * pt.battle_count) midl
+           , sum(t.tank_level * pt.battles) midl
       FROM
         wot_player_tank pt
       JOIN wot_tank t
@@ -75,17 +96,17 @@ JOIN (SELECT pt.player_id
         pt.player_id
   ) a ON a.player_id = wp.player_id
 
-  SET wp.wn6=(1240 - 1040 / power(least(a.midl / wp.battles_count, 6), 0.164)) * wp.frags / wp.battles_count +
-       wp.damage_dealt / wp.battles_count * 530 / (184 * exp(0.24 * a.midl / wp.battles_count) + 130) +
-       wp.spotted / wp.battles_count * 125 +
-       least(wp.dropped_capture_points / wp.battles_count, 2.2) * 100 +
-       ((185 / (0.17 + exp((wp.wins / wp.battles_count * 100 - 35) * -0.134))) - 500) * 0.45 +
-       (6 - least(a.midl / wp.battles_count, 6)) * -60,
-  wp.effect= wp.damage_dealt / wp.battles_count * (10 / (a.midl / wp.battles_count + 2)) * (0.23 + 2 * a.midl / wp.battles_count / 100) +
-       250 * wp.frags / wp.battles_count +
-       wp.spotted / wp.battles_count * 150 +
-       log(1.732, wp.capture_points / wp.battles_count + 1) * 150 +
-       wp.dropped_capture_points / wp.battles_count * 150
+  SET wp.wn6=(1240 - 1040 / power(least(a.midl / wps.battles, 6), 0.164)) * wps.frags / wps.battles +
+       wps.damage_dealt / wps.battles * 530 / (184 * exp(0.24 * a.midl / wps.battles) + 130) +
+       wps.spotted / wps.battles * 125 +
+       least(wps.dropped_capture_points / wps.battles, 2.2) * 100 +
+       ((185 / (0.17 + exp((wps.wins / wps.battles * 100 - 35) * -0.134))) - 500) * 0.45 +
+       (6 - least(a.midl / wps.battles, 6)) * -60,
+  wp.effect= wps.damage_dealt / wps.battles * (10 / (a.midl / wps.battles + 2)) * (0.23 + 2 * a.midl / wps.battles / 100) +
+       250 * wps.frags / wps.battles +
+       wps.spotted / wps.battles * 150 +
+       log(1.732, wps.capture_points / wps.battles + 1) * 150 +
+       wps.dropped_capture_points / wps.battles * 150
 SQL;
 		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
 	}
