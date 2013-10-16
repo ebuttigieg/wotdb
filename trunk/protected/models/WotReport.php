@@ -316,42 +316,55 @@ SQL;
 	public static function progress()
 	{
 		$sql=<<<SQL
-SELECT wp.player_id
-  ,wp.player_name
-  ,wp.battles_count-wph.battles_count battles_count
-  ,wph.updated_at
-  ,wp.effect
-  ,wp.effect-wph.effect heffect
-  ,wp.wn6
-  ,wp.wn6-wph.wn6 hwn6
-  ,wp.wins/wp.battles_count*100 winp
-  ,wp.wins/wp.battles_count*100 - wph.wins/wph.battles_count*100 hwinp
-  ,wp.capture_points/wp.battles_count cp
-  ,wp.capture_points/wp.battles_count-wph.capture_points/wph.battles_count hcp
-  ,wp.spotted/wp.battles_count spotted
-  ,wp.spotted/wp.battles_count-wph.spotted/wph.battles_count hspotted
-  ,wp.hits_percents hitp
-  ,wp.hits_percents-wph.hits_percents hhitp
-  ,wp.dropped_capture_points/wp.battles_count dcp
-  ,wp.dropped_capture_points/wp.battles_count-wph.dropped_capture_points/wph.battles_count hdcp
-  ,wp.survived_battles/wp.battles_count sb
-  ,wp.survived_battles/wp.battles_count-wph.survived_battles/wph.battles_count hsb
-  ,wp.damage_dealt/wp.battles_count damage
-  ,wp.damage_dealt/wp.battles_count-wph.damage_dealt/wph.battles_count hdamage
-  ,wp.battle_avg_xp
-  ,wp.battle_avg_xp-wph.battle_avg_xp hbattle_avg_xp
-  ,wp.frags/wp.battles_count frags
-  ,wp.frags/wp.battles_count-wph.frags/wph.battles_count hfrags
-  ,wp.max_xp
-  ,wp.max_xp-wph.max_xp hmax_xp
-  FROM wot_player wp
-  JOIN (
-SELECT MIN(wph.updated_at) updated_at, wph.player_id
+SELECT
+  wp.player_id,
+  wp.player_name,
+  wps.battles - wpsh.battles battles_count,
+  wph.updated_at,
+  wp.effect,
+  wp.effect - wph.effect heffect,
+  wp.wn6,
+  wp.wn6 - wph.wn6 hwn6,
+  wps.wins / wps.battles * 100 winp,
+  wps.wins / wps.battles * 100 - wpsh.wins / wpsh.battles * 100 hwinp,
+  wps.capture_points / wps.battles cp,
+  wps.capture_points / wps.battles - wpsh.capture_points / wpsh.battles hcp,
+  wps.spotted / wps.battles spotted,
+  wps.spotted / wps.battles - wpsh.spotted / wpsh.battles hspotted,
+  wps.hits_percents hitp,
+  wps.hits_percents - wpsh.hits_percents hhitp,
+  wps.dropped_capture_points / wps.battles dcp,
+  wps.dropped_capture_points / wps.battles - wpsh.dropped_capture_points / wpsh.battles hdcp,
+  wps.survived_battles / wps.battles sb,
+  wps.survived_battles / wps.battles - wpsh.survived_battles / wpsh.battles hsb,
+  wps.damage_dealt / wps.battles damage,
+  wps.damage_dealt / wps.battles - wpsh.damage_dealt / wpsh.battles hdamage,
+  wps.battle_avg_xp,
+  wps.battle_avg_xp - wpsh.battle_avg_xp hbattle_avg_xp,
+  wps.frags / wps.battles frags,
+  wps.frags / wps.battles - wpsh.frags / wpsh.battles hfrags,
+  wp.max_xp,
+  wp.max_xp - wph.max_xp hmax_xp
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
+  JOIN (SELECT
+    MIN(wpsh.updated_at) updated_at,
+    wpsh.player_id,
+    wpsh.statistic_id
+  FROM wot_player_statistic_history wpsh
+    JOIN wot_player_clan wpc
+      ON wpsh.player_id = wpc.player_id AND wpc.clan_id = :clan AND wpc.escape_date IS NULL
+  WHERE wpsh.updated_at > DATE_ADD(NOW(), INTERVAL -2 DAY)) a ON a.player_id = wp.player_id AND a.statistic_id = wps.statistic_id
+  JOIN wot_player_statistic_history wpsh ON wpsh.updated_at = a.updated_at AND wpsh.player_id = a.player_id AND wpsh.statistic_id = a.statistic_id
+  JOIN (SELECT
+    MIN(wph.updated_at) updated_at,
+    wph.player_id
   FROM wot_player_history wph
-  JOIN wot_player_clan wpc ON wpc.player_id=wph.player_id AND wpc.clan_id=:clan AND wpc.escape_date IS NULL
-  WHERE wph.updated_at>DATE_ADD(NOW(), INTERVAL -2 day)
-  GROUP BY wph.player_id) s ON s.player_id=wp.player_id
-  JOIN wot_player_history wph ON wph.updated_at=s.updated_at AND wph.player_id=s.player_id
+    JOIN wot_player_clan wpc
+      ON wpc.player_id = wph.player_id AND wpc.clan_id = :clan AND wpc.escape_date IS NULL
+  WHERE wph.updated_at > DATE_ADD(NOW(), INTERVAL -2 DAY)
+  GROUP BY wph.player_id) s ON s.player_id = wp.player_id
+  JOIN wot_player_history wph ON wph.updated_at = s.updated_at AND wph.player_id = s.player_id
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -379,18 +392,30 @@ SQL;
 	public static function playerProgress($playerId)
 	{
 		$sql=<<<SQL
-SELECT wph.player_id, UNIX_TIMESTAMP(DATE(wph.updated_at)) dd, MAX(wph.effect) effect, MAX(wph.wn6) wn6, MAX(wph.wins/wph.battles_count*100) wp
-  FROM wot_player_history wph
-  WHERE wph.player_id=:player AND wph.effect>0 AND DATE(wph.updated_at)<curdate() AND DATE(wph.updated_at)>date_add(curdate(), interval - 3 month)
-  GROUP BY  DATE(wph.updated_at), wph.player_id
-UNION
-  (SELECT wp.player_id, UNIX_TIMESTAMP(DATE(wp.updated_at)), wp.effect,wp.wn6, wp.wins/wp.battles_count*100
-    FROM wot_player wp
-    WHERE wp.player_id=:player
-  ORDER BY  wp.updated_at DESC LIMIT 1)
+SELECT
+  wph.player_id,
+  UNIX_TIMESTAMP(DATE(wph.updated_at)) dd,
+  MAX(wph.effect) effect,
+  MAX(wph.wn6) wn6,
+  MAX(wpsh.wins / wpsh.battles * 100) wp
+FROM wot_player_history wph
+  JOIN wot_player_statistic_history wpsh ON wpsh.player_id = wph.player_id AND wpsh.statistic_id = :stat
+WHERE wph.player_id = :player AND wph.effect > 0 AND DATE(wph.updated_at) < CURDATE() AND DATE(wph.updated_at) > DATE_ADD(CURDATE(), INTERVAL -3 MONTH)
+GROUP BY DATE(wph.updated_at),
+         wph.player_id
+UNION (SELECT
+  wp.player_id,
+  UNIX_TIMESTAMP(DATE(wp.updated_at)),
+  wp.effect,
+  wp.wn6,
+  wps.wins / wps.battles * 100
+FROM wot_player wp
+JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id=:stat
+WHERE wp.player_id = :player
+ORDER BY wp.updated_at DESC LIMIT 1)
 ORDER BY dd
 SQL;
-		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('player'=>$playerId));
+		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('player'=>$playerId, 'stat'=>1));
 		return $data;
 	}
 
@@ -407,20 +432,24 @@ FROM wot_player wp
   JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
   JOIN wot_clan_role wcr ON wpc.clan_role_id = wcr.clan_role_id
   LEFT JOIN (SELECT
-    wph.player_id,
-    DATE(wph.updated_at) dte,
-    MIN(wph.battles_count) bc
-  FROM wot_player_history wph
-    JOIN wot_player wp ON wph.player_id = wp.player_id
-    JOIN wot_player_clan wpc ON wph.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
-  WHERE wph.updated_at > DATE_ADD(CURDATE(), INTERVAL - 1 MONTH)
-  GROUP BY wph.player_id, DATE(wph.updated_at)) a ON a.player_id = wp.player_id
+    wpsh.player_id,
+    DATE(wpsh.updated_at) dte,
+    MIN(wpsh.battles) bc
+  FROM wot_player_statistic_history wpsh
+    JOIN wot_player wp
+      ON wpsh.player_id = wp.player_id
+    JOIN wot_player_clan wpc
+      ON wpsh.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  WHERE wpsh.updated_at > DATE_ADD(CURDATE(), INTERVAL -1 MONTH)
+  GROUP BY wpsh.player_id,
+           DATE(wpsh.updated_at)) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
     wt.player_id,
     DATE(wt.updated_at) dts
   FROM wot_teamspeak wt
   WHERE TIME(wt.updated_at) BETWEEN TIME('20:00') AND TIME('24:00')
-  GROUP BY wt.player_id, DATE(wt.updated_at)) b ON a.player_id = b.player_id AND a.dte = b.dts
+  GROUP BY wt.player_id,
+           DATE(wt.updated_at)) b ON a.player_id = b.player_id AND a.dte = b.dts
 SQL;
 
 		$dates=array();
