@@ -136,7 +136,7 @@ class WotService
 					$clan->clan_descr=$data['description'];
 					$clan->updated_at=date('Y-m-d H:i',$data['updated_at']);
 					$clan->clan_name=$data['abbreviation'];
-					$clan->clan_fullname=$dat['name'];
+					$clan->clan_fullname=$data['name'];
 					$clan->clan_descr_html=$data['description_html'];
 					$clan->clan_created=date('Y-m-d', $data['created_at']);
 					$clan->clan_ico=$data['emblems']['large'];
