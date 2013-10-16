@@ -291,17 +291,17 @@ class WotService
 					foreach (WotPlayerTank::$attrs as $attr) {
 						$playerTank->$attr=$vehicle['statistics'][$attr];
 					}
-					foreach (array('all', 'clan', 'company') as $statName){
-						$stat=$playerTank->getStatistic($statName);
-						$stat->attributes=$vehicle['statistics'][$statName];
-						$stat->save(false);
-					}
 					$playerTank->updated_at=$player->updated_at;
 					if($vehicle['last_battle_time']>0)
 						$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
 					$playerTank->mark_of_mastery=$vehicle['mark_of_mastery'];
 					$playerTank->in_garage=$vehicle['in_garage'];
 					$playerTank->save(false);
+					foreach (array('all', 'clan', 'company') as $statName){
+						$stat=$playerTank->getStatistic($statName);
+						$stat->attributes=$vehicle['statistics'][$statName];
+						$stat->save(false);
+					}
 				}
 				$tran->commit();
 			}
