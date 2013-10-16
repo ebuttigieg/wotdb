@@ -6,36 +6,36 @@ class WotReport
 	{
 		$sql=<<<SQL
 SELECT
-  pt.battle_count - pth.battle_count b,
-  p.player_name,
-  t.tank_localized_name,
-  pt.updated_at,
-  pth.updated_at hupdated_at,
-  pt.battle_count,
-  pth.battle_count hbattle_count,
-  pt.win_count,
-  pth.win_count hwin_count,
-  pt.win_count - pth.win_count dwins,
-  (pt.win_count - pth.win_count)/(pt.battle_count - pth.battle_count)*100 dwin_count,
-  pt.win_count / pt.battle_count * 100 wp,
-  pt.win_count / pt.battle_count * 100 - pth.win_count / pth.battle_count * 100 dwp
-FROM wot_player_tank pt
-  JOIN wot_player p ON p.player_id = pt.player_id
-  JOIN wot_player_clan pc ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
-  JOIN wot_tank t ON t.tank_id = pt.tank_id
+  wpt.battles - wpth.battles b,
+  wp.player_name,
+  wt.tank_localized_name,
+  wpt.updated_at,
+  wpth.updated_at hupdated_at,
+  wpt.battles,
+  wpth.battles hbattle_count,
+  wpt.wins,
+  wpth.wins hwin_count,
+  wpt.wins - wpth.wins dwins,
+  (wpt.wins - wpth.wins) / (wpt.battles - wpth.battles) * 100 dwin_count,
+  wpt.wins / wpt.battles * 100 wp,
+  wpt.wins / wpt.battles * 100 - wpth.wins / wpth.battles * 100 dwp
+FROM wot_player_tank wpt
+  JOIN wot_player wp ON wp.player_id = wpt.player_id
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  JOIN wot_tank wt ON wt.tank_id = wpt.tank_id
   JOIN (SELECT
     pt.player_id,
     pt.tank_id,
     (SELECT
       MIN(pth.updated_at)
     FROM wot_player_tank_history pth
-    WHERE pth.updated_at > DATE_ADD(pt.updated_at, INTERVAL - 2 DAY)
+    WHERE pth.updated_at > DATE_ADD(pt.updated_at, INTERVAL -2 DAY)
     AND pth.player_id = pt.player_id
     AND pth.tank_id = pt.tank_id) last_updated_at
-  FROM wot_player_tank pt) a ON a.player_id = pt.player_id AND a.tank_id = pt.tank_id
-  JOIN wot_player_tank_history pth ON pth.player_id = a.player_id AND pth.tank_id = a.tank_id AND pth.updated_at = a.last_updated_at
-WHERE pt.updated_at > DATE_ADD(NOW(), INTERVAL - 1 WEEK)
-ORDER BY pt.player_id, pt.battle_count - pth.battle_count DESC
+  FROM wot_player_tank pt) a ON a.player_id = wpt.player_id AND a.tank_id = wpt.tank_id
+  JOIN wot_player_tank_history wpth ON wpth.player_id = a.player_id AND wpth.tank_id = a.tank_id AND wpth.updated_at = a.last_updated_at
+WHERE wpt.updated_at > DATE_ADD(NOW(), INTERVAL -1 WEEK)
+ORDER BY wpt.player_id, wpt.battles - wpth.battles DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -44,24 +44,24 @@ SQL;
 	public static function players()
 	{
 		$sql=<<<SQL
-SELECT p.player_name
-     , p.battles_count
-     , p.created_at
-     , p.battle_avg_xp
-     , p.losses
-     , p.wins
-     , p.wins / p.battles_count * 100 AS wp
-     , p.max_xp
-     , datediff(now(), p.updated_at) updated_at
-     , p.player_id
-     , p.effect
-     , p.wn6
-     , p.damage_dealt/p.battles_count damage
-FROM
-  wot_player p
-JOIN wot_player_clan pc
-ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
-ORDER BY p.player_name
+SELECT
+  wp.player_name,
+  wps.battles,
+  wp.created_at,
+  wps.battle_avg_xp,
+  wps.losses,
+  wps.wins,
+  wps.wins / wps.battles * 100 AS wp,
+  wp.max_xp,
+  DATEDIFF(NOW(), wp.updated_at) updated_at,
+  wps.player_id,
+  wp.effect,
+  wp.wn6,
+  wps.damage_dealt / wps.battles damage
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY wp.player_name
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -91,19 +91,16 @@ SQL;
 	public static function tanks()
 	{
 		$sql=<<<SQL
-SELECT p.player_name
-     , t.tank_localized_name
-     , pt.battle_count
-     , pt.win_count
-     , pt.win_count / pt.battle_count * 100 AS wp
-FROM
-  wot_player p
-JOIN wot_player_clan pc
-ON pc.player_id = p.player_id AND pc.escape_date IS NULL AND pc.clan_id = :clan
-JOIN wot_player_tank pt
-ON pt.player_id = p.player_id
-JOIN wot_tank t
-ON t.tank_id = pt.tank_id AND t.tank_level = 10
+SELECT
+  wp.player_name,
+  wt.tank_localized_name,
+  wpt.battles,
+  wpt.wins,
+  wpt.wins / wpt.battles * 100 AS wp
+FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+  JOIN wot_player_tank wpt ON wpt.player_id = wp.player_id
+  JOIN wot_tank wt ON wt.tank_id = wpt.tank_id AND wt.tank_level = 10
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -112,12 +109,18 @@ SQL;
 	public static function members()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, wp.player_id, wpc.entry_date, wp.created_at,
-  datediff(now(),wpc.entry_date) dcnt, wcr.clan_role_name, wp.updated_at
-  from wot_player_clan wpc
-  join wot_player wp on wp.player_id=wpc.player_id
-  join wot_clan_role wcr on wcr.clan_role_id=wpc.clan_role_id
-  where wpc.clan_id=:clan and wpc.escape_date is null
+SELECT
+  wp.player_name,
+  wp.player_id,
+  wpc.entry_date,
+  wp.created_at,
+  DATEDIFF(NOW(), wpc.entry_date) dcnt,
+  wcr.clan_role_name,
+  wp.updated_at
+FROM wot_player_clan wpc
+  JOIN wot_player wp ON wp.player_id = wpc.player_id
+  JOIN wot_clan_role wcr ON wcr.clan_role_id = wpc.clan_role_id
+WHERE wpc.clan_id = :clan AND wpc.escape_date IS NULL
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -132,13 +135,13 @@ SELECT
   wp.player_name,
   wpc.entry_date,
   wcr.clan_role_name,
-  DATEDIFF(NOW(),wpc.entry_date) days
+  DATEDIFF(NOW(), wpc.entry_date) days
 FROM wot_player_clan wpc
   JOIN wot_player wp ON wp.player_id = wpc.player_id
   JOIN wot_clan_role wcr ON wcr.clan_role_id = wpc.clan_role_id
 WHERE clan_id = :clan
 AND wpc.escape_date IS NULL
-AND wpc.entry_date > DATE_ADD(NOW(), INTERVAL - 1 WEEK)
+AND wpc.entry_date > DATE_ADD(NOW(), INTERVAL -1 WEEK)
 ORDER BY wpc.entry_date DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
@@ -149,11 +152,15 @@ SQL;
 	public static function escapedMembers()
 	{
 		$sql=<<<SQL
-select wp.player_id, wp.player_name, wpc.escape_date, datediff(wpc.escape_date,wpc.entry_date) days
-  from wot_player_clan wpc
-  join wot_player wp on wp.player_id=wpc.player_id
-  where clan_id=:clan and wpc.escape_date > date_add(now(), interval -1 week)
-  order by wpc.escape_date desc, days desc
+SELECT
+  wp.player_id,
+  wp.player_name,
+  wpc.escape_date,
+  DATEDIFF(wpc.escape_date, wpc.entry_date) days
+FROM wot_player_clan wpc
+  JOIN wot_player wp ON wp.player_id = wpc.player_id
+WHERE clan_id = :clan AND wpc.escape_date > DATE_ADD(NOW(), INTERVAL -1 WEEK)
+ORDER BY wpc.escape_date DESC, days DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -172,7 +179,7 @@ FROM wot_player_clan_history wpch
   JOIN wot_player wp ON wp.player_id = wpch.player_id
   JOIN wot_player_clan wpc ON wpc.clan_id = wpch.clan_id AND wpc.player_id = wp.player_id
   JOIN wot_clan_role wcr1 ON wcr1.clan_role_id = wpc.clan_role_id
-WHERE wpch.clan_history_date>DATE_ADD(CURDATE(), INTERVAL - 1 WEEK) AND wpch.clan_id = :clan
+WHERE wpch.clan_history_date > DATE_ADD(CURDATE(), INTERVAL -1 WEEK) AND wpch.clan_id = :clan
 ORDER BY wpch.clan_history_date DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
@@ -182,10 +189,13 @@ SQL;
 	public static function top5effect()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, wp.effect FROM wot_player wp
-  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  ORDER BY wp.effect DESC
-  LIMIT 5
+SELECT
+  wp.player_name,
+  wp.effect
+FROM wot_player wp
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY wp.effect DESC
+LIMIT 5
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -194,10 +204,14 @@ SQL;
 	public static function top5damage()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, ROUND(wp.damage_dealt/wp.battles_count,2) AS dmg FROM wot_player wp
-  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  ORDER BY dmg DESC
-  LIMIT 5
+SELECT
+  wp.player_name,
+  ROUND(wps.damage_dealt / wps.battles, 2) AS dmg
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY dmg DESC
+LIMIT 5
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -206,10 +220,14 @@ SQL;
 	public static function top5spotted()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, ROUND(wp.spotted/wp.battles_count,2) AS spotted FROM wot_player wp
-  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  ORDER BY spotted DESC
-  LIMIT 5
+SELECT
+  wp.player_name,
+  ROUND(wps.spotted / wps.battles, 2) AS spotted
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY spotted DESC
+LIMIT 5
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -218,10 +236,14 @@ SQL;
 	public static function top5capture()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, ROUND(wp.capture_points/wp.battles_count,2) AS capture FROM wot_player wp
-  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  ORDER BY capture DESC
-  LIMIT 5
+SELECT
+  wp.player_name,
+  ROUND(wps.capture_points / wps.battles, 2) AS capture
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id=1
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY capture DESC
+LIMIT 5
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -230,10 +252,14 @@ SQL;
 	public static function top5defense()
 	{
 		$sql=<<<SQL
-SELECT wp.player_name, ROUND(wp.dropped_capture_points/wp.battles_count,2) AS defense FROM wot_player wp
-  JOIN wot_player_clan wpc ON wpc.player_id=wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
-  ORDER BY defense DESC
-  LIMIT 5
+SELECT
+  wp.player_name,
+  ROUND(wps.dropped_capture_points / wps.battles, 2) AS defense
+FROM wot_player wp
+  JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
+  JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
+ORDER BY defense DESC
+LIMIT 5
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
@@ -242,12 +268,18 @@ SQL;
 	public static function newTanks()
 	{
 		$sql=<<<SQL
-SELECT wp.player_id, wp.player_name, wt.tank_localized_name, wt.tank_image, wt.tank_level FROM wot_player_tank wpt
+SELECT
+  wp.player_id,
+  wp.player_name,
+  wt.tank_localized_name,
+  wt.tank_image,
+  wt.tank_level
+FROM wot_player_tank wpt
   JOIN wot_player wp ON wpt.player_id = wp.player_id
-  JOIN wot_player_clan wpc ON wp.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+  JOIN wot_player_clan wpc ON wp.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
   JOIN wot_tank wt ON wpt.tank_id = wt.tank_id
-  WHERE wpt.created_at>DATE_ADD(NOW(), INTERVAL -2 DAY) AND wp.created_at<DATE_ADD(NOW(), INTERVAL - 3 DAY)
-  ORDER BY wpt.created_at DESC
+WHERE wpt.created_at > DATE_ADD(NOW(), INTERVAL -2 DAY) AND wp.created_at < DATE_ADD(NOW(), INTERVAL -3 DAY)
+ORDER BY wpt.created_at DESC
 SQL;
 		$data=Yii::app()->db->cache(3600)->createCommand($sql)->queryAll(true,array('clan'=>WotClan::$clanId));
 		return $data;
