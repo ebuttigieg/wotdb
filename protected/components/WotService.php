@@ -215,6 +215,7 @@ class WotService
 				$tran=Yii::app()->db->beginTransaction();
 				$data=$jsonData['data'][$player->player_id];
 				$achievments=$player->achievments;
+				$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
 				foreach ($data['achievements'] as $key=>$value){
 					if($value>0){
 						if(isset($achievments[$key])){
@@ -228,6 +229,7 @@ class WotService
 						}
 						if($playerAchievment->cnt!=$value){
 							$playerAchievment->cnt=$value;
+							$playerAchievment->updated_at=$player->updated_at;
 							$playerAchievment->save(false);
 						}
 					}
@@ -235,10 +237,10 @@ class WotService
 				foreach (array('all', 'clan', 'company') as $statName){
 					$stat=$player->getStatistic($statName);
 					$stat->attributes=$data['statistics'][$statName];
+					$stat->updated_at=$player->updated_at;
 					$stat->save(false);
 				}
 				$player->max_xp=$data['statistics']['max_xp'];
-				$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
 				$player->created_at=date('Y-m-d H:i',$data['created_at']);
 				$player->player_name=$data['nickname'];			
 				$player->save(false);
@@ -291,6 +293,7 @@ class WotService
 			if($jsonData['status']=='ok'){
 				$tran=Yii::app()->db->beginTransaction();
 				foreach ($jsonData['data'][$player->player_id] as $vehicle){
+				    if($vehicle['statistics']['all']['battles']>0){
 					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
 					foreach (WotPlayerTank::$attrs as $attr) {
 						$playerTank->$attr=$vehicle['statistics'][$attr];
@@ -302,10 +305,14 @@ class WotService
 					$playerTank->in_garage=$vehicle['in_garage'];
 					$playerTank->save(false);
 					foreach (array('all', 'clan', 'company') as $statName){
+					    if($vehicle['statistics'][$statName]['battles']>0){
 						$stat=$playerTank->getStatistic($statName);
 						$stat->attributes=$vehicle['statistics'][$statName];
+						$stat->updated_at=$player->updated_at;
 						$stat->save(false);
+					    }
 					}
+				    }
 				}
 				$tran->commit();
 			}
