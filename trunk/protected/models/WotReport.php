@@ -354,7 +354,9 @@ FROM wot_player wp
   FROM wot_player_statistic_history wpsh
     JOIN wot_player_clan wpc
       ON wpsh.player_id = wpc.player_id AND wpc.clan_id = :clan AND wpc.escape_date IS NULL
-  WHERE wpsh.updated_at > DATE_ADD(NOW(), INTERVAL -2 DAY)) a ON a.player_id = wp.player_id AND a.statistic_id = wps.statistic_id
+  WHERE wpsh.updated_at > DATE_ADD(NOW(), INTERVAL -2 DAY)
+  GROUP BY wpsh.player_id,
+           wpsh.statistic_id) a ON a.player_id = wp.player_id AND a.statistic_id = wps.statistic_id
   JOIN wot_player_statistic_history wpsh ON wpsh.updated_at = a.updated_at AND wpsh.player_id = a.player_id AND wpsh.statistic_id = a.statistic_id
   JOIN (SELECT
     MIN(wph.updated_at) updated_at,
