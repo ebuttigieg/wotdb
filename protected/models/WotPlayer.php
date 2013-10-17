@@ -55,20 +55,20 @@ class WotPlayer extends CActiveRecord
 
 	public function getStatistic($statName)
 	{
-		$stats=$this->statistics;
-		if(!isset($stats[$statName])){
-			$stat=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
-			if(empty($stat)){
-				throw new CException('statistic is not defined!');
-			}
-			$playerStat = new WotPlayerStatistic();
-			$playerStat->statistic_id=$stat->statistic_id;
-			$playerStat->player_id=$this->player_id;
-			$playerStat->save(false);
-			$this->refresh();
-			return $this->getStatistic($statName);
+		$statistic=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
+		if(empty($statistic)){
+			throw new CException('statistic is not defined!');
 		}
-		return $stats[$statName];
+		$playerStat=WotPlayerStatistic::model()->findByAttributes(array(
+				'player_id'=>$this->player_id,
+				'statistic_id'=>$statistic->statistic_id,
+		));
+		if(empty($playerStat)){
+			$playerStat = new WotPlayerStatistic();
+			$playerStat->statistic_id=$statistic->statistic_id;
+			$playerStat->player_id=$this->player_id;
+		}
+		return $playerStat;
 	}
 	
 	/**

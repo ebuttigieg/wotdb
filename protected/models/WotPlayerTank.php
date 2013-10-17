@@ -74,21 +74,22 @@ class WotPlayerTank extends CActiveRecord
 	
 	public function getStatistic($statName)
 	{
-		$stats=$this->statistics;
-		if(!isset($stats[$statName])){
-			$stat=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
-			if(empty($stat)){
-				throw new CException('statistic is not defined!');
-			}
+		$stat=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
+		if(empty($stat)){
+			throw new CException('statistic is not defined!');
+		}
+		$playerTankStat=WotPlayerTankStatistic::model()->findByAttributes(array(
+				'statistic_id'=>$stat->statistic_id,
+				'player_id'=>$this->player_id,
+				'tank_id'=>$this->tank_id,
+		));
+		if(empty($playerTankStat)){
 			$playerTankStat = new WotPlayerTankStatistic();
 			$playerTankStat->statistic_id=$stat->statistic_id;
 			$playerTankStat->player_id=$this->player_id;
 			$playerTankStat->tank_id=$this->tank_id;
-			$playerTankStat->save(false);
-			$this->refresh();
-			return $this->getStatistic($statName);
 		}
-		return $stats[$statName];
+		return $playerTankStat;
 	}
 	
 }
