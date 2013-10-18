@@ -15,6 +15,7 @@ class WotService
 	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
 	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/2.0/account/tanks/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
 	static private $wotApiTanks="http://api.worldoftanks.ru/2.0/encyclopedia/tanks/?application_id=171745d21f7f98fd8878771da1000a31";
+	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=demo";
 
 
 	static private function tryContent($url)
@@ -284,6 +285,47 @@ class WotService
 			}
 		}
 	}
+	
+	static public function updateAchievments()
+	{
+		$jsonString=self::getContent(self::$wotApiAchievments);
+		if($jsonString!=false){
+			$jsonData=json_decode($jsonString,true);
+			if($jsonData['status']=='ok'){
+				$tran=Yii::app()->db->beginTransaction();
+				$achievments=WotAchievment::model()->findAll(array('index'=>'achievment_name'));
+				foreach ($jsonData['data'] as $key=>$data){
+					if(!isset($achievments[$key])){
+						$achievment=new WotAchievment();
+						$achievment->achievment_name=$key;
+					}else{
+						$achievment=$achievments[$key];
+					}
+					$achievment->name=$data['name'];
+					$achievment->type=$data['type'];
+					$achievment->section=$data['section'];
+					$achievment->image=$data['image'];
+					$achievment->description=$data['description'];
+					$achievment->save(false);
+					if(is_array($data['variants'])){
+						foreach($data['variants'] as $key=>$variant){
+							$achievmentVariant=WotAchievmentVariant::model()->findByAttributes(array('achievment_id'=>$achievment->achievment_id,'variant_id'=>$key));
+							if(empty($achievmentVariant)){
+								$achievmentVariant=new WotAchievmentVariant();
+								$achievmentVariant->achievment_id=$achievment->achievment_id;
+								$achievmentVariant->variant_id=$key;
+								$achievmentVariant->name=$variant['name'];
+								$achievmentVariant->image=$variant['image'];
+								$achievmentVariant->save(false);
+							}
+						}
+					}
+				}
+				$tran->commit();
+			}
+		}
+	}
+	
 	
 	static public function updatePlayerTanks($player)
 	{
