@@ -13,26 +13,27 @@ $cs = Yii::app()->clientScript;
 
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
-	if(val=='++'){
-		console.log(cm, rdata);
-		return 'style="background-color:#91cc8e" title="'+cm.index+' Был онлайн и в ТС"';
+	var vVal=rawObject[cm.index], title=cm.index, color="993300";
+	if(vVal&1){
+	    title=title+'Был онлайн';
+	    color="CC9900";
 	}
-	if(val=='+')
-		return 'style="background-color:#DADE64" title="'+cm.index+' Был онлайн"';
-	else
-		return 'style="background-color:#bd7187" title="'+cm.index+' Не играл"';
+	if(vVal&2){
+	    title=title+" Был в ТС";
+	    color="99CC00";
+	}
+	if(vVal&4){
+	    title=title+" Воевал на ГК";
+	    color="9900FF";
+	}
+	return 'style="background-color:#'+color+'" title="'+title+'"';
 }
 FUNC;
 
 $formatter=<<<FUNCF
 function jqcFormatter(cellvalue, options, rowObject)
 {
-	if(cellvalue==2)
-		return '++';
-	else if(cellvalue==1)
-		return '+';
-	else
-		return '-';
+	return parseInt(cellvalue, 10).toString(2).replace(/0/g,'-').replace(/1/g,'+');
 }
 FUNCF;
 
