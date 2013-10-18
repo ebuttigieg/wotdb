@@ -158,7 +158,7 @@ class WotController extends Controller
 	
 	public function actionTest()
 	{
-		WotService::scanClan(WotClan::$clanId);
+		WotService::updateAchievments();
 	}
 	
 }
