@@ -429,14 +429,18 @@ SELECT
   wp.player_name,
   wcr.clan_role_name,
   a.dte,
-  b.dts
+  b.dts,
+  a.ab,
+  a.gb
 FROM wot_player wp
   JOIN wot_player_clan wpc ON wpc.player_id = wp.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
   JOIN wot_clan_role wcr ON wpc.clan_role_id = wcr.clan_role_id
   LEFT JOIN (SELECT
     wpsh.player_id,
     DATE(wpsh.updated_at) dte,
-    MIN(wpsh.battles) bc
+    MIN(wpsh.battles) bc,
+    COUNT(CASE wpsh.statistic_id WHEN 1 THEN 1 ELSE NULL END) ab,
+    COUNT(CASE wpsh.statistic_id WHEN 2 THEN 1 ELSE NULL END) gb
   FROM wot_player_statistic_history wpsh
     JOIN wot_player wp
       ON wpsh.player_id = wp.player_id
@@ -472,10 +476,15 @@ SQL;
 					$result[$row['player_id']][$date]=0;
 				}
 			}
+			$pres=0;
+			if($row['ab']>0)
+			    $pres=1;
 			if(!empty($row['dts']))
-				$result[$row['player_id']][$row['dte']]=2;
-			else
-				$result[$row['player_id']][$row['dte']]=1;
+			    $pres=$pres+2;
+			if($row['gb']>0)
+			    $pres=$pres+4;
+			if($pres>0)    
+			    $result[$row['player_id']][$row['dte']]=$pres;
 		}
 		$res=array();
 		foreach ($result as $row){
