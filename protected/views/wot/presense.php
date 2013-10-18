@@ -15,15 +15,15 @@ $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
 	var vVal=rawObject[cm.index], title=cm.index, color="993300";
 	if(vVal&1){
-	    title=title+'Был онлайн';
+	    title=title+'\\nБыл онлайн';
 	    color="CC9900";
 	}
 	if(vVal&2){
-	    title=title+" Был в ТС";
+	    title=title+"\\nБыл в ТС";
 	    color="99CC00";
 	}
 	if(vVal&4){
-	    title=title+" Воевал на ГК";
+	    title=title+"\\nВоевал на ГК";
 	    color="9900FF";
 	}
 	return 'style="background-color:#'+color+'" title="'+title+'"';
