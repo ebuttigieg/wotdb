@@ -13,7 +13,7 @@ $cs = Yii::app()->clientScript;
 
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
-	var vVal=rawObject[cm.index], title=cm.index, color="993300";
+	var vVal=rawObject[cm.index], title=cm.index, color="AA7744";
 	if(vVal&1){
 	    title=title+'\\nБыл онлайн';
 	    color="CC9900";
