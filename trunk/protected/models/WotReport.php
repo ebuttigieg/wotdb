@@ -439,15 +439,31 @@ FROM wot_player wp
     wpsh.player_id,
     DATE(wpsh.updated_at) dte,
     MIN(wpsh.battles) bc,
-    COUNT(CASE wpsh.statistic_id WHEN 1 THEN 1 ELSE NULL END) ab,
-    COUNT(CASE wpsh.statistic_id WHEN 2 THEN 1 ELSE NULL END) gb
-  FROM wot_player_statistic_history wpsh
+    COUNT(CASE wpsh.statistic_id
+      WHEN 1 THEN 1 ELSE NULL
+    END) ab,
+    COUNT(CASE wpsh.statistic_id
+      WHEN 2 THEN 1 ELSE NULL
+    END) gb
+  FROM (SELECT
+    wps.player_id,
+    wps.statistic_id,
+    wps.updated_at,
+    wps.battles
+  FROM wot_player_statistic wps
+  UNION
+  SELECT
+    wpsh.player_id,
+    wpsh.statistic_id,
+    wpsh.updated_at,
+    wpsh.battles
+  FROM wot_player_statistic_history wpsh) wpsh
     JOIN wot_player wp
       ON wpsh.player_id = wp.player_id
     JOIN wot_player_clan wpc
       ON wpsh.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
   WHERE wpsh.updated_at > DATE_ADD(CURDATE(), INTERVAL -1 MONTH)
-  GROUP BY wpsh.player_id, wpsh.statistic_id,
+  GROUP BY wpsh.player_id,
            DATE(wpsh.updated_at)) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
     wt.player_id,
