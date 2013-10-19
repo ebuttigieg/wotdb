@@ -447,7 +447,7 @@ FROM wot_player wp
     JOIN wot_player_clan wpc
       ON wpsh.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id = :clan
   WHERE wpsh.updated_at > DATE_ADD(CURDATE(), INTERVAL -1 MONTH)
-  GROUP BY wpsh.player_id,
+  GROUP BY wpsh.player_id, wpsh.statistic_id,
            DATE(wpsh.updated_at)) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
     wt.player_id,
