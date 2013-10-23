@@ -11,11 +11,12 @@ class WotService
 
 //	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
 //	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
-	static private $wotApiClanUrl="http://api.worldoftanks.ru/2.0/clan/info/?application_id=171745d21f7f98fd8878771da1000a31&clan_id={clanId}";
-	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
-	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/2.0/account/tanks/?application_id=171745d21f7f98fd8878771da1000a31&account_id={playerId}";
-	static private $wotApiTanks="http://api.worldoftanks.ru/2.0/encyclopedia/tanks/?application_id=171745d21f7f98fd8878771da1000a31";
-	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=demo";
+	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
+	static private $wotApiClanUrl="http://api.worldoftanks.ru/2.0/clan/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&clan_id={clanId}";
+	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&account_id={playerId}";
+	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/2.0/account/tanks/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&account_id={playerId}";
+	static private $wotApiTanks="http://api.worldoftanks.ru/2.0/encyclopedia/tanks/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
+	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
 
 
 	static private function tryContent($url)
