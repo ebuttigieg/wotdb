@@ -1,6 +1,6 @@
 <?php
 
-class WotReport
+class RptReport
 {
 	public static function getDefaultParams()
 	{
@@ -27,4 +27,5 @@ class WotReport
 			return $data;
 		}
 	}
+	
 }
