@@ -15,7 +15,7 @@ $this->breadcrumbs=array(
 $this->widget('zii.widgets.grid.CGridView',array(
 	//	'type'=>array('condensed','striped','bordered'),
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5effect(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('top5effect'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -46,7 +46,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5damage(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('top5damage'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -86,7 +86,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 					<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5defense(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('top5defense'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -111,7 +111,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5capture(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('top5capture'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -136,7 +136,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 						<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::top5spotted(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('top5spotted'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -174,7 +174,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::newMembers(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('newMembers'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -206,7 +206,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::escapedMembers(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('escapedMembers'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,
@@ -237,7 +237,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::career(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('career'),array(
 				'keyField'=>'player_name',
 		)),
 	//	'filter'=>$model,

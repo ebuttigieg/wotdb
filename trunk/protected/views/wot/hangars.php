@@ -4,7 +4,7 @@ $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'url'=> $this->createUrl('wot/jqgriddata'),
 		'datatype'=>'local',
-		'data'=>WotReport::tanks(),
+		'data'=>RptReport::execute('tanks'),
 		'colNames'=>array('Игрок', 'Танк', 'Боев', 'Побед', 'Процент побед'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left','summaryType'=>'count'),

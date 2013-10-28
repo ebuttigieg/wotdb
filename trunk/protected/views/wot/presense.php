@@ -41,7 +41,7 @@ FUNCF;
 	$cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
 
 
-	$data=WotReport::playerPresense();
+	$data=RptPlayerPresense::execute('playerPresense');
 	$colModel=array(
 		array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),
 		array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>140,'align'=>'left'),

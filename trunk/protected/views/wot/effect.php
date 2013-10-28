@@ -4,7 +4,7 @@
 $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'datatype'=>'local',
-		'data'=>WotReport::players(),
+		'data'=>RptReport::execute('players'),
 		'colNames'=>array('Игрок', 'Начал играть', 'Боев', 'Проц. побед','Сред. опыт','Макс. опыт', 'Дамаг','Эффект.','WN6','Неакт. дней'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),

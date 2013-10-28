@@ -1,6 +1,6 @@
 <?php
 
-class RptPlayerPresense extends WotReport
+class RptPlayerPresense extends RptReport
 {
 	public static function execute($reportName='playerPresense', $params=array())
 	{
@@ -12,7 +12,7 @@ class RptPlayerPresense extends WotReport
 			$dates[]=date_format($date, 'Y-m-d');
 		}
 		
-		$data=self::execute($reportName, $params);
+		$data=parent::execute($reportName, $params);
 		
 		$result=array();
 		$names=array();
