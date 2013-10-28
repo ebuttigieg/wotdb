@@ -14,7 +14,7 @@ class WotReport
 	public static function execute($reportName, $params=array())
 	{
 		$params=CMap::mergeArray(self::getDefaultParams(), $params);
-		$fileName=file_exists(__DIR__.'/'.$reportName.'.sql');
+		$fileName=file_exists(__DIR__.'/sql/'.$reportName.'.sql');
 		if($fileName){
 			$sql=file_get_contents($filename);
 			$cmd=Yii::app()->db->cache(3600)->createCommand($sql);
