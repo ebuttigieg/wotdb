@@ -99,7 +99,7 @@ class WotController extends Controller
 
 	public function actionPlayerdata($id)
 	{
-		echo json_encode(WotReport::playerProgress($id));
+		echo json_encode(RptReport::execute('playerProgress',array('player'=>$id, 'stat'=>1)));
 	}
 
 	public function actionPlayertankdata($playerId,$date)
