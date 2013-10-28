@@ -1,6 +1,6 @@
 <?php
 
-class WotReport
+class WotReportOld
 {
 	public static function report()
 	{

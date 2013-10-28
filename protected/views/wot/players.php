@@ -17,7 +17,7 @@ $cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::PO
 $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'datatype'=>'local',
-		'data'=>WotReport::members(),
+		'data'=>RptReport::execute('members'),
 		'colNames'=>array('Игрок', 'Начал играть', 'Дней в клане', 'Должность','Обновлено'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left','formatter'=>'js:linkFormatter'),

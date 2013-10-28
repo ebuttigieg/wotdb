@@ -22,6 +22,7 @@ $config=CMap::mergeArray($config,array(
 		'application.models.*',
 		'application.components.*',
 		'application.forms.*',
+		'application.reports.*',
 	),
 
 	'defaultController'=>'wot',

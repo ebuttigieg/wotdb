@@ -14,7 +14,7 @@
 $this->widget('zii.widgets.grid.CGridView',array(
 	//	'type'=>array('condensed','striped','bordered'),
 		'itemsCssClass'=>'table table-condensed table-striped',
-		'dataProvider'=>new CArrayDataProvider(WotReport::players(),array(
+		'dataProvider'=>new CArrayDataProvider(RptReport::execute('players'),array(
 				'keyField'=>'player_name',
 				'pagination'=>false,
 		)),

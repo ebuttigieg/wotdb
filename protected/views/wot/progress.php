@@ -48,7 +48,7 @@ $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'url'=> $this->createUrl('wot/jqgriddata'),
 		'datatype'=>'local',
-		'data'=>WotReport::progress(),
+		'data'=>RptReport::execute('progress'),
 		'colNames'=>array('Игрок', 'Боев', 'Эффективность', 'WN6', 'Побед','Опыт','Дамаг','Фраги','Засвет','Захват','Защита','Живучесть','Точность','Макс. опыт'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),

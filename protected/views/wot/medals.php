@@ -3,7 +3,7 @@
 $this->widget('ext.jqgrid.JQGrid', 
 	array('options'=>array(
 		'datatype'=>'local',
-		'data'=>WotReport::medals(),
+		'data'=>RptReport::execute('medals'),
 		'colNames'=>array('Игрок', 'Мед. Кариуса', 'Мед. Халонена', 'invader','Мед. Фадина','armorPiercer','Мед. Елькинса','Гроза мышей','mechanicEngineer','heroesOfRassenay','medalKay','defender','medalLeClerc'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),
