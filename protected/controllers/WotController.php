@@ -161,4 +161,9 @@ class WotController extends Controller
 		WotService::updateAchievments();
 	}
 	
+	public function actionFame()
+	{
+		$this->render('fame');
+	}
+	
 }
