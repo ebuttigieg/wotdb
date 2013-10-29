@@ -1,6 +1,6 @@
 <?php
 
-class WotClanProvince extends CActiveRecord
+class WotClanProvince extends CTimeAR
 {
 	
 	/**
@@ -40,6 +40,7 @@ class WotClanProvince extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'province'=>array(self::BELONGS_TO,'WotProvince','province_id'),
+			'clan'=>array(self::BELONGS_TO,'WotClan','clan_id'),
 		);
 	}
 
@@ -51,19 +52,4 @@ class WotClanProvince extends CActiveRecord
 		return array(
 		);
 	}
-	
-	protected function beforeSave()
-	{
-		if(parent::beforeSave())
-		{
-			if($this->isNewRecord)
-			{
-				$this->c_time=new CDbExpression('now()');
-			}
-			return true;
-		}
-		else
-			return false;
-	}
-
 }
