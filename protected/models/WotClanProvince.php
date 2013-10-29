@@ -39,8 +39,8 @@ class WotClanProvince extends CTimeAR
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'province'=>array(self::BELONGS_TO,'WotProvince','province_id'),
-			'clan'=>array(self::BELONGS_TO,'WotClan','clan_id'),
+			'province'=>array(self::BELONGS_TO, 'WotProvince', 'province_id'),
+			'clan'=>array(self::BELONGS_TO, 'WotClan', 'clan_id'),
 		);
 	}
 
