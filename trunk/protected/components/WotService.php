@@ -449,7 +449,7 @@ class WotService
 		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/$clanId/provinces/list/");
 		$currentProvinces=array();
 		if(!empty($data)){
-			if($data['result']=='success'){
+			if($data['status']=='ok'){
 				foreach ($data['request_data']['items'] as $item){
 					$province=WotProvince::getByAttributes($item['name'], $item['id']);
 					$map=WotMap::getByName($item['arena_name']);
