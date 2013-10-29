@@ -263,12 +263,20 @@ class WotService
 			if($jsonData['status']=='ok'){
 				$tran=Yii::app()->db->beginTransaction();
 				$tanks=WotTank::model()->findAll(array('index'=>'tank_id'));
+				$nations=WotTankNation::model()->findAll(array('index'=>'tank_nation_id'));
 				foreach ($jsonData['data'] as $data){
 				//	$tank=WotTank::model()->findByPk($data['tank_id']);//Attributes(array('tank_name'=>$tankName));//
+					if(!isset($nations[$data['nation']])){
+						$nation=new WotTankNation();
+						$nation->tank_nation_id=$data['nation'];
+						$nation->tank_nation_name=$data['nation'];
+						$nation->save(false);
+						$nations[$data['nation']]=$nation;
+					}
 					if(!isset($tanks[$data['tank_id']])){
 						$tank=new WotTank();
 						$tank->tank_id=$data['tank_id'];
-						$tank->tank_class_id=$data['type'];
+						$tank->tank_class_id=$data['type'];						
 						$tank->tank_nation_id=$data['nation'];
 						$tank->tank_level=$data['level'];
 						$tank->is_premium=$data['is_premium'];
