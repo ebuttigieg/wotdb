@@ -36,7 +36,7 @@ class RptPlayerPresense extends RptReport
 				$result[$row['player_id']][$row['dte']]=$pres;
 			$coins=0;
 			if($row['ab']>0){
-				if(empty($row['dts'])&&($row['gb']=0))
+				if(empty($row['dts'])&&($row['gb']==0))
 					$coins=-1;
 				else{
 					if(!empty($row['dts']))
