@@ -51,6 +51,8 @@ FUNCF;
 		$colModel[]=array('name'=>$date,'index'=>$date,'width'=>20,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter','firstsortorder'=>'desc');
 		$colNames[]=date('d', strtotime($date));
 	}
+	$colNames[]='Очки';
+	$colModel[]=array('name'=>'total','index'=>'total','width'=>40,'align'=>'right','sorttype'=>'number', 'firstsortorder'=>'desc');
 
 $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
