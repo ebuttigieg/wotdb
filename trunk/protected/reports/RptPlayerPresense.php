@@ -23,8 +23,9 @@ class RptPlayerPresense extends RptReport
 				foreach ($dates as $date){
 					$result[$row['player_id']][$date]=0;
 				}
+				$result[$row['player_id']]['total']=0;
 			}
-			$pres=0;
+			$pres=0;			
 			if($row['ab']>0)
 				$pres=1;
 			if(!empty($row['dts']))
@@ -33,6 +34,18 @@ class RptPlayerPresense extends RptReport
 				$pres=$pres+4;
 			if($pres>0)
 				$result[$row['player_id']][$row['dte']]=$pres;
+			$coins=0;
+			if($row['ab']>0){
+				if(empty($row['dts'])&&($row['gb']=0))
+					$coins=-1;
+				else{
+					if(!empty($row['dts']))
+						$coins++;
+					if($row['gb']>0)
+						$coins++;
+				}
+			}
+			$result[$row['player_id']]['total']+=$coins;
 		}
 		$res=array();
 		foreach ($result as $row){
