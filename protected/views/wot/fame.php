@@ -17,4 +17,6 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Достижения',
 		'viewrecords'=> true,
-)));
+	),
+	'theme'=>'conquer',
+));
