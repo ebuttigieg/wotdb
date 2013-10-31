@@ -25,27 +25,30 @@ class RptPlayerPresense extends RptReport
 				}
 				$result[$row['player_id']]['total']=0;
 			}
-			$pres=0;			
-			if($row['ab']>0)
-				$pres=1;
-			if(!empty($row['dts']))
-				$pres=$pres+2;
-			if($row['gb']>0)
-				$pres=$pres+4;
-			if($pres>0)
-				$result[$row['player_id']][$row['dte']]=$pres;
-			$coins=0;
-			if($row['ab']>0){
-				if(empty($row['dts'])&&($row['gb']==0))
-					$coins=-1;
-				else{
-					if(!empty($row['dts']))
-						$coins++;
-					if($row['gb']>0)
-						$coins++;
+			if(isset($dates[$row['dte']])){
+				$pres=0;			
+				if($row['ab']>0)
+					$pres=1;
+				if(!empty($row['dts']))
+					$pres=$pres+2;
+				if($row['gb']>0)
+					$pres=$pres+4;
+				
+				if($pres>0)
+					$result[$row['player_id']][$row['dte']]=$pres;
+				$coins=0;
+				if($row['ab']>0){
+					if(empty($row['dts'])&&($row['gb']==0))
+						$coins=-1;
+					else{
+						if(!empty($row['dts']))
+							$coins++;
+						if($row['gb']>0)
+							$coins++;
+					}
 				}
+				$result[$row['player_id']]['total']+=$coins;
 			}
-			$result[$row['player_id']]['total']+=$coins;
 		}
 		$res=array();
 		foreach ($result as $row){
