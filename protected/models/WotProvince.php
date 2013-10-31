@@ -15,13 +15,26 @@ class WotProvince extends CActiveRecord
 	/**
 	 * @return WotProvince the static model class
 	 */
-	public static function getByAttributes($provinceName, $territoryId)
+	public static function getByAttributes($attributes)
 	{
-		$model=self::model()->findByAttributes(array('province_name'=>$provinceName));
+		$arena=WotArena::model()->findByPk($attributes['arena_id']);
+		if(empty($arena)){
+			$arena=new WotArena();
+			$arena->arena_id=$attributes['arena_id'];
+			$arena->arena_name=$attributes['arena_name'];
+			$arena->save(false);
+		}
+		$model=self::model()->findByBk($attributes['province_id']);
 		if(empty($model)){
 			$model=new WotProvince();
-			$model->province_name=$provinceName;
-			$model->territory_id=$territoryId;
+			$model->province_id=$attributes['province_id'];
+			$model->province_name=$attributes['name'];
+			$model->arena_id=$attributes['arena_id'];
+			$model->attaked=$attributes['attaked'];
+			$model->occupancy_time=$attributes['occupancy_time'];
+			$model->combats_running=$attributes['combats_running'];
+			$model->prime_time=$attributes['prime_time'];
+			$model->gold=$attributes['gold'];
 			$model->save(false);
 		}
 		return $model;
