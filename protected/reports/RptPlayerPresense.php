@@ -25,7 +25,7 @@ class RptPlayerPresense extends RptReport
 				}
 				$result[$row['player_id']]['total']=0;
 			}
-			if(isset($dates[$row['dte']])){
+			if(in_array($row['dte'],$dates)){
 				$pres=0;			
 				if($row['ab']>0)
 					$pres=1;
