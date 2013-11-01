@@ -25,4 +25,5 @@ FROM wot_player_achievment wpa
     GROUP BY a.achievment_id
     HAVING COUNT(*) = 1) s ON s.achievment_id = wpa.achievment_id AND s.max_cnt = wpa.cnt
   LEFT JOIN wot_achievment_variant wav ON wa.achievment_id = wav.achievment_id AND wav.variant_id=s.max_cnt
+  WHERE wa.name IS NOT NULL
 ORDER BY wp.player_name
