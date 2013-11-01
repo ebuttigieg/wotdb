@@ -4,20 +4,8 @@ $cs = Yii::app()->clientScript;
 
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
-	var vVal=rawObject[cm.index], title=cm.index, color="BEBEBE";
-	if(vVal&1){
-	    title=title+'\\nБыл онлайн';
-	    color="D7E200";
-	}
-	if(vVal&2){
-	    title=title+"\\nБыл в ТС";
-	    color="5CCD00";
-	}
-	if(vVal&4){
-	    title=title+"\\nВоевал на ГК";
-	    color="9900FF";
-	}
-	return 'style="background-color:#'+color+'" title="'+title+'"';
+	var title=rawObject['description'];	
+	return 'style=title="'+title+'"';
 }
 FUNC;
 
