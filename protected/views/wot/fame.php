@@ -5,7 +5,7 @@ $cs = Yii::app()->clientScript;
 $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
 	var title=rawObject['description'];	
-	return 'style="title="'+title+'"';
+	return 'title="'+title+'"';
 }
 FUNC;
 
