@@ -3,6 +3,7 @@ SELECT
   wp.player_name,
   wa.achievment_name,
   IFNULL(wav.name,wa.name) name,
+  wa.description,
   wa.section,
   s.max_cnt
 FROM wot_player_achievment wpa
