@@ -78,4 +78,9 @@ SQL;
 		WotService::updateClanProvinces(WotClan::currentClan());
 	}
 
+	public function actionAchievments()
+	{
+		WotService::updateAchievments();
+	}
+	
 }
