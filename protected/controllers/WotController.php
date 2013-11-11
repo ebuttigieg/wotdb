@@ -104,7 +104,7 @@ class WotController extends Controller
 
 	public function actionPlayertankdata($playerId,$date)
 	{
-		echo json_encode(WotReport::playerProgressTanks($playerId, $date));
+		echo json_encode(RptReport::execute('playerProgressTanks',array('player_id'=>$playerId, 'date'=>$date)));
 	}
 
 	public function actionJqgrid() {
