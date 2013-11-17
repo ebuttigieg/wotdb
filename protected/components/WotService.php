@@ -491,9 +491,10 @@ class WotService
 	 */
 	static public function updatePlayerGlory($player)
 	{
-		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/show_clan_block/?spa_id={$player->player_id}");
-		if(!empty($data)){
-			if($data['status']=='ok'){
+		$result=self::ajaxRequest("http://worldoftanks.ru/community/clans/show_clan_block/?spa_id={$player->player_id}");
+		if(!empty($result)){
+			if($result['status']=='ok'){
+				$data=$result['data'];
 				if(isset($data['glory_points_block'])){
 					$block=$data['glory_points_block'];
 					$glory=$player->getGlory();
