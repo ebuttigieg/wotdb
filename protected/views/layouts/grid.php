@@ -162,9 +162,15 @@
                </a>
             </li>
             <li class="">
-               <a href="<?php echo Yii::app()->createUrl('wot/fame'); ?>">
+               <a href="<?php echo Yii::app()->createUrl('wot/glory'); ?>">
                <i class="icon-user"></i>
                <span class="title">Зал славы</span>
+               </a>
+            </li>
+            <li class="">
+               <a href="<?php echo Yii::app()->createUrl('wot/fame'); ?>">
+               <i class="icon-user"></i>
+               <span class="title">Герои</span>
                </a>
             </li>
             <li class="">
