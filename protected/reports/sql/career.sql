@@ -2,7 +2,7 @@ SELECT
   wp.player_name,
   wcr.clan_role_name,
   wcr1.clan_role_name new_role,
-  h.clan_history_date
+  DATE(h.clan_history_date) AS clan_history_date
 FROM (SELECT
   wpch.clan_history_date,
   wpch.player_id,
