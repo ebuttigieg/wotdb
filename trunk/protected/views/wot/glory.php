@@ -34,8 +34,6 @@ FUNCF;
 	$cs->registerScript(__CLASS__. $this->getId().'1', $cellAttr, CClientScript::POS_READY);
 	$cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
 
-$cs->registerScript(__CLASS__. $this->getId().'1', $cellAttr, CClientScript::POS_READY);
-
 $this->widget('ext.jqgrid.JQGrid', 
 	array('options'=>array(
 		'datatype'=>'local',
@@ -44,9 +42,9 @@ $this->widget('ext.jqgrid.JQGrid',
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left'),
 			array('name'=>'days','index'=>'days','width'=>140,'align'=>'left'),
-			array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>150,'align'=>'right', 'cellattr'=>'js:jqcCellattr'),
-			array('name'=>'glory_points','index'=>'glory_points','width'=>150,'align'=>'right', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
-			array('name'=>'glory_position','index'=>'glory_position','width'=>80,'align'=>'right','sorttype'=>'number', 'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'),
+			array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>150,'align'=>'right'),
+			array('name'=>'glory_points','index'=>'glory_points','width'=>150,'align'=>'right'), //'cellattr'=>'js:jqcCellattr','formatter'=>'js:jqcFormatter'
+			array('name'=>'glory_position','index'=>'glory_position','width'=>80,'align'=>'right','sorttype'=>'number'),
 		),
 		'rowNum'=>1000,
 	//	'rowList'=>array( 10, 20, 30 ),
