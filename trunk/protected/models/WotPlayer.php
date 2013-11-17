@@ -111,5 +111,19 @@ JOIN (SELECT pt.player_id
 SQL;
 		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
 	}
+	
+	/**
+	 * @return WotPlayerGlory
+	 */
+	public function getGlory()
+	{
+		$glory=WotPlayerGlory::model()->findByPk(array('updated_at'=>new CDbExpression('curdate()'), 'player_id'=>$this->player_id));
+		if(empty($glory)){
+			$glory=new WotPlayerGlory();
+			$glory->updated_at=new CDbExpression('curdate()');
+			$glory->player_id=$this->player_id;
+		}
+		return $glory;
+	}
 
 }
