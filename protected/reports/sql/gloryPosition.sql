@@ -1,7 +1,7 @@
-﻿SELECT
+SELECT
   a.player_id,
   a.player_name,
-  DATEDIFF(CURDATE(), a.entry_date) days,
+  a.days,
   a.clan_role_name,
   a.glory_points,
   a.glory_position,
@@ -10,7 +10,7 @@
 FROM (SELECT
   wp.player_id,
   wp.player_name,
-  wpc.entry_date,
+  DATEDIFF(CURDATE(), wpc.entry_date) days,
   wcr.clan_role_name,
   wpg.glory_points,
   IFNULL(NULLIF(wpg.glory_position, 0), POWER(2, 31)) glory_position,
