@@ -385,7 +385,7 @@ class WotService
 		foreach ($clan->players as $player){
 			self::updatePlayerInfo($player);
 			self::updatePlayerTanks($player);
-			
+			self::updatePlayerGlory($player);
 		}
 		WotPlayer::calcRating();
 	}
@@ -480,6 +480,30 @@ class WotService
 						$clanProvince->date_end=new CDbExpression('now()');
 						$clanProvince->save(false);
 					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param WotPlayer $player
+	 */
+	static public function updatePlayerGlory($player)
+	{
+		$data=self::ajaxRequest("http://worldoftanks.ru/community/clans/show_clan_block/?spa_id={$player->player_id}");
+		if(!empty($data)){
+			if($data['status']=='ok'){
+				if(isset($data['glory_points_block'])){
+					$block=$data['glory_points_block'];
+					$glory=$player->getGlory();
+					if(preg_match('/id="js-glory-points".*?>(.*?)<\/a>/', $block,$matches)){
+						 $glory->glory_position=preg_replace('/\D/', '', $matches[1])."\n";
+					}
+					if(preg_match('/Очки славы: (.*?)</', $block,$matches)){
+						$glory->glory_points=preg_replace('/\D/', '', $matches[1]);
+					}
+					$glory->save(false);
 				}
 			}
 		}
