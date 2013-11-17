@@ -28,7 +28,7 @@ class WotController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to access 'index' and 'view' actions.
-				'actions'=>array('index','players', 'effect'),
+				'actions'=>array('index','players', 'effect', 'glory'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated users to access all actions
@@ -164,6 +164,11 @@ class WotController extends Controller
 	public function actionFame()
 	{
 		$this->render('fame');
+	}
+
+	public function actionGlory()
+	{
+		$this->render('glory');
 	}
 	
 }
