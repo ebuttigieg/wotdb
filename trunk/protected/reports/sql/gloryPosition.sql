@@ -6,14 +6,14 @@ SELECT
   a.glory_points,
   a.glory_position,
   a.glory_points - wpg.glory_points AS dglory_points,
-  a.glory_position - wpg.glory_position AS dglory_position
+  wpg.glory_position - a.glory_position AS dglory_position
 FROM (SELECT
   wp.player_id,
   wp.player_name,
   DATEDIFF(CURDATE(), wpc.entry_date) days,
   wcr.clan_role_name,
   wpg.glory_points,
-  IFNULL(NULLIF(wpg.glory_position, 0), POWER(2, 31)) glory_position,
+  wpg.glory_position,
   (SELECT
     MAX(wpg1.updated_at)
   FROM wot_player_glory wpg1
