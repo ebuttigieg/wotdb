@@ -6,7 +6,6 @@ $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
 	var v=rawObject['d'+cm.name], val=rawObject[cm.name];
 	v=parseFloat(v).toFixed(0);
-	val=parseFloat(val).toFixed(0);
 	if(v>0)
 		return 'style="color:green" title="'+val+' (+'+ v +')"';
 	else if(v<0)
@@ -39,7 +38,7 @@ $this->widget('ext.jqgrid.JQGrid',
 			array('name'=>'days','index'=>'days','width'=>100,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc'),
 			array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>150,'align'=>'right'),
 			array('name'=>'glory_points','index'=>'glory_points','width'=>80,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc','cellattr'=>'js:jqcCellattr'), 
-			array('name'=>'glory_position','index'=>'glory_position','width'=>80,'align'=>'right','sorttype'=>'number','cellattr'=>'js:jqcCellattr'),
+			array('name'=>'glory_position','index'=>'glory_position','width'=>80,'align'=>'right','sorttype'=>'js:function(cellValue){return cellValue == 0 ? 99999999 : Number(cellValue);}','cellattr'=>'js:jqcCellattr'),
 		),
 		'rowNum'=>1000,
 	//	'rowList'=>array( 10, 20, 30 ),
