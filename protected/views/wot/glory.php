@@ -6,6 +6,7 @@ $cellAttr=<<<FUNC
 function jqcCellattr(rowId, val, rawObject, cm, rdata) {
 	var v=rawObject['d'+cm.name], val=rawObject[cm.name];
 	v=parseFloat(v).toFixed(0);
+	val=parseFloat(val).toFixed(0);
 	if(v>0)
 		return 'style="color:green" title="'+val+' (+'+ v +')"';
 	else if(v<0)
