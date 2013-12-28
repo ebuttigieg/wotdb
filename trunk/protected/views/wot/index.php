@@ -176,6 +176,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(RptReport::execute('newMembers'),array(
 				'keyField'=>'player_name',
+				'pagination'=>false,
 		)),
 	//	'filter'=>$model,
 		'columns'=>array(
@@ -208,6 +209,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(RptReport::execute('escapedMembers'),array(
 				'keyField'=>'player_name',
+				'pagination'=>false,
 		)),
 	//	'filter'=>$model,
 		'columns'=>array(
@@ -239,6 +241,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
 		'dataProvider'=>new CArrayDataProvider(RptReport::execute('career'),array(
 				'keyField'=>'player_name',
+				'pagination'=>false,
 		)),
 	//	'filter'=>$model,
 		'columns'=>array(
