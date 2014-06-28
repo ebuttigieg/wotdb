@@ -1,6 +1,6 @@
 SELECT
   wp.player_name,
-  wt.tank_name_i18n,
+  wt.tank_name_i18n AS tank_localized_name,
   wpt.battles,
   wpt.wins,
   wpt.wins / wpt.battles * 100 AS wp,
