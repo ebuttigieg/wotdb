@@ -345,9 +345,7 @@ class WotService
 			self::updatePlayerTanks($player);
 			self::updatePlayerGlory($player);
 		}
-/*
 		WotPlayer::calcRating();
-*/
 	}
 
 	/**
