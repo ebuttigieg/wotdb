@@ -186,7 +186,7 @@ class WotService
 							$playerClan->clan_id=$clan->clan_id;
 							$playerClan->player_id=$playerId;
 							$playerClan->entry_date=date('Y-m-d' ,$playerData['created_at']);
-							$playerClan->clan_role=WotClanRole::getRoleId($playerData['role'], $playerData['role_i18n']);
+							$playerClan->clan_role_id=WotClanRole::getRoleId($playerData['role'], $playerData['role_i18n']);
 						}
 						else
 						{
