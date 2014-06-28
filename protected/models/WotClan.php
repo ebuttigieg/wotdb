@@ -3,7 +3,7 @@
 class WotClan extends CActiveRecord
 {
 	
-	public static $clanId=25129;
+	public static $clanId=93535;
 
 	/**
 	 * Returns the static model of the specified AR class.
