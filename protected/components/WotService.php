@@ -419,7 +419,7 @@ class WotService
 		
 				$tran=Yii::app()->db->beginTransaction();
 				foreach ($jsonData['data'] as $playerId=>$data){
-					$data=$jsonData['data'][$player->player_id];
+					$player=$clan->players[$playerId];
 					$achievments=$player->achievments;
 					$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
 					foreach ($data['achievements'] as $key=>$value){
