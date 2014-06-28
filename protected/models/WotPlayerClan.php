@@ -54,10 +54,4 @@ class WotPlayerClan extends CActiveRecord
 		);
 	}
 
-	public function setClan_role($value)
-	{
-		$clanRole=WotClanRole::getRoleById($value);
-		$this->clan_role_id=$value;
-	}
-
 }
