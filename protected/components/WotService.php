@@ -204,58 +204,6 @@ class WotService
 				//var_dump($jsonData);
 		}
 	}
-
-	/**
-	 * 
-	 * @param WotPlayer $player
-	 */
-	static public function updatePlayerInfo($player)
-	{
-		$jsonString=self::getContent(str_replace('{playerId}', $player->player_id, self::$wotApiPlayerUrl));
-		if($jsonString!=false){
-			$jsonData=json_decode($jsonString,true);
-			if($jsonData['status']=='ok'){
-
-				$tran=Yii::app()->db->beginTransaction();
-				$data=$jsonData['data'][$player->player_id];
-				$achievments=$player->achievments;
-				$player->updated_at=date('Y-m-d H:i',$data['updated_at']);
-				foreach ($data['achievements'] as $key=>$value){
-					if($value>0){
-						if(isset($achievments[$key])){
-							$playerAchievment=$achievments[$key];
-						}else{
-							$achievment=WotAchievment::achievment($key);
-							$playerAchievment=new WotPlayerAchievment();
-							$playerAchievment->achievment_id=$achievment->achievment_id;
-							$playerAchievment->player_id=$player->player_id;
-							
-						}
-						if($playerAchievment->cnt!=$value){
-							$playerAchievment->cnt=$value;
-							$playerAchievment->updated_at=$player->updated_at;
-							$playerAchievment->save(false);
-						}
-					}
-				}
-				foreach (array('all', 'clan', 'company') as $statName){
-					$stat=$player->getStatistic($statName);
-					$stat->attributes=$data['statistics'][$statName];
-					$stat->updated_at=$player->updated_at;
-					$stat->save(false);
-				}
-				$player->max_xp=$data['statistics']['max_xp'];
-				$player->created_at=date('Y-m-d H:i',$data['created_at']);
-				$player->player_name=$data['nickname'];			
-				$player->save(false);
-
-				$tran->commit();
-			}
-			else
-				Yii::log($jsonString,'error');
-			//	var_dump($jsonData);
-		}
-	}
 	
 	static public function updateTanks()
 	{
@@ -356,24 +304,24 @@ class WotService
 				$tran=Yii::app()->db->beginTransaction();
 				foreach ($jsonData['data'][$player->player_id] as $vehicle){
 				    if($vehicle['statistics']['all']['battles']>0){
-					$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
-					foreach (WotPlayerTank::$attrs as $attr) {
-						$playerTank->$attr=$vehicle['statistics'][$attr];
-					}
-					$playerTank->updated_at=$player->updated_at;
-					if($vehicle['last_battle_time']>0)
-						$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
-					$playerTank->mark_of_mastery=$vehicle['mark_of_mastery'];
-					$playerTank->in_garage=$vehicle['in_garage'];
-					$playerTank->save(false);
-					foreach (array('all', 'clan', 'company') as $statName){
-					    if($vehicle['statistics'][$statName]['battles']>0){
-						$stat=$playerTank->getStatistic($statName);
-						$stat->attributes=$vehicle['statistics'][$statName];
-						$stat->updated_at=$player->updated_at;
-						$stat->save(false);
-					    }
-					}
+						$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
+						foreach (WotPlayerTank::$attrs as $attr) {
+							$playerTank->$attr=$vehicle['statistics'][$attr];
+						}
+						$playerTank->updated_at=$player->updated_at;
+						if($vehicle['last_battle_time']>0)
+							$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
+						$playerTank->mark_of_mastery=$vehicle['mark_of_mastery'];
+						$playerTank->in_garage=$vehicle['in_garage'];
+						$playerTank->save(false);
+						foreach (array('all', 'clan', 'company', 'historical') as $statName){
+						    if($vehicle['statistics'][$statName]['battles']>0){
+							$stat=$playerTank->getStatistic($statName);
+							$stat->attributes=$vehicle['statistics'][$statName];
+							$stat->updated_at=$player->updated_at;
+							$stat->save(false);
+						    }
+						}
 				    }
 				}
 				$tran->commit();
@@ -392,12 +340,12 @@ class WotService
 		}
 		self::updateClanInfo($clan);
 		self::updateClanPlayersInfo($clan);
-/*		$clan->refresh();
+		$clan->refresh();
 		foreach ($clan->players as $player){
-			self::updatePlayerInfo($player);
 			self::updatePlayerTanks($player);
 			self::updatePlayerGlory($player);
 		}
+/*
 		WotPlayer::calcRating();
 */
 	}
