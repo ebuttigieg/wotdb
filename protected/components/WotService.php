@@ -14,8 +14,8 @@ class WotService
 	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
 	static private $wotApiClanUrl="http://api.worldoftanks.ru/2.0/clan/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&clan_id={clanId}";
 	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&account_id={playerId}";
-	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/2.0/account/tanks/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&account_id={playerId}";
-	static private $wotApiTanks="http://api.worldoftanks.ru/2.0/encyclopedia/tanks/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
+	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/wot/tanks/stats/?application_id={applicationId}&language=ru&account_id={playerId}";
+	static private $wotApiTanks="http://api.worldoftanks.ru/wot/encyclopedia/tanks/?application_id={applicationId}&language=ru";
 	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
 
 
@@ -257,38 +257,46 @@ class WotService
 	
 	static public function updateTanks()
 	{
-		$jsonString=self::getContent(self::$wotApiTanks);
+		$jsonString=self::getContent(str_replace('{applicationId}', self::$applicationId, self::$wotApiTanks));
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
 				$tran=Yii::app()->db->beginTransaction();
 				$tanks=WotTank::model()->findAll(array('index'=>'tank_id'));
 				$nations=WotTankNation::model()->findAll(array('index'=>'tank_nation_id'));
+				$classes=WotTankClass::model()->findAll(array('index'=>'tank_class_id'));
 				foreach ($jsonData['data'] as $data){
 				//	$tank=WotTank::model()->findByPk($data['tank_id']);//Attributes(array('tank_name'=>$tankName));//
 					if(!isset($nations[$data['nation']])){
 						$nation=new WotTankNation();
 						$nation->tank_nation_id=$data['nation'];
-						$nation->tank_nation_name=$data['nation'];
+						$nation->tank_nation_name=$data['nation_i18n'];
 						$nation->save(false);
 						$nations[$data['nation']]=$nation;
 					}
+					if(!isset($classes[$data['type']])){
+						$class=new WotTankClass();
+						$class->tank_class_id=$data['type'];
+						$class->tank_class_name=$data['type_i18n'];
+						$class->save(false);
+						$classes[$data['type']]=$class;
+					}
 					if(!isset($tanks[$data['tank_id']])){
 						$tank=new WotTank();
-						$tank->tank_id=$data['tank_id'];
-						$tank->tank_class_id=$data['type'];						
-						$tank->tank_nation_id=$data['nation'];
-						$tank->tank_level=$data['level'];
-						$tank->is_premium=$data['is_premium'];
-						if (preg_match("/#(.*?):(.*)/",$data['name'],$mathes)){
-							$tankName=$mathes[2];
-						}
-						else
-							$tankName=$data['name'];
-						$tank->tank_name=$tankName;
-						$tank->tank_localized_name=$tankName;
-						$tank->save(false);
 					}
+					$tank->tank_id=$data['tank_id'];
+					$tank->tank_class_id=$data['type'];						
+					$tank->tank_nation_id=$data['nation'];
+					$tank->tank_level=$data['level'];
+					$tank->is_premium=$data['is_premium'];
+					if (preg_match("/#(.*?):(.*)/",$data['name'],$mathes)){
+						$tankName=$mathes[2];
+					}
+					else
+						$tankName=$data['name'];
+					$tank->tank_name=$tankName;
+					$tank->tank_name_i18n=$data['name_i18n'];
+					$tank->save(false);
 				}
 				$tran->commit();
 			}
