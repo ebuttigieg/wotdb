@@ -297,7 +297,10 @@ class WotService
 	
 	static public function updatePlayerTanks($player)
 	{
-		$jsonString=self::getContent(str_replace('{playerId}', $player->player_id, self::$wotApiPlayerTanks));
+		$jsonString=self::getContent(strtr(self::$wotApiPlayerTanks, array(
+				'{playerId}'=>$player->player_id,
+				'{applicationId}'=>self::$applicationId,
+		)));
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
