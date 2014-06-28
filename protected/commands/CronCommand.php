@@ -7,6 +7,11 @@ class CronCommand extends CConsoleCommand
 		WotService::scanClan(WotClan::$clanId);
 	}
 
+	public function actionTanks()
+	{
+		WotService::updateTanks();
+	}
+	
 	public function actionIndex()
 	{
 		echo 'hellow!';
