@@ -15,18 +15,18 @@ class WotClanRole extends CActiveRecord
 	}
 
 
-	public static function getRoleById($roleId)
+	public static function getRoleId($roleId, $role_i18n)
 	{
 		if(empty(self::$_models))
 			self::$_models=self::model()->findAll(array('index'=>'clan_role_id'));
 		if(!isset(self::$_models[$roleId])){
 			$model=new self();
 			$model->clan_role_id=$roleId;
-			$model->clan_role_name=$roleId;
+			$model->clan_role_name=$role_i18n;
 			$model->save(false);
 			self::$_models=self::model()->findAll(array('index'=>'clan_role_id'));
 		}
-		return $model=self::$_models[$roleId];
+		return self::$_models[$roleId]->role_id;
 	}
 
 	/**
