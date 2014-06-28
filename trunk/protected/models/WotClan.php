@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @property WotPlayer[] $players
+ * 
+ * @author Андрей
+ *
+ */
 class WotClan extends CActiveRecord
 {
 	
