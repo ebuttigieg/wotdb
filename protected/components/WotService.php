@@ -12,7 +12,7 @@ class WotService
 //	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
 //	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
 	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
-	static private $wotApiClanUrl="http://api.worldoftanks.ru/2.0/clan/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&clan_id={clanId}";
+	static private $wotApiClanUrl="http://api.worldoftanks.ru/wot/clan/info/?application_id={applicationId}&language=ru&clan_id={clanId}";
 	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/2.0/account/info/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru&account_id={playerId}";
 	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/wot/tanks/stats/?application_id={applicationId}&language=ru&account_id={playerId}";
 	static private $wotApiTanks="http://api.worldoftanks.ru/wot/encyclopedia/tanks/?application_id={applicationId}&language=ru";
@@ -129,7 +129,8 @@ class WotService
 	 */
 	static public function updateClanInfo($clan)
 	{
-		$jsonString= self::getContent(str_replace('{clanId}', $clan->clan_id, self::$wotApiClanUrl));
+		$url=strtr(self::$wotApiClanUrl, array('{applicationId}'=>self::$applicationId, '{clanId}'=>$clan->clan_id));
+		$jsonString= self::getContent($url);
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
@@ -143,6 +144,7 @@ class WotService
 					$clan->clan_created=date('Y-m-d', $data['created_at']);
 					$clan->clan_ico=$data['emblems']['large'];
 					$clan->clan_motto=$data['motto'];
+					$clan->clan_owner_id=$data['owner_id'];
 					$clan->save(false);
 					
 					$members=$data['members'];
@@ -164,7 +166,7 @@ class WotService
 						continue;
 					}
 					if($clanPlayerRec->clan_role_id!=$members[$playerId]['role']){
-						$clanPlayerRec->clan_role=$members[$playerId]['role'];
+						$clanPlayerRec->clan_role=WotClanRole::getRoleId($playerData['role'], $playerData['role_i18n']);;
 						$clanPlayerRec->save(false);
 					}
 				}
@@ -184,7 +186,7 @@ class WotService
 							$playerClan->clan_id=$clan->clan_id;
 							$playerClan->player_id=$playerId;
 							$playerClan->entry_date=date('Y-m-d' ,$playerData['created_at']);
-							$playerClan->clan_role=$playerData['role'];
+							$playerClan->clan_role=WotClanRole::getRoleId($playerData['role'], $playerData['role_i18n']);
 						}
 						else
 						{
@@ -266,7 +268,6 @@ class WotService
 				$nations=WotTankNation::model()->findAll(array('index'=>'tank_nation_id'));
 				$classes=WotTankClass::model()->findAll(array('index'=>'tank_class_id'));
 				foreach ($jsonData['data'] as $data){
-				//	$tank=WotTank::model()->findByPk($data['tank_id']);//Attributes(array('tank_name'=>$tankName));//
 					if(!isset($nations[$data['nation']])){
 						$nation=new WotTankNation();
 						$nation->tank_nation_id=$data['nation'];
@@ -391,13 +392,14 @@ class WotService
 		}
 		self::updateClanInfo($clan);
 //!!	self::updateClanPlayers($clan);
-		$clan->refresh();
+/*		$clan->refresh();
 		foreach ($clan->players as $player){
 			self::updatePlayerInfo($player);
 			self::updatePlayerTanks($player);
 			self::updatePlayerGlory($player);
 		}
 		WotPlayer::calcRating();
+*/
 	}
 
 	/**
