@@ -306,11 +306,13 @@ class WotService
 			if($jsonData['status']=='ok'){
 				$tran=Yii::app()->db->beginTransaction();
 				foreach ($jsonData['data'][$player->player_id] as $vehicle){
-				    if($vehicle['statistics']['all']['battles']>0){
+				    if($vehicle['all']['battles']>0){
 						$playerTank=WotPlayerTank::getPlayerTank($player->player_id, $vehicle['tank_id']);
 						foreach (WotPlayerTank::$attrs as $attr) {
-							$playerTank->$attr=$vehicle['statistics'][$attr];
+							$playerTank->$attr=$vehicle[$attr];
 						}
+						$playerTank->battles=$vehicle['all']['battles'];
+						$playerTank->wins=$vehicle['all']['wins'];
 						$playerTank->updated_at=$player->updated_at;
 						if($vehicle['last_battle_time']>0)
 							$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
@@ -318,9 +320,9 @@ class WotService
 						$playerTank->in_garage=$vehicle['in_garage'];
 						$playerTank->save(false);
 						foreach (array('all', 'clan', 'company', 'historical') as $statName){
-						    if($vehicle['statistics'][$statName]['battles']>0){
+						    if(isset($vehicle[$statName])&&($vehicle[$statName]['battles']>0)){
 							$stat=$playerTank->getStatistic($statName);
-							$stat->attributes=$vehicle['statistics'][$statName];
+							$stat->attributes=$vehicle[$statName];
 							$stat->updated_at=$player->updated_at;
 							$stat->save(false);
 						    }

@@ -3,7 +3,7 @@
 class WotPlayerTank extends CActiveRecord
 {
 
-	public static $attrs=array('max_xp', 'wins', 'battles', 'max_frags', 'win_and_survived');
+	public static $attrs=array('max_xp', 'max_frags', 'mark_of_mastery');
 
 	/**
 	 * Returns the static model of the specified AR class.
