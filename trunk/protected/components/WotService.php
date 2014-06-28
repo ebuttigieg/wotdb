@@ -285,7 +285,7 @@ class WotService
 						$tank=new WotTank();
 					}
 					else
-						$tank=$tanks[$data['tank_id'];
+						$tank=$tanks[$data['tank_id']];
 					$tank->tank_id=$data['tank_id'];
 					$tank->tank_class_id=$data['type'];						
 					$tank->tank_nation_id=$data['nation'];
