@@ -314,8 +314,6 @@ class WotService
 						$playerTank->battles=$vehicle['all']['battles'];
 						$playerTank->wins=$vehicle['all']['wins'];
 						$playerTank->updated_at=$player->updated_at;
-						if($vehicle['last_battle_time']>0)
-							$player->last_battle_time=date('Y-m-d H:i',$vehicle['last_battle_time']);
 						$playerTank->mark_of_mastery=$vehicle['mark_of_mastery'];
 						$playerTank->in_garage=$vehicle['in_garage'];
 						$playerTank->save(false);
@@ -400,6 +398,9 @@ class WotService
 					$player->max_xp=$data['statistics']['max_xp'];
 					$player->created_at=date('Y-m-d H:i',$data['created_at']);
 					$player->player_name=$data['nickname'];
+					$player->last_battle_time=date('Y-m-d H:i',$data['last_battle_time']);
+					$player->logout_at=date('Y-m-d H:i',$data['logout_at']);
+					$player->global_rating=$data['global_rating'];
 					$player->save(false);
 				}
 				$tran->commit();
