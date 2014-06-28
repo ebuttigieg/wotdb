@@ -1,7 +1,7 @@
 SELECT
   wpt.battles - wpth.battles b,
   wp.player_name,
-  wt.tank_localized_name,
+  wt.tank_name_i18n AS tank_localized_name,
   wpt.updated_at,
   wpth.updated_at hupdated_at,
   wpt.battles,
