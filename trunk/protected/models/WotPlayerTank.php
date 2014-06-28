@@ -72,6 +72,18 @@ class WotPlayerTank extends CActiveRecord
 		);
 	}
 	
+	public function beforeSave()
+	{
+		if(parent::beforeSave()){
+			if($this->isNewRecord){
+				$this->created_at=new CDbExpression('now()');
+			}
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	public function getStatistic($statName)
 	{
 		$stat=WotStatistic::model()->findByAttributes(array('statistic_name'=>$statName));
