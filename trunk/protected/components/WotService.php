@@ -14,10 +14,10 @@ class WotService
 	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
 	static private $wotApiClanUrl="http://api.worldoftanks.ru/wot/clan/info/?application_id={applicationId}&language=ru&clan_id={clanId}";
 	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/wot/account/info/?application_id={applicationId}&language=ru&account_id={playerId}";
-	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/wot/tanks/stats/?application_id={applicationId}&language=ru&account_id={playerId}";
+	static private $wotApiPlayerTankStat="http://api.worldoftanks.ru/wot/tanks/stats/?application_id={applicationId}&language=ru&account_id={playerId}";
 	static private $wotApiTanks="http://api.worldoftanks.ru/wot/encyclopedia/tanks/?application_id={applicationId}&language=ru";
 	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
-
+	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/wot/account/tanks/?application_id={applicationId}&language=ru&account_id={playerId}";
 
 	static private function tryContent($url)
 	{
@@ -297,7 +297,7 @@ class WotService
 	
 	static public function updatePlayerTanks($player)
 	{
-		$jsonString=self::getContent(strtr(self::$wotApiPlayerTanks, array(
+		$jsonString=self::getContent(strtr(self::$wotApiPlayerTankStat, array(
 				'{playerId}'=>$player->player_id,
 				'{applicationId}'=>self::$applicationId,
 		)));
@@ -408,6 +408,29 @@ class WotService
 			else
 				Yii::log($jsonString,'error');
 			//	var_dump($jsonData);
+		}
+	}
+	
+	/**
+	 *
+	 * @param WotClan $clan
+	 */
+	static public function updateClanPlayersTanks($clan)
+	{
+		$url=strtr(self::$wotApiPlayerTanks, array(
+				'{applicationId}'=>self::$applicationId,
+				'{playerId}'=>implode(',', array_keys($clan->players))
+		));
+		$jsonString= self::getContent($url);
+		if($jsonString!=false){
+			$jsonData=json_decode($jsonString,true);
+			if($jsonData['status']=='ok'){
+				$tran=Yii::app()->db->beginTransaction();
+				foreach ($jsonData['data'] as $playerId=>$data){
+					
+				}
+				$tran->commit();
+			}
 		}
 	}
 	
