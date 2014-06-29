@@ -11,7 +11,7 @@ Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 $config=require(dirname(__FILE__).'/common.php');
 
 $config=CMap::mergeArray($config,array(
-	'name'=>'[THE-P] Pirates',
+	'name'=>'[MUMMI] Mummies',
 		// preloading 'log' component
 	'preload'=>array('log'),
 
