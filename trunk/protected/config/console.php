@@ -17,6 +17,8 @@ $config=CMap::mergeArray($config,array(
 					'levels'=>'error, warning',
 				),
 				array(
+					'utf8'=>true,
+					'subject'=>'MUMMI console error',
 					'class'=>'CEmailLogRoute',
 					'levels'=>'error',
 					'emails'=>'borodulin@gmail.com',
