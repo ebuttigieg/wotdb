@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: UDP.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: UDP.php 10/11/2013 11:35:22 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -51,7 +51,7 @@ class TeamSpeak3_Transport_UDP extends TeamSpeak3_Transport_Abstract
 
     if($this->stream === FALSE)
     {
-      throw new TeamSpeak3_Transport_Exception(utf8_encode($errstr), $errno);
+      throw new TeamSpeak3_Transport_Exception(TeamSpeak3_Helper_String::factory($errstr)->toUtf8()->toString(), $errno);
     }
 
     @stream_set_timeout($this->stream, $timeout);

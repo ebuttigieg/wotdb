@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: Server.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: Server.php 10/11/2013 11:35:21 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -196,19 +196,21 @@ class TeamSpeak3_Node_Server extends TeamSpeak3_Node_Abstract
    * @param  mixed   $type
    * @param  integer $align
    * @param  integer $order
+   * @param  integer $maxclients
    * @throws TeamSpeak3_Adapter_ServerQuery_Exception
    * @return integer
    */
-  public function channelSpacerCreate($ident, $type = TeamSpeak3::SPACER_SOLIDLINE, $align = TeamSpeak3::SPACER_ALIGN_REPEAT, $order = null)
+  public function channelSpacerCreate($ident, $type = TeamSpeak3::SPACER_SOLIDLINE, $align = TeamSpeak3::SPACER_ALIGN_REPEAT, $order = null, $maxclients = 0)
   {
     $properties = array(
       "channel_name_phonetic" => "channel spacer",
-      "channel_codec" => TeamSpeak3::CODEC_SPEEX_NARROWBAND,
+      "channel_codec" => TeamSpeak3::CODEC_OPUS_VOICE,
       "channel_codec_quality" => 0x00,
       "channel_flag_permanent" => TRUE,
       "channel_flag_maxclients_unlimited" => FALSE,
       "channel_flag_maxfamilyclients_unlimited" => FALSE,
       "channel_flag_maxfamilyclients_inherited" => FALSE,
+      "channel_maxclients" => $maxclients,
       "channel_order" => $order,
     );
 
@@ -627,7 +629,7 @@ class TeamSpeak3_Node_Server extends TeamSpeak3_Node_Abstract
   {
     if($this->clientList === null)
     {
-      $clients = $this->request("clientlist -uid -away -voice -info -times -groups -icon -country -ip")->toAssocArray("clid");
+      $clients = $this->request("clientlist -uid -away -badges -voice -info -times -groups -icon -country -ip")->toAssocArray("clid");
 
       $this->clientList = array();
 
@@ -669,7 +671,8 @@ class TeamSpeak3_Node_Server extends TeamSpeak3_Node_Abstract
   }
 
   /**
-   * Returns a list of client identities known by the virtual server.
+   * Returns a list of client identities known by the virtual server. By default, the server spits out 25 entries
+   * at once.
    *
    * @param  integer $offset
    * @param  integer $limit
@@ -772,6 +775,23 @@ class TeamSpeak3_Node_Server extends TeamSpeak3_Node_Abstract
     foreach($this->clientList() as $client)
     {
       if($client["client_unique_identifier"] == $uid) return $client;
+    }
+
+    throw new TeamSpeak3_Adapter_ServerQuery_Exception("invalid clientID", 0x200);
+  }
+  
+  /**
+   * Returns the TeamSpeak3_Node_Client object matching the given database ID.
+   *
+   * @param  integer $dbid
+   * @throws TeamSpeak3_Adapter_ServerQuery_Exception
+   * @return TeamSpeak3_Node_Client
+   */
+  public function clientGetByDbid($dbid)
+  {
+    foreach($this->clientList() as $client)
+    {
+      if($client["client_database_id"] == $dbid) return $client;
     }
 
     throw new TeamSpeak3_Adapter_ServerQuery_Exception("invalid clientID", 0x200);
@@ -2270,6 +2290,18 @@ class TeamSpeak3_Node_Server extends TeamSpeak3_Node_Abstract
   public function stop()
   {
     $this->getParent()->serverStop($this->getId());
+  }
+  
+  /**
+   * Sends a plugin command to all clients connected to the server.
+   *
+   * @param  string $plugin
+   * @param  string $data
+   * @return void
+   */
+  public function sendPluginCmd($plugin, $data)
+  {
+    $this->execute("plugincmd", array("name" => $plugin, "data" => $data, "targetmode" => TeamSpeak3::PLUGINCMD_SERVER));
   }
 
   /**

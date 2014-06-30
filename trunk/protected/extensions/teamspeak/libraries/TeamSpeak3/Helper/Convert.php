@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: Convert.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: Convert.php 10/11/2013 11:35:21 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -304,6 +304,22 @@ class TeamSpeak3_Helper_Convert
     $buildno = $version->section("[", 1)->filterDigits()->toInt();
 
     return ($buildno <= 15001) ? $version : $version->section("[")->append("(" . date($format, $buildno) . ")");
+  }
+  
+  /**
+   * Returns a client-like short-formatted version of the TeamSpeak 3 version string.
+   *
+   * @param  string $version
+   * @return string
+   */
+  public static function versionShort($version)
+  {
+    if(!$version instanceof TeamSpeak3_Helper_String)
+    {
+      $version = new TeamSpeak3_Helper_String($version);
+    }
+    
+    return $version->section(" ", 0);
   }
 
   /**

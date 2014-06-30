@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: Client.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: Client.php 10/11/2013 11:35:21 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -343,6 +343,18 @@ class TeamSpeak3_Node_Client extends TeamSpeak3_Node_Abstract
     $transfer = TeamSpeak3::factory("filetransfer://" . $download["host"] . ":" . $download["port"]);
 
     return $transfer->download($download["ftkey"], $download["size"]);
+  }
+  
+  /**
+   * Sends a plugin command to the client.
+   *
+   * @param  string $plugin
+   * @param  string $data
+   * @return void
+   */
+  public function sendPluginCmd($plugin, $data)
+  {
+    $this->execute("plugincmd", array("name" => $plugin, "data" => $data, "targetmode" => TeamSpeak3::PLUGINCMD_CLIENT, "target" => $this->getId()));
   }
 
   /**

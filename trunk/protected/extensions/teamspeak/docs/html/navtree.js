@@ -9,15 +9,23 @@ var NAVTREE =
       [ "Requirements", "index.html#sysreqs_sec", null ],
       [ "Features", "index.html#feature_sec", null ],
       [ "Usage Examples", "index.html#example_sec", [
-        [ "1. Kick all Clients from a Virtual Server", "index.html#example1", null ],
-        [ "2. Modify the Settings of each Virtual Server", "index.html#example2", null ],
-        [ "3. Modify the Permissions of Admins on each Virtual Server", "index.html#example3", null ],
-        [ "4. Create a new Virtual Server", "index.html#example4", null ],
-        [ "5. Create a hierarchical Channel Stucture", "index.html#example5", null ],
-        [ "6. Send a Text Message to outdated Clients", "index.html#example6", null ],
-        [ "7. Check if the Server Instance is Outdated or Blacklisted", "index.html#example7", null ],
-        [ "8. Create a simple TSViewer for your Website", "index.html#example8", null ],
-        [ "9. Update all outdated codecs to their Opus equivalent", "index.html#example9", null ]
+        [ "1. Kick a single Client from a Virtual Server", "index.html#example1", null ],
+        [ "2. Kick all Clients from a Virtual Server", "index.html#example2", null ],
+        [ "3. Print the Nicknames of connected Android Clients", "index.html#example3", null ],
+        [ "4. Modify the Settings of each Virtual Server", "index.html#example4", null ],
+        [ "5. Create a Privilege Key for a Server Group", "index.html#example5", null ],
+        [ "6. Modify the Permissions of Admins on each Virtual Server", "index.html#example6", null ],
+        [ "7. Create a new Virtual Server", "index.html#example7", null ],
+        [ "8. Create a hierarchical Channel Stucture", "index.html#example8", null ],
+        [ "9. Send a Text Message to outdated Clients", "index.html#example9", null ],
+        [ "10. Check if the Server Instance is Outdated or Blacklisted", "index.html#example10", null ],
+        [ "11. Create a simple TSViewer for your Website", "index.html#example11", null ],
+        [ "12. Update all outdated Audio Codecs to their Opus equivalent", "index.html#example12", null ],
+        [ "13. Display the Avatar of a connected User", "index.html#example13", null ],
+        [ "14. Create a Simple Bot waiting for Events", "index.html#example14", null ],
+        [ "15. Handle Errors using Exceptions and Custom Error Messages", "index.html#example15", null ],
+        [ "16. Save Connection State in Persistent Session Variable", "index.html#example16", null ],
+        [ "17. Restore Connection State from Persistent Session Variable", "index.html#example17", null ]
       ] ]
     ] ],
     [ "Deprecated List", "deprecated.html", null ],
@@ -39,11 +47,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_adapter_2_abstract_8php.html",
-"class_team_speak3___adapter___file_transfer___exception.html#a3bfcdf7b85a393b7a8b05b048ae3279c",
-"class_team_speak3___helper___uri.html#aada4ff6119919a87251a4569b54f3b4a",
-"class_team_speak3___node___client.html#a716e7512816cf490e5a16ec307f7d889",
-"class_team_speak3___node___server.html#a6ee64afd6c312ff8644725823ab0b078",
-"class_team_speak3___viewer___text.html#aa39cd6d4d771d9c4d94e368e1b548405"
+"class_team_speak3___adapter___file_transfer.html#ab1bd002b22a8121e8efa5ab4ccd36fa5",
+"class_team_speak3___helper___uri.html#a94c765c6262844caad188417a77adda8",
+"class_team_speak3___node___client.html#a63fb203f511e99625428f70f0525950c",
+"class_team_speak3___node___server.html#a6866211126530af14d9c60976960b39f",
+"class_team_speak3___viewer___html.html#ac7d4636a787439c500691818edeae752"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

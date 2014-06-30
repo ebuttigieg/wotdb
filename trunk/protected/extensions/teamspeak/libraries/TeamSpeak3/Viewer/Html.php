@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: Text.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: Text.php 10/11/2013 11:35:22 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -299,7 +299,7 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
     }
     elseif($this->currObj instanceof TeamSpeak3_Node_Client)
     {
-      return "ID: " . $this->currObj->getId() . " | Version: " . TeamSpeak3_Helper_Convert::version($this->currObj["client_version"]) . " | Platform: " . $this->currObj["client_platform"];
+      return "ID: " . $this->currObj->getId() . " | Version: " . TeamSpeak3_Helper_Convert::versionShort($this->currObj["client_version"]) . " | Platform: " . $this->currObj["client_platform"];
     }
     elseif($this->currObj instanceof TeamSpeak3_Node_Servergroup || $this->currObj instanceof TeamSpeak3_Node_Channelgroup)
     {

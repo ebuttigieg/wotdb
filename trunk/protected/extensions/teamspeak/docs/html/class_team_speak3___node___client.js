@@ -26,6 +26,7 @@ var class_team_speak3___node___client =
     [ "getRev", "class_team_speak3___node___client.html#a4a941f045f697ed0ed494e9d785b037b", null ],
     [ "memberOf", "class_team_speak3___node___client.html#a9d9a31c0821e3dc13da505000b0adcbf", null ],
     [ "iconDownload", "class_team_speak3___node___client.html#a165635e00e068e1f35ae2f32082334b2", null ],
+    [ "sendPluginCmd", "class_team_speak3___node___client.html#ac6bd2a4585bfe075d794a6fb5842fdba", null ],
     [ "fetchNodeInfo", "class_team_speak3___node___client.html#ac3e560bcb715c46919000cd1820f7382", null ],
     [ "getUniqueId", "class_team_speak3___node___client.html#a62a1fed92852d1b91b7a5f6036a867f3", null ],
     [ "getIcon", "class_team_speak3___node___client.html#a0ba0213562c9ca67efa1507076ca3079", null ],

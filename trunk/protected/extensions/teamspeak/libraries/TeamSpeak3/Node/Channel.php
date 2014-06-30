@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: Channel.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: Channel.php 10/11/2013 11:35:21 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -460,6 +460,25 @@ class TeamSpeak3_Node_Channel extends TeamSpeak3_Node_Abstract
   public function move($pid, $order = null)
   {
     $this->getParent()->channelMove($this->getId(), $pid, $order);
+  }
+  
+  /**
+   * Sends a plugin command to all clients in the channel.
+   *
+   * @param  string  $plugin
+   * @param  string  $data
+   * @param  string  $cpw
+   * @param  boolean $subscribed
+   * @return void
+   */
+  public function sendPluginCmd($plugin, $data, $cpw = null, $subscribed = FALSE)
+  {
+    if($this->getId() != $this->getParent()->whoamiGet("client_channel_id"))
+    {
+      $this->getParent()->clientMove($this->getParent()->whoamiGet("client_id"), $this->getId(), $cpw);
+    }
+    
+    $this->execute("plugincmd", array("name" => $plugin, "data" => $data, "targetmode" => $subscribed ? TeamSpeak3::PLUGINCMD_CHANNEL_SUBSCRIBED : TeamSpeak3::PLUGINCMD_CHANNEL));
   }
 
   /**
