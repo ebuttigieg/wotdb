@@ -5,7 +5,7 @@ SELECT
   --  wpth.damageDealt/wpth.battle_count-wpth1.damageDealt/wpth1.battle_count dd,
   wpth.wins - wpth1.wins wc,
   (wpth.wins - wpth1.wins) / (wpth.battles - wpth1.battles) * 100 pw,
-  wt.tank_localized_name,
+  wt.tank_name_i18n as tank_localized_name,
   wp.player_name
 FROM wot_player_tank_history wpth
   JOIN (SELECT
