@@ -4,7 +4,7 @@
  * @file
  * TeamSpeak 3 PHP Framework
  *
- * $Id: String.php 3/8/2013 6:00:05 scp@orilla $
+ * $Id: String.php 10/11/2013 11:35:21 scp@orilla $
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package   TeamSpeak3
- * @version   1.1.20
+ * @version   1.1.23
  * @author    Sven 'ScP' Paulsen
  * @copyright Copyright (c) 2010 by Planet TeamSpeak. All rights reserved.
  */
@@ -450,8 +450,6 @@ class TeamSpeak3_Helper_String implements ArrayAccess, Iterator, Countable
    */
   public function isUtf8()
   {
-    //return (utf8_encode(utf8_decode($this->string)) == $this->string) ? TRUE : FALSE;
-
     $pattern = array();
 
     $pattern[] = "[\xC2-\xDF][\x80-\xBF]";            // non-overlong 2-byte

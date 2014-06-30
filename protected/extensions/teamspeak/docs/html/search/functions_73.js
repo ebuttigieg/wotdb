@@ -8,6 +8,7 @@ var searchData=
   ['selfupdatelogin',['selfUpdateLogin',['../class_team_speak3___node___server.html#a3bf58118ecbc54cde9cd4a652d139352',1,'TeamSpeak3_Node_Server']]],
   ['send',['send',['../class_team_speak3___transport___abstract.html#aa96e8e6fa360d0b9e1db0eaeae858520',1,'TeamSpeak3_Transport_Abstract\send()'],['../class_team_speak3___transport___t_c_p.html#a65ae7814e6733bd7967f0421baa88cec',1,'TeamSpeak3_Transport_TCP\send()'],['../class_team_speak3___transport___u_d_p.html#a3fd9e15b4b86ff749033c12610563f10',1,'TeamSpeak3_Transport_UDP\send()']]],
   ['sendline',['sendLine',['../class_team_speak3___transport___t_c_p.html#a70b9a5c409d0c481ef980aa8b2723d1e',1,'TeamSpeak3_Transport_TCP']]],
+  ['sendplugincmd',['sendPluginCmd',['../class_team_speak3___node___channel.html#abb2adcb5338c4e1a9bb4ab1009c977d7',1,'TeamSpeak3_Node_Channel\sendPluginCmd()'],['../class_team_speak3___node___client.html#ac6bd2a4585bfe075d794a6fb5842fdba',1,'TeamSpeak3_Node_Client\sendPluginCmd()'],['../class_team_speak3___node___server.html#a7ad80214abca716151ed418dd0a65129',1,'TeamSpeak3_Node_Server\sendPluginCmd()']]],
   ['servercreate',['serverCreate',['../class_team_speak3___node___host.html#a1a3e7ae9444d37169d52376d5bde2b03',1,'TeamSpeak3_Node_Host']]],
   ['serverdelete',['serverDelete',['../class_team_speak3___node___host.html#add283a1e8d0938064cd37168af0eacda',1,'TeamSpeak3_Node_Host']]],
   ['serverdeselect',['serverDeselect',['../class_team_speak3___node___host.html#a7cdbb02364fbdcde55f6931ecfed32e6',1,'TeamSpeak3_Node_Host']]],

@@ -31,5 +31,9 @@ var searchData=
   ['perm_5ftype_5fchannelclient',['PERM_TYPE_CHANNELCLIENT',['../class_team_speak3.html#a5324e065c2ed9c98c0931654d388610f',1,'TeamSpeak3']]],
   ['perm_5ftype_5fchannelgroup',['PERM_TYPE_CHANNELGROUP',['../class_team_speak3.html#a2a930337bd67c2c2893b3afad902b440',1,'TeamSpeak3']]],
   ['perm_5ftype_5fclient',['PERM_TYPE_CLIENT',['../class_team_speak3.html#a9ea90147fb0486786931015e4d64abba',1,'TeamSpeak3']]],
-  ['perm_5ftype_5fservergroup',['PERM_TYPE_SERVERGROUP',['../class_team_speak3.html#a0772e3a79ac03d3acb657e07dad63a0e',1,'TeamSpeak3']]]
+  ['perm_5ftype_5fservergroup',['PERM_TYPE_SERVERGROUP',['../class_team_speak3.html#a0772e3a79ac03d3acb657e07dad63a0e',1,'TeamSpeak3']]],
+  ['plugincmd_5fchannel',['PLUGINCMD_CHANNEL',['../class_team_speak3.html#a1017b9d565da82a1a360ecd1074ef882',1,'TeamSpeak3']]],
+  ['plugincmd_5fchannel_5fsubscribed',['PLUGINCMD_CHANNEL_SUBSCRIBED',['../class_team_speak3.html#ac5519852d33570fbd89e171937f553c2',1,'TeamSpeak3']]],
+  ['plugincmd_5fclient',['PLUGINCMD_CLIENT',['../class_team_speak3.html#a2bd847d0f20f1d827238304dedaa6b77',1,'TeamSpeak3']]],
+  ['plugincmd_5fserver',['PLUGINCMD_SERVER',['../class_team_speak3.html#a908573c6bc67e85396a4af21972bfeae',1,'TeamSpeak3']]]
 ];

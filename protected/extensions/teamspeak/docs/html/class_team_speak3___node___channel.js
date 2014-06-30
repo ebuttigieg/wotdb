@@ -32,6 +32,7 @@ var class_team_speak3___node___channel =
     [ "message", "class_team_speak3___node___channel.html#abb90a093d39070b66f903c29aee75eb7", null ],
     [ "delete", "class_team_speak3___node___channel.html#a1dde358f63d3ac8c2298fd21142dac27", null ],
     [ "move", "class_team_speak3___node___channel.html#ac6c3d3563ea70b58e5d06504cea1dc40", null ],
+    [ "sendPluginCmd", "class_team_speak3___node___channel.html#abb2adcb5338c4e1a9bb4ab1009c977d7", null ],
     [ "fetchNodeList", "class_team_speak3___node___channel.html#a81bb1307281b161103c7578cb27883cb", null ],
     [ "fetchNodeInfo", "class_team_speak3___node___channel.html#a0309efb6b6ba7612c0298edb3f411fd3", null ],
     [ "getUniqueId", "class_team_speak3___node___channel.html#a44bfe5d3b60bf1126fe64a3ab26d9b97", null ],
