@@ -7,7 +7,7 @@ SELECT
   wps.wins,
   wps.wins / wps.battles * 100 AS wp,
   wp.max_xp,
-  DATEDIFF(NOW(), wp.updated_at) updated_at,
+  DATEDIFF(NOW(), wp.last_battle_time) updated_at,
   wps.player_id,
   wp.effect,
   wp.wn6,
