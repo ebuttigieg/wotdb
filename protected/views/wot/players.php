@@ -18,7 +18,7 @@ $this->widget('ext.jqgrid.JQGrid',
 	array('options'=>array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('members'),
-		'colNames'=>array('Игрок', 'Начал играть', 'Дней в клане', 'Должность','Обновлено'),
+		'colNames'=>array('Игрок', 'Начал играть', 'Дней в клане', 'Должность','Неакт. дней'),
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left','formatter'=>'js:linkFormatter'),
 			array('name'=>'created_at','index'=>'created_at','width'=>100,'sorttype'=>'date','align'=>'right','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y')),//d.m.Y H:i
@@ -30,7 +30,8 @@ $this->widget('ext.jqgrid.JQGrid',
 		//	array('name'=>'max_xp','index'=>'max_xp','width'=>80,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc'),
 		//	array('name'=>'effect','index'=>'effect','width'=>80,'align'=>'right','sorttype'=>'number','formatter'=>'number','firstsortorder'=>'desc'),
 		//	array('name'=>'wn6','index'=>'wn6','width'=>80,'align'=>'right','sorttype'=>'number','formatter'=>'number','firstsortorder'=>'desc'),
-			array('name'=>'updated_at','index'=>'updated_at','width'=>110,'align'=>'right','sorttype'=>'date','firstsortorder'=>'desc','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y H:i')),
+		//	array('name'=>'updated_at','index'=>'updated_at','width'=>110,'align'=>'right','sorttype'=>'date','firstsortorder'=>'desc','formatter'=>'date','formatoptions'=>array('srcformat'=>'Y-m-d H:i:s','newformat'=>'d.m.Y H:i')),
+			array('name'=>'inactivity','index'=>'inactivity','width'=>80,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc'),
 		),
 		'rowNum'=>1000,
 	//	'rowList'=>array( 10, 20, 30 ),
