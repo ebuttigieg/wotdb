@@ -11,6 +11,8 @@ SELECT
   wps.player_id,
   wp.effect,
   wp.wn6,
+  wp.wn7,
+  wp.wn8,
   wps.damage_dealt / wps.battles damage
 FROM wot_player wp
   JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id = 1
