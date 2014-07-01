@@ -49,7 +49,7 @@ class WotPlayer extends CActiveRecord
 		return array(
 			'statistics'=>array(self::HAS_MANY, 'WotPlayerStatistic', 'player_id', 'index'=>'statisticName', 'with'=>array('statistic')),
 			'achievments'=>array(self::HAS_MANY, 'WotPlayerAchievment', 'player_id', 'index'=>'achievmentName', 'with'=>array('achievment')),
-			'stat'=>array(self::HAS_ONE, 'WotPlayerStatistic','player_id','condition'=>'WotPlayerStatistic.statistic_id=1'),
+			'stat'=>array(self::HAS_ONE, 'WotPlayerStatistic','player_id','on'=>'stat.statistic_id=1'),
 		);
 	}
 
