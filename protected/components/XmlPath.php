@@ -23,6 +23,8 @@ class XmlPath
 		$xml = preg_replace('/&/', '', $xml);
 	//	file_put_contents(Yii::app()->getRuntimePath().'/tt/last.xml', $xml);
 		$this->_doc=new DOMDocument();
+		$this->_doc->strictErrorChecking = false;
+		libxml_use_internal_errors(true);
 		set_error_handler('HandleXmlError');
 		$this->_doc->loadXML($xml);
 		restore_error_handler();
