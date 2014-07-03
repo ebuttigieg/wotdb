@@ -166,7 +166,7 @@ class WotService
 						continue;
 					}
 					if($clanPlayerRec->clan_role_id!=$members[$playerId]['role']){
-						$clanPlayerRec->clan_role=WotClanRole::getRoleId($playerData['role'], $playerData['role_i18n']);;
+						$clanPlayerRec->clan_role=WotClanRole::getRoleId($members[$playerId]['role'], $members[$playerId]['role_i18n']);
 						$clanPlayerRec->save(false);
 					}
 				}
