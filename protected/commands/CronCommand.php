@@ -101,6 +101,7 @@ SQL;
 				'ivanner_skill'=>'//tr[td/a[@href="/lt/clan/93535"]]/td[7]',
 			));
 			CVarDumper::dump($query);
+			echo $url->content;
 		}
 	}
 }
