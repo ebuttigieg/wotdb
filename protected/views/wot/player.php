@@ -1,13 +1,15 @@
 <div class="row-fluid">
-	<div class="span2">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Игроки</h4>
-				<span class="tools">
-					<a href="javascript:;" class="icon-refresh"></a>
-				</span>
+	<div class="col-md-2">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Игроки
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="reload"></a>
+				</div>
 			</div>
-			<div class="widget-body">
+			<div class="portlet-body">
 				<div class="scroller" data-height="700px">
 <?php
 
@@ -36,37 +38,43 @@ $this->widget('zii.widgets.grid.CGridView',array(
 			</div>
 		</div>
 	</div>
-	<div class="span10">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-user"></i><span id="user"></span></h4>
+	<div class="col-md-10">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-users"></i>
+				</div>
 			</div>
-			<div class="widget-body">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="widget">
-							<div class="widget-title">
-								<h4><i class="icon-reorder"></i>Динамика эффективности wot-news</h4>
-								<span class="tools">
-									<a href="javascript:;" class="icon-refresh"></a>
-								</span>
+			<div class="portlet-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-users"></i>Динамика эффективности wot-news
+								</div>
+								<div class="tools">
+									<a href="javascript:;" class="reload"></a>
+								</div>
 							</div>
-							<div class="widget-body">
+							<div class="portlet-body">
 								<div id="chart_1" class="chart" style="height: 200px"></div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="widget">
-							<div class="widget-title">
-								<h4><i class="icon-reorder"></i>Динамика процента побед</h4>
-								<span class="tools">
-									<a href="javascript:;" class="icon-refresh"></a>
-								</span>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-users"></i>Динамика процента побед
+								</div>
+								<div class="tools">
+									<a href="javascript:;" class="reload"></a>
+								</div>
 							</div>
-							<div class="widget-body">
+							<div class="portlet-body">
 								<div id="chart_2" class="chart" style="height: 200px"></div>
 							</div>
 						</div>
@@ -200,5 +208,6 @@ $("#chart_1,#chart_2").bind("plotclick", function (event, pos, item) {
 SCRIPT;
 	$cs=Yii::app()->clientScript;
 	$cs->registerScript(__CLASS__.$this->getId(), $script,CClientScript::POS_END);
+	$cs->registerPackage('flot');
 ?>
 

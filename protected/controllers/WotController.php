@@ -41,7 +41,7 @@ class WotController extends Controller
 		);
 	}
 
-
+	
 	/**
 	 * Lists all models.
 	 */

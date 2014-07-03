@@ -4,14 +4,14 @@ $this->breadcrumbs=array(
 	'Grid',
 );
 ?>
-
+<!-- BEGIN OVERVIEW STATISTIC BARS-->
 <div class="row stats-overview-cont">
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat ok huge">
-				<span class="line-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="line-chart">
 					 5, 6, 7, 11, 14, 10, 15, 19, 15, 2
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +66%
 				</div>
@@ -36,9 +36,9 @@ $this->breadcrumbs=array(
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat good huge">
-				<span class="line-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="line-chart">
 					 2,6,8,12, 11, 15, 16, 11, 16, 11, 10, 3, 7, 8, 12, 19
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +16%
 				</div>
@@ -63,9 +63,9 @@ $this->breadcrumbs=array(
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat bad huge">
-				<span class="line-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="line-chart">
 					 2,6,8,11, 14, 11, 12, 13, 15, 12, 9, 5, 11, 12, 15, 9,3
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +6%
 				</div>
@@ -90,9 +90,9 @@ $this->breadcrumbs=array(
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat good huge">
-				<span class="bar-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="bar-chart">
 					 1,4,9,12, 10, 11, 12, 15, 12, 11, 9, 12, 15, 19, 14, 13, 15
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +86%
 				</div>
@@ -117,9 +117,9 @@ $this->breadcrumbs=array(
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat ok huge">
-				<span class="line-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="line-chart">
 					 2,6,8,12, 11, 15, 16, 17, 14, 12, 10, 8, 10, 2, 4, 12, 19
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +72%
 				</div>
@@ -144,9 +144,9 @@ $this->breadcrumbs=array(
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<div class="display stat bad huge">
-				<span class="line-chart" style="display: inline;"><span style="display: none;"><span style="display: none;"><span style="display: none;">
+				<span class="line-chart">
 					 1,7,9,11, 14, 12, 6, 7, 4, 2, 9, 8, 11, 12, 14, 12, 10
-				</span><canvas width="50" height="20"></canvas></span><canvas width="50" height="20"></canvas></span><canvas width="40" height="20"></canvas></span>
+				</span>
 				<div class="percent">
 					 +15%
 				</div>
@@ -169,14 +169,19 @@ $this->breadcrumbs=array(
 		</div>
 	</div>
 </div>
-
+<div class="clearfix">
+</div>
+<!-- END OVERVIEW STATISTIC BARS-->
 <div class="row-fluid">
-	<div class="span4">
+	<div class="col-md-4">
 		<!-- BEGIN SAMPLE TABLE widget-->
-		<div class="widget">
-			<div class="widget-title">
-				<h4 style="white-space: nowrap;"><i class="icon-reorder"></i>Топ 5 по эффективности</h4>
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Топ 5 по эффективности
+				</div>
 			</div>
+			<div class="portlet-body">
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 	//	'type'=>array('condensed','striped','bordered'),
@@ -201,14 +206,18 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
+			</div>
 		</div>
 	<!-- END SAMPLE TABLE widget-->
 	</div>
-	<div class="span4">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Топ 5 по урону</h4>
+	<div class="col-md-4">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Топ 5 по урону
+				</div>
 			</div>
+			<div class="portlet-body">
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
@@ -232,16 +241,17 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
+			</div>
 		</div>
 	</div>
-	<div class="span4">
-		<div class="widget widget-tabs">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Топ 5</h4>
+	<div class="col-md-4">
+		<div class="portlet portlet-tabs">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Топ 5
+				</div>
 			</div>
-
-
-			<div class="widget-body">
+			<div class="portlet-body">
 				<div class="tabbable portlet-tabs">
 					<ul class="nav nav-tabs">
 						<li class=""><a href="#portlet_tab2" data-toggle="tab">По захвату</a></li>
@@ -332,11 +342,14 @@ $this->widget('zii.widgets.grid.CGridView',array(
 	</div>
 </div>
 <div class="row-fluid">
-	<div class="span4">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Новые игроки</h4>
+	<div class="col-md-4">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Новые игроки
+				</div>
 			</div>
+			<div class="portlet-body">
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
@@ -363,13 +376,17 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
+			</div>
 		</div>
 	</div>
-	<div class="span4">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Ушедшие игроки</h4>
+	<div class="col-md-4">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Ушедшие игроки
+				</div>
 			</div>
+			<div class="portlet-body">
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
@@ -395,13 +412,17 @@ $this->widget('zii.widgets.grid.CGridView',array(
 		'hideHeader'=>true,
 ));
 			?>
+			</div>
 		</div>
 	</div>
-	<div class="span4">
-		<div class="widget">
-			<div class="widget-title">
-				<h4><i class="icon-reorder"></i>Карьера</h4>
+	<div class="col-md-4">
+		<div class="portlet">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Карьера
+				</div>
 			</div>
+			<div class="portlet-body">
 			<?php
 $this->widget('zii.widgets.grid.CGridView',array(
 		'itemsCssClass'=>'table table-condensed table-striped',
@@ -428,6 +449,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 	//	'hideHeader'=>true,
 ));
 			?>
+			</div>
 		</div>
 	</div>
 </div>
