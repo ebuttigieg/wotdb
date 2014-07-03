@@ -19,15 +19,15 @@ class XmlPath
 	
 	public function __construct($xml)
 	{
-		$xml = preg_replace('/&QUOT;?/', '', $xml);
-		$xml = preg_replace('/&/', '', $xml);
+	//	$xml = preg_replace('/&QUOT;?/', '', $xml);
+	//	$xml = preg_replace('/&/', '', $xml);
 	//	file_put_contents(Yii::app()->getRuntimePath().'/tt/last.xml', $xml);
 		$this->_doc=new DOMDocument();
-		$this->_doc->recover = true;
-		$this->_doc->strictErrorChecking = false;
-		libxml_use_internal_errors(true);
+	//	$this->_doc->recover = true;
+	//	$this->_doc->strictErrorChecking = false;
+	//	libxml_use_internal_errors(true);
 		set_error_handler('HandleXmlError');
-		$this->_doc->loadXML($xml);
+		$this->_doc->loadHTML($xml);
 		restore_error_handler();
 		$this->_xpath = new DOMXpath($this->_doc);
 	}
