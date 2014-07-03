@@ -93,7 +93,7 @@ SQL;
 	{
 		$pattern=<<<PATTERN
 /<tr><td><b>(\d+)<\/b><\/td><td><a href="\/lt\/alliance\/(\d+)">(.*?)<\/a><\/td>
-<td><a href="\/lt\/clan\/93535">MUMMI<\/a><\/td><td><a href="\/lt\/clan/93535">Мумии<\/a><\/td>
+<td><a href="\/lt\/clan\/93535">MUMMI<\/a><\/td><td><a href="\/lt\/clan\/93535">Мумии<\/a><\/td>
 <td><b>(\d+)<\/b><\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td>
 <td>(\d+)<\/td><td>(\d+)<\/td><td>21:00<\/td><\/tr>/is
 PATTERN;
