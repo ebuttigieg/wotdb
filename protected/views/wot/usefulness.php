@@ -22,7 +22,7 @@ $this->widget('ext.jqgrid.JQGrid',
 		'colModel'=>array(
 			array('name'=>'player_name','index'=>'player_name','width'=>140,'align'=>'left','formatter'=>'js:linkFormatter'),
 			array('name'=>'pp','index'=>'pp','width'=>100,'align'=>'right','formatter'=>'number','sorttype'=>'number','firstsortorder'=>'desc'),
-			array('name'=>'tops','index'=>'tops','width'=>100,'align'=>'right','formatter'=>'integer','sorttype'=>'number'),
+			array('name'=>'tops','index'=>'tops','width'=>100,'align'=>'right','formatter'=>'integer','sorttype'=>'number', 'firstsortorder'=>'desc'),
 		//	array('name'=>'losses','index'=>'losses','width'=>80,'align'=>'right','sorttype'=>'number'),
 		//	array('name'=>'clan_role_name','index'=>'clan_role_name','width'=>140,'align'=>'right', 'firstsortorder'=>'desc'),
 		//	array('name'=>'battle_avg_xp','index'=>'battle_avg_xp','width'=>80,'align'=>'right','sorttype'=>'number','firstsortorder'=>'desc'),
