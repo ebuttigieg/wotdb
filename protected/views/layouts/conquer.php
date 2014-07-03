@@ -153,7 +153,7 @@
 						</li>
 						<?php if(isset($this->menu[$this->action->id])):?>
 						<li>
-							<a href="#"><?php echo $this->menu[$this->action->id]; ?></a>
+							<span><?php echo $this->menu[$this->action->id]; ?></span>
 						</li>
 						<?php endif;?>
 						<li class="pull-right">
