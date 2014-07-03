@@ -1,19 +1,15 @@
 /***
 Import fonts
 ***/
-body {
-	background-image: none !important;
-}
-
-#header {
+.header {
 	display: none;
 }
 
-#sidebar {
+.page-sidebar {
 	display: none;
 }
 
-#styler {
+.theme-panel {
 	display: none;
 }
 
@@ -21,7 +17,7 @@ body {
 	display: none;
 }
 
-#footer {
+.footer {
 	display: none;
 }
 
@@ -29,13 +25,11 @@ body {
 	page-break-after: avoid;
 }
 
-#container {
+.page-container {
 	margin: 0px;
 	padding: 0px;
 }
 
-#body {
+.page-content {
 	min-height: auto !important;
-	background-image: none !important;
-	border-bottom: 0 solid #ddd;
 }
