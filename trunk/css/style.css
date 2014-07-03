@@ -276,8 +276,10 @@ Header and header elements.
 .header .navbar-brand {
   display: inline-block;
   margin-right: 0;
+  margin-bottom: 0;
   padding-left: 0;
   padding-right: 0;
+  padding-bottom: 0;
   width: 215px;
 }
 
@@ -500,10 +502,8 @@ Page content
 
 .page-sidebar-menu {
   list-style: none;
-  margin: 0;
-  padding: 0;
-  margin: 0;
-  padding: 0; 
+  margin: 0px;
+  padding: 40px 0px 0px 0px; 
 }
 
 .page-sidebar-menu > li {
@@ -721,8 +721,8 @@ Sidebar toggler(show/hide)
   cursor: pointer;
   display: block;
   float: right;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 0px;
+  margin-bottom: 3px;
   width: 23px;
   height: 23px;
   background-color: #FcFcFc;

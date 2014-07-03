@@ -2,7 +2,7 @@
 
 class SiteController extends Controller
 {
-	public $layout='grid';
+	public $layout='conquer';
 
 	/**
 	 * Declares class-based actions.
@@ -22,7 +22,7 @@ class SiteController extends Controller
 			),
 		);
 	}
-
+	
 	/**
 	 * This is the action to handle external exceptions.
 	 */

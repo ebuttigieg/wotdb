@@ -62,7 +62,8 @@ return array(
 		'basePath'=>'ext.conquer.flot',
 		'js'=>array(
 				'excanvas.min.js',
-				'jquery.flot.js',
+				'jquery.flot.min.js',
+				'jquery.flot.time.min.js',
 			//	'jquery.flot.crosshair.js',
 			//	'jquery.flot.fillbetween.js',
 			//	'jquery.flot.image.js',
