@@ -91,18 +91,17 @@ SQL;
 	
 	public function actionIvanner()
 	{
+		$pattern=<<<PATTERN
+/<tr><td><b>(\d+)<\/b><\/td><td><a href="\/lt\/alliance\/(\d+)">(.*?)<\/a><\/td>
+<td><a href="\/lt\/clan\/93535">MUMMI<\/a><\/td><td><a href="\/lt\/clan/93535">Мумии<\/a><\/td>
+<td><b>(\d+)<\/b><\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td>
+<td>(\d+)<\/td><td>(\d+)<\/td><td>21:00<\/td><\/tr>/is
+PATTERN;
 		$url=new CUrlHelper();
 		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
-			$xpath=new XmlPath($url->content);
-			$xpath->registerNamespace('xmlns', 'http://www.w3.org/1999/xhtml');
-			$query=$xpath->queryAll(array(
-				'test'=>'//xmlns:tr/td/a/b',
-				'ivanner_pos'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
-				'ivanner_strength'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
-				'ivanner_firepower'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[6]',
-				'ivanner_skill'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[7]',
-			));
-			CVarDumper::dump($query);
+			if(preg_match($pattern,$url->content, $matches)){
+				CVarDumper::dump($matches);
+			}
 		}
 	}
 }
