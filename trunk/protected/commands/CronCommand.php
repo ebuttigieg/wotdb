@@ -95,10 +95,10 @@ SQL;
 		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
-				'ivanner_pos'		=> '//tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
-				'ivanner_strength'	=> '//tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
-				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/93535"]]/td[6]',
-				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/93535"]]/td[7]',
+				'ivanner_pos'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[1]/b',
+				'ivanner_strength'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[5]/b',
+				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[6]',
+				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[7]',
 			));
 			$clan=WotClan::currentClan();
 			$clan->setAttributes($query,false);
