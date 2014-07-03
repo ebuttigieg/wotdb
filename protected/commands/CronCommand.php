@@ -96,11 +96,11 @@ SQL;
 			$xpath=new XmlPath($url->content);
 			$xpath->registerNamespace('xmlns', 'http://www.w3.org/1999/xhtml');
 			$query=$xpath->queryAll(array(
-				'test'=>'xhtml://tr/td/a/b',
-				'ivanner_pos'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
-				'ivanner_strength'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
-				'ivanner_firepower'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[6]',
-				'ivanner_skill'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[7]',
+				'test'=>'//xmlns:tr/td/a/b',
+				'ivanner_pos'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
+				'ivanner_strength'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
+				'ivanner_firepower'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[6]',
+				'ivanner_skill'=>'//xmlns:tr[td/a[@href="/lt/clan/93535"]]/td[7]',
 			));
 			CVarDumper::dump($query);
 		}
