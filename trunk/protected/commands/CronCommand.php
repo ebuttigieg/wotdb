@@ -100,7 +100,9 @@ SQL;
 				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/93535"]]/td[6]',
 				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/93535"]]/td[7]',
 			));
-			CVarDumper::dump($query);
+			$clan=WotClan::currentClan();
+			$clan->setAttributes($query,false);
+			$clan->save(false);
 		}
 	}
 }
