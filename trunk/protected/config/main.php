@@ -89,60 +89,14 @@ $config=CMap::mergeArray($config,array(
 			),
 		),
 		'clientScript' => array(
-		//	'scriptMap' => array(
-		//		'jquery-ui.css' => '/css/ff/jquery-ui-1.9.1.custom.min.css',
-		//		'jquery-ui.min.js' => '/css/ff/jquery-ui-1.9.2.custom.min.js',
-		//		'jquery-ui-i18n.min.js' => '/css/ff/jquery-ui-i18n.min.js',
-		//	),
-			'packages' => array(
-				'font-awesome'=>array(
-					'basePath'=>'ext.conquer.plugins.font-awesome',
-				//	'js'=>array('modernizr.custom.js'),
-					'css'=>array('css/font-awesome.min.css'),
-				//	'depends'=>array(),
-				),
-				'scrollTo'=>array(
-					'basePath'=>'ext.ScrollTo',
-					'js'=>array('jquery.scrollTo-min.js'),
-					'depends'=>array('jquery'),
-				),
-				'extJs'=>array(
-					'basePath'=>'ext.ExtJs.assets',
-					'js'=>array(YII_DEBUG?'ext-all-debug.js':'ext-all.js'),
-					'css'=>array('resources/css/ext-all.css'),
-				),
-				'breakpoints'=>array(
-					'basePath'=>'ext.conquer.plugins.breakpoints',
-					'js'=>array('breakpoints.js'),
-					// 'css'=>array('css/font-awesome.min.css'),
-					'depends'=>array('jquery'),
-				),
-				'flot'=>array(
-					'basePath'=>'ext.conquer.plugins.flot',
-					'js'=>array(
-							'excanvas.min.js',
-							'jquery.flot.js',
-						//	'jquery.flot.crosshair.js',
-						//	'jquery.flot.fillbetween.js',
-						//	'jquery.flot.image.js',
-						//	'jquery.flot.navigate.js',
-						//	'jquery.flot.pie.js',
-						//	'jquery.flot.resize.js',
-						//	'jquery.flot.selection.js',
-						//	'jquery.flot.stack.js',
-						//	'jquery.flot.symbol.js',
-						//	'jquery.flot.threshold.js'
-					),
-					// 'css'=>array('css/font-awesome.min.css'),
-					'depends'=>array('jquery'),
-				),
-				'wysihtml'=>array(
-					'basePath'=>'ext.conquer.plugins.bootstrap-wysihtml5',
-					'js'=>array('wysihtml5-0.3.0.js','bootstrap-wysihtml5.js'),
-					'css'=>array('wysiwyg-color.css','bootstrap-wysihtml5.css'),
-					'depends'=>array('jquery'),
-				),
+		/*	'scriptMap' => array(
+				'jquery-ui.css' => '/scripts/jquery-ui/jquery-ui-1.10.3.custom.min.css',
+				'jquery-ui.min.js' => '/scripts/jquery-ui/jquery-ui-1.10.2.custom.min.js',
+				'jquery-ui-i18n.min.js' => '/css/ff/jquery-ui-i18n.min.js',
+				'jquery.min.js'=>'/scripts/jquery-1.10.2.min.js',
 			),
+		*/
+			'packages' =>require __DIR__.'/packages.php',
 		),
 		'widgetFactory' => array(
 			'class'=>'CWidgetFactory',
