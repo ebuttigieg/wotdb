@@ -173,6 +173,12 @@
                <span class="title">Герои</span>
                </a>
             </li>
+			<li class="">
+               <a href="<?php echo Yii::app()->createUrl('wot/usefulness'); ?>">
+               <i class="icon-user"></i>
+               <span class="title">Полезность</span>
+               </a>
+            </li>
             <li class="">
                <a href="<?php echo Yii::app()->createUrl('wot/ts'); ?>">
                <i class="icon-user"></i>
