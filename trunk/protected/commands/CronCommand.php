@@ -94,12 +94,13 @@ SQL;
 		$url=new CUrlHelper();
 		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
 			$xpath=new XmlPath($url->content);
+			$xpath->registerNamespace('xhtml', 'http://www.w3.org/1999/xhtml');
 			$query=$xpath->queryAll(array(
-				'test'=>'//tr/td/a/b',
-				'ivanner_pos'=>'//tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
-				'ivanner_strength'=>'//tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
-				'ivanner_firepower'=>'//tr[td/a[@href="/lt/clan/93535"]]/td[6]',
-				'ivanner_skill'=>'//tr[td/a[@href="/lt/clan/93535"]]/td[7]',
+				'test'=>'xhtml://tr/td/a/b',
+				'ivanner_pos'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[1]/b',
+				'ivanner_strength'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[5]/b',
+				'ivanner_firepower'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[6]',
+				'ivanner_skill'=>'xhtml://tr[td/a[@href="/lt/clan/93535"]]/td[7]',
 			));
 			CVarDumper::dump($query);
 		}
