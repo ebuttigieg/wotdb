@@ -47,7 +47,7 @@
 	<!-- BEGIN TOP NAVIGATION BAR -->
 	<div class="header-inner">
 		<!-- BEGIN LOGO -->
-		<a class="navbar-brand" href="index.html">
+		<a class="navbar-brand" href="/">
 		<img src="<?php echo WotClan::currentClan()->clan_ico;?>" alt="logo" class="img-responsive"/>
 		</a>
 		<!-- END LOGO -->
