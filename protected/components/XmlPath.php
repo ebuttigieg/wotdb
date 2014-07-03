@@ -24,7 +24,7 @@ class XmlPath
 	//	file_put_contents(Yii::app()->getRuntimePath().'/tt/last.xml', $xml);
 		$this->_doc=new DOMDocument();
 	//	$this->_doc->recover = true;
-	//	$this->_doc->strictErrorChecking = false;
+		$this->_doc->strictErrorChecking = false;
 	//	libxml_use_internal_errors(true);
 		set_error_handler('HandleXmlError');
 		$this->_doc->loadHTML($xml);
