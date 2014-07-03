@@ -171,4 +171,8 @@ class WotController extends Controller
 		$this->render('glory');
 	}
 	
+	public function actionUsefulness()
+	{
+		$this->render('usefulness');
+	}
 }
