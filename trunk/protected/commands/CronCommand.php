@@ -91,7 +91,7 @@ SQL;
 	
 	public function actionIvanner()
 	{
-		$pattern="/<tr><td><b>(\d+)<\/b><\/td><td><a href=\"\/lt\/alliance\/(\d+)\">(.*?)<\/a><\/td>\s<td><a href=\"\/lt\/clan\/93535\">MUMMI<\/a><\/td><td><a href=\"\/lt\/clan\/93535\">Мумии<\/a><\/td>\s<td><b>(\d+)<\/b><\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td>\s<td>(\d+)<\/td><td>(\d+)<\/td><td>21:00<\/td><\/tr>/is";
+		$pattern="/<tr><td><b>(\d+)<\/b><\/td><td><a href=\"\/lt\/alliance\/(\d+)\">(.*?)<\/a><\/td>\s?<td><a href=\"\/lt\/clan\/93535\">MUMMI<\/a><\/td><td><a href=\"\/lt\/clan\/93535\">Мумии<\/a><\/td>\s?<td><b>(\d+)<\/b><\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td>\s?<td>(\d+)<\/td><td>(\d+)<\/td><td>21:00<\/td><\/tr>/is";
 		$url=new CUrlHelper();
 		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
 			if(preg_match($pattern,$url->content, $matches)){
