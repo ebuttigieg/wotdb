@@ -147,12 +147,14 @@
 					<ul class="page-breadcrumb breadcrumb">
 						<li>
 							<i class="fa fa-home"></i>
-							<a href="/">Home</a>
+							<a href="/">Главная</a>
 							<i class="fa fa-angle-right"></i>
 						</li>
+						<?php if(isset($this->menu[$this->action->id])):?>
 						<li>
-							<a href="#">Dashboard</a>
+							<a href="#"><?php echo $this->menu[$this->action->id]; ?></a>
 						</li>
+						<?php endif;?>
 						<li class="pull-right">
 							<div id="dashboard-report-range" class="dashboard-date-range tooltips" data-placement="top" data-original-title="Change dashboard date range">
 								<i class="fa fa-calendar"></i>
