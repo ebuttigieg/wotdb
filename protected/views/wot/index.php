@@ -116,7 +116,7 @@ function getPietyClass($value){
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
 			<?php $inc=WotClan::currentClan()->increment('ivanner_skill');?>
-			<div class="display stat <?php getPietyClass($inc); ?> huge">
+			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
 				<span class="bar-chart">
 					<?php echo WotClan::currentClan()->historyValues('ivanner_skill'); ?>
 				</span>
