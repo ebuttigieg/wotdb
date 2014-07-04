@@ -3,6 +3,11 @@ $this->pageTitle=Yii::app()->name . ' - Grid';
 $this->breadcrumbs=array(
 	'Grid',
 );
+$cs=Yii::app()->clientScript;
+$cs->registerPackage('jquery-peity');
+$cs->registerScriptFile('/scripts/index.js', CClientScript::POS_END);
+$cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClientScript::POS_READY);
+
 ?>
 <!-- BEGIN OVERVIEW STATISTIC BARS-->
 <div class="row stats-overview-cont">
@@ -39,23 +44,16 @@ $this->breadcrumbs=array(
 				<span class="line-chart">
 					 2,6,8,12, 11, 15, 16, 11, 16, 11, 10, 3, 7, 8, 12, 19
 				</span>
-				<div class="percent">
+				<div class="numbers">
 					 +16%
 				</div>
 			</div>
 			<div class="details">
 				<div class="title">
-					 Site Visits
+					 Позиция Ivanner
 				</div>
 				<div class="numbers">
-					 1800
-				</div>
-				<div class="progress">
-					<span style="width: 16%;" class="progress-bar progress-bar-warning" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 16% Complete
-						</span>
-					</span>
+					 <?php echo WotClan::currentClan()->ivanner_pos; ?>
 				</div>
 			</div>
 		</div>

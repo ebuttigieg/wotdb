@@ -8,8 +8,8 @@
 	$cs->registerPackage('jquery-slimscroll');
 	$cs->registerPackage('jquery-blockui');
 	$cs->registerPackage('jquery-cookie');
-	
 	$cs->registerScript($this->getId().'Init','App.init();', CClientScript::POS_READY);
+	$cs->registerScriptFile('/scripts/app.js', CClientScript::POS_END);
 ?>
 
 <!DOCTYPE html>
@@ -186,7 +186,6 @@
 <![endif]-->
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/scripts/app.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- END JAVASCRIPTS -->
 </body>
