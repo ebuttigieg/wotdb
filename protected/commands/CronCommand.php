@@ -113,10 +113,10 @@ SQL;
 		if($url->execute('http://armor.kiev.ua/wot/clan/'.WotClan::$clanId)){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
-					'armor_gk_pos'		=> '//*[@id="main"]/div[4]/div[6]/table[1]/tr[1]/td[2]',
-					'armor_gk_val'		=> '//*[@id="main"]/div[4]/div[6]/table[1]/tr[1]/td[1]',
-					'armor_rb_pos'	=> '//*[@id="main"]/div[4]/div[6]/table[1]/tr[2]/td[2]',
-					'armor_rb_val'	=> '//*[@id="main"]/div[4]/div[6]/table[1]/tr[2]/td[1]',
+					'armor_gk_pos'		=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[1]/td[2]',
+					'armor_gk_val'		=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[1]/td[1]',
+					'armor_rb_pos'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[2]',
+					'armor_rb_val'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[1]',
 			));
 			CVarDumper::dump($query);
 			exit;
