@@ -8,17 +8,36 @@ $cs->registerPackage('jquery-peity');
 $cs->registerScriptFile('/scripts/index.js', CClientScript::POS_END);
 $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClientScript::POS_READY);
 
+function getProgressClass($value){
+	if($value<30)
+		return 'progress-bar-danger';
+	if($value<40)
+		return 'progress-bar-warning';
+	if($value<60)
+		return 'progress-bar-info';	
+	return 'progress-bar-success';	
+}
+
+function getPietyClass($value){
+	if($value>0) 
+		return 'good';	
+	if($value<0)
+		return 'bad'; 
+	return 'ok';
+}
+
 ?>
 <!-- BEGIN OVERVIEW STATISTIC BARS-->
 <div class="row stats-overview-cont">
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
-			<div class="display stat ok huge">
+			<?php $inc=-1*WotClan::currentClan()->increment('ivanner_pos');?>
+			<div class="display stat <?php if($inc>0) echo getPietyClass($inc) ?> huge">
 				<span class="line-chart">
-					 5, 6, 7, 11, 14, 10, 15, 19, 15, 2
+					<?php echo WotClan::currentClan()->historyValues('ivanner_pos'); ?>
 				</span>
 				<div class="percent">
-					 +66%
+					<?php echo ($inc>0)?'+'.$inc:$inc;?>
 				</div>
 			</div>
 			<div class="details">
@@ -30,9 +49,9 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 				</div>
 			</div>
 			<div class="progress">
-				<span style="width: 40%;" class="progress-bar progress-bar-info" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+				<span style="width: <?php echo (1-WotClan::currentClan()->ivanner_pos/400)*100 ?>%;" class="progress-bar <?php echo getProgressClass((1-WotClan::currentClan()->ivanner_pos/400)*100) ?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_pos; ?>" aria-valuemin="0" aria-valuemax="400">
 					<span class="sr-only">
-						 66% Complete
+						 <?php echo (1-WotClan::currentClan()->ivanner_pos/400)*100?>% Complete
 					</span>
 				</span>
 			</div>
@@ -40,12 +59,41 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 	</div>
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
-			<div class="display stat good huge">
+			<?php $inc=WotClan::currentClan()->increment('ivanner_strength');?>
+			<div class="display stat <?php if($inc>0) echo getPietyClass($inc); ?> huge">
 				<span class="line-chart">
-					 2,6,8,12, 11, 15, 16, 11, 16, 11, 10, 3, 7, 8, 12, 19
+					 <?php echo WotClan::currentClan()->historyValues('ivanner_strength'); ?>
 				</span>
+				<div class="percent">
+					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
+				</div>
+			</div>
+			<div class="details">
+				<div class="title">
+					 Сила клана (Ivanner)
+				</div>
 				<div class="numbers">
-					 +16%
+					 <?php echo WotClan::currentClan()->ivanner_strength; ?>
+				</div>
+			</div>
+			<div class="progress">
+				<span style="width: <?php echo WotClan::currentClan()->ivanner_strength/10; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_strength/10)?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_strength; ?>" aria-valuemin="0" aria-valuemax="1000">
+					<span class="sr-only">
+						 <?php echo WotClan::currentClan()->ivanner_strength/10; ?>% Complete
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-2 col-sm-4">
+		<div class="stats-overview stat-block">
+			<?php $inc=WotClan::currentClan()->increment('ivanner_firepower');?>
+			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
+				<span class="line-chart">
+					<?php echo WotClan::currentClan()->historyValues('ivanner_firepower'); ?>
+				</span>
+				<div class="percent">
+					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
 				</div>
 			</div>
 			<div class="details">
@@ -55,24 +103,25 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 				<div class="numbers">
 					 <?php echo WotClan::currentClan()->ivanner_firepower; ?>
 				</div>
-			</div>
-			<div class="progress">
-				<span style="width: 40%;" class="progress-bar progress-bar-info" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
-					<span class="sr-only">
-						 66% Complete
+				<div class="progress">
+					<span style="width: <?php echo WotClan::currentClan()->ivanner_firepower; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_firepower);?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_firepower; ?>" aria-valuemin="0" aria-valuemax="100">
+						<span class="sr-only">
+							 <?php echo WotClan::currentClan()->ivanner_firepower; ?>% Complete
+						</span>
 					</span>
-				</span>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
-			<div class="display stat bad huge">
-				<span class="line-chart">
-					 2,6,8,11, 14, 11, 12, 13, 15, 12, 9, 5, 11, 12, 15, 9,3
+			<?php $inc=WotClan::currentClan()->increment('ivanner_skill');?>
+			<div class="display stat <?php getPietyClass($inc); ?> huge">
+				<span class="bar-chart">
+					<?php echo WotClan::currentClan()->historyValues('ivanner_skill'); ?>
 				</span>
 				<div class="percent">
-					 +6%
+					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
 				</div>
 			</div>
 			<div class="details">
@@ -83,9 +132,9 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 					 <?php echo WotClan::currentClan()->ivanner_skill; ?>
 				</div>
 				<div class="progress">
-					<span style="width: 16%;" class="progress-bar progress-bar-success" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
+					<span style="width: <?php echo WotClan::currentClan()->ivanner_skill; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_skill)?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_skill; ?>" aria-valuemin="0" aria-valuemax="100">
 						<span class="sr-only">
-							 16% Complete
+							 <?php echo WotClan::currentClan()->ivanner_skill; ?>% Complete
 						</span>
 					</span>
 				</div>
@@ -94,52 +143,26 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 	</div>
 	<div class="col-md-2 col-sm-4">
 		<div class="stats-overview stat-block">
-			<div class="display stat good huge">
-				<span class="bar-chart">
-					 1,4,9,12, 10, 11, 12, 15, 12, 11, 9, 12, 15, 19, 14, 13, 15
-				</span>
-				<div class="percent">
-					 +86%
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Revenue
-				</div>
-				<div class="numbers">
-					 1550
-				</div>
-				<div class="progress">
-					<span style="width: 56%;" class="progress-bar progress-bar-warning" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 56% Complete
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<div class="display stat ok huge">
+			<?php $inc=WotClan::currentClan()->increment('players_count');?>
+			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
 				<span class="line-chart">
-					 2,6,8,12, 11, 15, 16, 17, 14, 12, 10, 8, 10, 2, 4, 12, 19
+					<?php echo WotClan::currentClan()->historyValues('players_count'); ?>
 				</span>
 				<div class="percent">
-					 +72%
+					<?php echo ($inc>0)?'+'.$inc:$inc;?>
 				</div>
 			</div>
 			<div class="details">
 				<div class="title">
-					 Sales
+					 Кол-во игроков
 				</div>
 				<div class="numbers">
-					 9600
+					 <?php echo WotClan::currentClan()->players_count; ?>
 				</div>
 				<div class="progress">
-					<span style="width: 72%;" class="progress-bar progress-bar-danger" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
+					<span style="width: <?php echo WotClan::currentClan()->players_count; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->players_count)?>" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
 						<span class="sr-only">
-							 72% Complete
+							 <?php echo WotClan::currentClan()->players_count; ?>% Complete
 						</span>
 					</span>
 				</div>
