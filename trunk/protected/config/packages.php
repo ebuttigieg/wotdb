@@ -40,10 +40,15 @@ return array(
 		'js'=>array('jquery.blockui.min.js'),
 		'depends'=>array('jquery'),
 	),
-	'jquery-cookie'=>array(
+	'jquery-peity'=>array(
 		'basePath'=>'ext.conquer.scripts',
-		'js'=>array('jquery.cokie.min.js'),
+		'js'=>array('jquery.peity.min.js'),
 		'depends'=>array('jquery'),
+	),
+	'jquery-cookie'=>array(
+			'basePath'=>'ext.conquer.scripts',
+			'js'=>array('jquery.cokie.min.js'),
+			'depends'=>array('jquery'),
 	),
 	'uniform'=>array(
 		'basePath'=>'ext.conquer.uniform',
