@@ -105,21 +105,17 @@ SQL;
 			$clan->players_count = count($clan->players);
 			$clan->save(false);
 		}
-	}
-	
-	public function actionArmor()
-	{		
-		$url=new CUrlHelper();
 		if($url->execute('http://armor.kiev.ua/wot/clan/'.WotClan::$clanId)){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
 					'armor_gk_pos'		=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[1]/td[2]',
 					'armor_gk_val'		=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[1]/td[1]',
-					'armor_rb_pos'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[2]',
-					'armor_rb_val'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[1]',
+					'armor_random_pos'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[2]',
+					'armor_random_val'	=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[2]/td[1]',
 			));
-			CVarDumper::dump($query);
-			exit;
+			foreach ($query as $key=>$val){
+				$query[$key]=strtr($val, array(','=>'.',' '=>''));
+			}
 			$clan=WotClan::currentClan();
 			$clan->setAttributes($query,false);
 			$clan->save(false);
