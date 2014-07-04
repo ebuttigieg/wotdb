@@ -23,10 +23,10 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 			</div>
 			<div class="details">
 				<div class="title">
-					 Users
+					 Рейтинг клана (Ivanner)
 				</div>
 				<div class="numbers">
-					 1360
+					 <?php echo WotClan::currentClan()->ivanner_pos; ?>
 				</div>
 			</div>
 			<div class="progress">
@@ -50,11 +50,18 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 			</div>
 			<div class="details">
 				<div class="title">
-					 Позиция Ivanner
+					 Огневая мощь (Ivanner)
 				</div>
 				<div class="numbers">
-					 <?php echo WotClan::currentClan()->ivanner_pos; ?>
+					 <?php echo WotClan::currentClan()->ivanner_firepower; ?>
 				</div>
+			</div>
+			<div class="progress">
+				<span style="width: 40%;" class="progress-bar progress-bar-info" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+					<span class="sr-only">
+						 66% Complete
+					</span>
+				</span>
 			</div>
 		</div>
 	</div>
@@ -70,10 +77,10 @@ $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClient
 			</div>
 			<div class="details">
 				<div class="title">
-					 Orders
+					 Скил (Ivanner)
 				</div>
 				<div class="numbers">
-					 509
+					 <?php echo WotClan::currentClan()->ivanner_skill; ?>
 				</div>
 				<div class="progress">
 					<span style="width: 16%;" class="progress-bar progress-bar-success" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
