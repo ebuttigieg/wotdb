@@ -1,7 +1,7 @@
 <?php
 return array(
 	'jquery'=>array(
-		'basePath'=>'ext.conquer',
+		'basePath'=>'ext.conquer.scripts',
 		'js'=>array('jquery-1.10.2.min.js '),
 	),
 	'jquery.ui'=>array(
@@ -31,17 +31,17 @@ return array(
 		'depends'=>array('jquery'),
 	),
 	'jquery-migrate'=>array(
-		'basePath'=>'ext.conquer',
+		'basePath'=>'ext.conquer.scripts',
 		'js'=>array('jquery-migrate-1.2.1.min.js'),
 		'depends'=>array('jquery'),
 	),
 	'jquery-blockui'=>array(
-		'basePath'=>'ext.conquer',
+		'basePath'=>'ext.conquer.scripts',
 		'js'=>array('jquery.blockui.min.js'),
 		'depends'=>array('jquery'),
 	),
 	'jquery-cookie'=>array(
-		'basePath'=>'ext.conquer',
+		'basePath'=>'ext.conquer.scripts',
 		'js'=>array('jquery.cokie.min.js'),
 		'depends'=>array('jquery'),
 	),
