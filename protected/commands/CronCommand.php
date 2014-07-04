@@ -102,6 +102,7 @@ SQL;
 			));
 			$clan=WotClan::currentClan();
 			$clan->setAttributes($query,false);
+			$clan->players_count = count($clan->players);
 			$clan->save(false);
 		}
 	}
