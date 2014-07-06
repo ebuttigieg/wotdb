@@ -100,7 +100,10 @@ SQL;
 					else
 					{
 						if(isset($clientGroups[$memberGroup->getId()]));{
-							$client->remServerGroup($memberGroup->getId());
+							try {
+								$client->remServerGroup($memberGroup->getId());
+							} catch (Exception $e) {
+							}
 						}
 						if(!isset($clientGroups[$friendGroup->getId()]));{
 							$client->addServerGroup($friendGroup->getId());
