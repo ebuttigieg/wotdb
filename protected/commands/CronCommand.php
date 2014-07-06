@@ -80,7 +80,7 @@ SQL;
 						}
 						else
 						{
-							$sql="INSERT IGNORE INTO wot_team_speak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$info['client_database_id']})";
+							$sql="INSERT IGNORE INTO wot_team_speak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$client['client_database_id']})";
 							Yii::app()->db->createCommand($sql)->execute();
 						}
 //						$wins=number_format($stat->wins/$stat->battles*100,2);
