@@ -96,21 +96,6 @@ SQL;
 					}
 				}
 			}
-				
-			
-			
-			$info =$client->getInfo();
-			if(!empty($client)){
-				$player_id=$client->player_id;
-				if(!empty($player_id)&&!isset($players[$player_id])){
-					$players[$player_id]=true;
-					$wts=new WotTeamspeak();
-					$wts->updated_at=new CDbExpression('now()');
-					$wts->player_id=$player_id;
-					$wts->client_id=$info['client_database_id'];
-					$wts->save(false);
-				}
-			}
 		}
 	}
 	
