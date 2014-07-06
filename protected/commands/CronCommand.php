@@ -71,6 +71,10 @@ SQL;
 		foreach ($clientList as $client){
 			if(((string)$client['client_platform'])!='ServerQuery'){
 				$info =$client->getInfo();
+				$clientGroups=$client->memberOf();
+				
+				throw new CException(CVarDumper::dumpAsString($clientGroups));
+				
 				if(preg_match('/^\w+/', (string)$client, $matches)){
 					$playerName=$matches[0];
 					$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
