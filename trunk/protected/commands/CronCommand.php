@@ -58,12 +58,47 @@ SQL;
 	{
 		Yii::import('ext.teamspeak.libraries.TeamSpeak3.*',true);//cFsOcmiR
 		// connect to local server, authenticate and spawn an object for the virtual server on port 9987
-		$ts3_VirtualServer = TeamSpeak3::factory(Yii::app()->params['tsUri']);
-		$arr_ClientList = $ts3_VirtualServer->clientList();
-		$players=array();
-		foreach ($arr_ClientList as $client){
+		$ts3 = TeamSpeak3::factory(Yii::app()->params['tsUri']);
+		$clientList = $ts3->clientList();
+		
+		$memberGroup=$ts3->serverGroupGetByName('MUMMI');
+		if(empty($memberGroup))
+			throw new CException('member group is empty');
+		$friendGroup=$ts3->serverGroupGetByName('Друг');
+			throw new CException('friend group is empty');
+		
+		foreach ($clientList as $client){
+			if(((string)$client['client_platform'])!='ServerQuery'){
+				if(preg_match('/^\w+/', (string)$client, $matches)){
+					$playerName=$matches[0];
+					$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
+					if(!empty($player)){
+						if(empty($player->playerClan)){
+							$client->addServerGroup($friendGroup->getId());
+							//$client->remServerGroup($memberGroup->getId());
+						}
+						else
+						{
+							$sql="INSERT IGNORE INTO wot_team_speak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$info['client_database_id']})";
+							Yii::app()->db->createCommand($sql)->execute();
+						}
+//						$wins=number_format($stat->wins/$stat->battles*100,2);
+//						$description="\nПроцент побед: {$wins} \nWN8: {$player->wn8}\nРЭ: {$player->effect}\n";
+//						$client->modifyDb(array('client_description'=>$description));
+					}
+					else
+					{
+						$client->addServerGroup($friendGroup->getId());
+						//$client->remServerGroup($memberGroup->getId());
+					}
+					CVarDumper::dump($client->infoDb());
+				}
+				CVarDumper::dump((string)$client['connection_client_ip']);
+			}
+				
+			
+			
 			$info =$client->getInfo();
-			$client=Clients::model()->findByPk($info['client_database_id']);
 			if(!empty($client)){
 				$player_id=$client->player_id;
 				if(!empty($player_id)&&!isset($players[$player_id])){
