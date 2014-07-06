@@ -70,6 +70,7 @@ SQL;
 		
 		foreach ($clientList as $client){
 			if(((string)$client['client_platform'])!='ServerQuery'){
+				$info =$client->getInfo();
 				if(preg_match('/^\w+/', (string)$client, $matches)){
 					$playerName=$matches[0];
 					$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
@@ -80,7 +81,8 @@ SQL;
 						}
 						else
 						{
-							$sql="INSERT IGNORE INTO wot_teamspeak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$client['client_database_id']})";
+							
+							$sql="INSERT IGNORE INTO wot_teamspeak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$info['client_database_id']})";
 							Yii::app()->db->createCommand($sql)->execute();
 						}
 //						$wins=number_format($stat->wins/$stat->battles*100,2);
@@ -92,9 +94,7 @@ SQL;
 						$client->addServerGroup($friendGroup->getId());
 						//$client->remServerGroup($memberGroup->getId());
 					}
-					CVarDumper::dump($client->infoDb());
 				}
-				CVarDumper::dump((string)$client['connection_client_ip']);
 			}
 				
 			
