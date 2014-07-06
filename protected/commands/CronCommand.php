@@ -64,7 +64,8 @@ SQL;
 		$memberGroup=$ts3->serverGroupGetByName('MUMMI');
 		if(empty($memberGroup))
 			throw new CException('member group is empty');
-		$friendGroup=$ts3->serverGroupGetByName('Friend');
+		$friendGroup=$ts3->serverGroupGetByName('Друг');
+		if(empty($friendGroup))
 			throw new CException('friend group is empty');
 		
 		foreach ($clientList as $client){
