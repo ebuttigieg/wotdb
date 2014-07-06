@@ -71,17 +71,21 @@ SQL;
 		foreach ($clientList as $client){
 			if(((string)$client['client_platform'])!='ServerQuery'){
 				$info =$client->getInfo();
-				$clientGroups=$client->memberOf();
 				
-				throw new CException(CVarDumper::dumpAsString($clientGroups));
+				$clientGroups=array();
+				foreach ($client->memberOf() as $clientGroup){
+					$clientGroups[$clientGroup->getId()]=$clientGroup;
+				}
 				
 				if(preg_match('/^\w+/', (string)$client, $matches)){
 					$playerName=$matches[0];
 					$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
 					if(!empty($player)){
 						if(empty($player->playerClan)){
-							$client->addServerGroup($friendGroup->getId());
-							//$client->remServerGroup($memberGroup->getId());
+							if(isset($clientGroups[$memberGroup->getId()]));{
+								$client->addServerGroup($friendGroup->getId());
+								$client->remServerGroup($memberGroup->getId());
+							}
 						}
 						else
 						{
@@ -95,8 +99,10 @@ SQL;
 					}
 					else
 					{
-						$client->addServerGroup($friendGroup->getId());
-						//$client->remServerGroup($memberGroup->getId());
+						if(isset($clientGroups[$memberGroup->getId()]));{
+							$client->addServerGroup($friendGroup->getId());
+							$client->remServerGroup($memberGroup->getId());
+						}
 					}
 				}
 			}
