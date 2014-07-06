@@ -106,7 +106,10 @@ SQL;
 							}
 						}
 						if(!isset($clientGroups[$friendGroup->getId()]));{
-							$client->addServerGroup($friendGroup->getId());
+							try {
+								$client->addServerGroup($friendGroup->getId());
+							} catch (Exception $e) {
+							}
 						}
 					}
 				}
