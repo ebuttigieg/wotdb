@@ -42,9 +42,10 @@ FROM wot_player wp
   GROUP BY a.player_id,
            a.updated_at) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
-    wt.player_id,
-    DATE(wt.updated_at) dts
-  FROM wot_teamspeak wt
-  WHERE TIME(wt.updated_at) BETWEEN TIME('20:00') AND TIME('24:00')
-  GROUP BY wt.player_id,
-           DATE(wt.updated_at)) b ON a.player_id = b.player_id AND a.updated_at = b.dts
+    wpt.player_id,
+    DATE(wp.updated_at) dts
+  FROM wot_player_ts wpt
+  JOIN wot_presense wp ON wp.ts_id=wpt.ts_id
+  WHERE TIME(wp.updated_at) BETWEEN TIME('20:00') AND TIME('24:00')
+  GROUP BY wpt.player_id,
+           DATE(wp.updated_at)) b ON a.player_id = b.player_id AND a.updated_at = b.dts
