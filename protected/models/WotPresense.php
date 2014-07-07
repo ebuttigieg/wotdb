@@ -39,7 +39,7 @@ class WotPresense extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				array(self::BELONGS_TO,'WotPlayerTs','ts_id'),
+				array(self::BELONGS_TO,'WotTeamspeak','client_database_id'),
 		);
 	}
 

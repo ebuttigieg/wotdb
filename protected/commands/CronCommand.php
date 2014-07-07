@@ -77,15 +77,15 @@ SQL;
 					$clientGroups[$clientGroup->getId()]=$clientGroup;
 				}
 				
-				$playerTs=WotPlayerTs::model()->with(array('player', 'player.playerClan'))->findByAttributes(array('player_id'=>$player->player_id, 'client_database_id'=>$info['client_database_id']));
-				if(empty($playerTs)){
+				$teamspeak=WotTeamspeak::model()->with(array('player', 'player.playerClan'))->findByPk($info['client_database_id']);
+				if(empty($teamspeak)){
 					if(preg_match('/^\w+/', (string)$client, $matches)){
 						$playerName=$matches[0];
 						$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
 					}
 				}
 				else
-					$player=$playerTs->player;
+					$player=$teamspeak->player;
 				if(!empty($player))
 				{
 					if(empty($player->playerClan)){
@@ -96,13 +96,13 @@ SQL;
 					}
 					else
 					{
-						if(empty($playerTs)){
-							$playerTs=new WotPlayerTs();
-							$playerTs->player_id=$player->player_id;
-							$playerTs->client_database_id=$info['client_database_id'];
-							$playerTs->save(false);
+						if(empty($teamspeak)){
+							$teamspeak=new WotTeamspeak();
+							$teamspeak->player_id=$player->player_id;
+							$teamspeak->client_database_id=$info['client_database_id'];
+							$teamspeak->save(false);
 						}
-						$sql="INSERT IGNORE INTO wot_presense(updated_at, ts_id)VALUES(now(),{$playerTs->ts_id})";
+						$sql="INSERT IGNORE INTO wot_presense(updated_at, client_database_id)VALUES(now(),{$info['client_database_id']})";
 						Yii::app()->db->createCommand($sql)->execute();
 					}
 //						$wins=number_format($stat->wins/$stat->battles*100,2);
