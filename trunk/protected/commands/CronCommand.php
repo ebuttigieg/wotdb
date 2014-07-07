@@ -89,8 +89,14 @@ SQL;
 						}
 						else
 						{
-							
-							$sql="INSERT IGNORE INTO wot_teamspeak(updated_at, player_id, client_id)VALUES(now(),{$player->player_id}, {$info['client_database_id']})";
+							$playerTs=WotPlayerTs::model()->findByAttributes(array('player_id'=>$player->player_id, 'client_database_id'=>$info['client_database_id']));
+							if(empty($playerTs)){
+								$playerTs=new WotPlayerTs();
+								$playerTs->player_id=$player->player_id;
+								$playerTs->client_database_id=$info['client_database_id'];
+								$playerTs->save(false);
+							}
+							$sql="INSERT IGNORE INTO wot_presense(updated_at, ts_id)VALUES(now(),{$playerTs->ts_id})";
 							Yii::app()->db->createCommand($sql)->execute();
 						}
 //						$wins=number_format($stat->wins/$stat->battles*100,2);
