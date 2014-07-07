@@ -175,4 +175,9 @@ class WotController extends Controller
 	{
 		$this->render('usefulness');
 	}
+	
+	public function actionPlayerTankProblem()
+	{
+		$this->render('playerTankProblem');
+	}
 }

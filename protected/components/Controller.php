@@ -26,6 +26,7 @@ class Controller extends CController
 			'glory'=>'Зал славы',
 			'fame'=>'Герои',
 			'usefulness'=>'Полезность',
+			'playerTankProblem'=>'Проблемные танки',
 			'ts'=>'Teamspeak',
 	);
 	/**
