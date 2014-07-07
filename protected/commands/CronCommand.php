@@ -77,45 +77,50 @@ SQL;
 					$clientGroups[$clientGroup->getId()]=$clientGroup;
 				}
 				
-				if(preg_match('/^\w+/', (string)$client, $matches)){
-					$playerName=$matches[0];
-					$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
-					if(!empty($player)){
-						if(empty($player->playerClan)){
-							if(isset($clientGroups[$memberGroup->getId()]));{
-								$client->addServerGroup($friendGroup->getId());
-								$client->remServerGroup($memberGroup->getId());
-							}
+				$playerTs=WotPlayerTs::model()->with(array('player', 'player.playerClan'))->findByAttributes(array('player_id'=>$player->player_id, 'client_database_id'=>$info['client_database_id']));
+				if(empty($playerTs)){
+					if(preg_match('/^\w+/', (string)$client, $matches)){
+						$playerName=$matches[0];
+						$player=WotPlayer::model()->with(array('playerClan'))->findByAttributes(array('player_name'=>$playerName));
+					}
+				}
+				else
+					$player=$playerTs->player;
+				if(!empty($player))
+				{
+					if(empty($player->playerClan)){
+						if(isset($clientGroups[$memberGroup->getId()]));{
+							$client->addServerGroup($friendGroup->getId());
+							$client->remServerGroup($memberGroup->getId());
 						}
-						else
-						{
-							$playerTs=WotPlayerTs::model()->findByAttributes(array('player_id'=>$player->player_id, 'client_database_id'=>$info['client_database_id']));
-							if(empty($playerTs)){
-								$playerTs=new WotPlayerTs();
-								$playerTs->player_id=$player->player_id;
-								$playerTs->client_database_id=$info['client_database_id'];
-								$playerTs->save(false);
-							}
-							$sql="INSERT IGNORE INTO wot_presense(updated_at, ts_id)VALUES(now(),{$playerTs->ts_id})";
-							Yii::app()->db->createCommand($sql)->execute();
-						}
-//						$wins=number_format($stat->wins/$stat->battles*100,2);
-//						$description="\nПроцент побед: {$wins} \nWN8: {$player->wn8}\nРЭ: {$player->effect}\n";
-//						$client->modifyDb(array('client_description'=>$description));
 					}
 					else
 					{
-						if(isset($clientGroups[$memberGroup->getId()]));{
-							try {
-								$client->remServerGroup($memberGroup->getId());
-							} catch (Exception $e) {
-							}
+						if(empty($playerTs)){
+							$playerTs=new WotPlayerTs();
+							$playerTs->player_id=$player->player_id;
+							$playerTs->client_database_id=$info['client_database_id'];
+							$playerTs->save(false);
 						}
-						if(!isset($clientGroups[$friendGroup->getId()]));{
-							try {
-								$client->addServerGroup($friendGroup->getId());
-							} catch (Exception $e) {
-							}
+						$sql="INSERT IGNORE INTO wot_presense(updated_at, ts_id)VALUES(now(),{$playerTs->ts_id})";
+						Yii::app()->db->createCommand($sql)->execute();
+					}
+//						$wins=number_format($stat->wins/$stat->battles*100,2);
+//						$description="\nПроцент побед: {$wins} \nWN8: {$player->wn8}\nРЭ: {$player->effect}\n";
+//						$client->modifyDb(array('client_description'=>$description));
+				}
+				else
+				{
+					if(isset($clientGroups[$memberGroup->getId()]));{
+						try {
+							$client->remServerGroup($memberGroup->getId());
+						} catch (Exception $e) {
+						}
+					}
+					if(!isset($clientGroups[$friendGroup->getId()]));{
+						try {
+							$client->addServerGroup($friendGroup->getId());
+						} catch (Exception $e) {
 						}
 					}
 				}
