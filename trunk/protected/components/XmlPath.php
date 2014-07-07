@@ -25,7 +25,7 @@ class XmlPath
 		$this->_doc=new DOMDocument();
 		$this->_doc->recover = true;
 		$this->_doc->strictErrorChecking = false;
-	//	libxml_use_internal_errors(true);
+		libxml_use_internal_errors(true);
 		set_error_handler('HandleXmlError');
 		$this->_doc->loadHTML($xml);
 		restore_error_handler();
