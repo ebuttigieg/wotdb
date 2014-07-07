@@ -8,194 +8,57 @@ $cs->registerPackage('jquery-peity');
 $cs->registerScriptFile('/scripts/index.js', CClientScript::POS_END);
 $cs->registerScript($this->getId().'Index','Index.initPeityElements();', CClientScript::POS_READY);
 
-function getProgressClass($value){
-	if($value<30)
-		return 'progress-bar-danger';
-	if($value<40)
-		return 'progress-bar-warning';
-	if($value<60)
-		return 'progress-bar-info';	
-	return 'progress-bar-success';	
-}
-
-function getPietyClass($value){
-	if($value>0) 
-		return 'good';	
-	if($value<0)
-		return 'bad'; 
-	return 'ok';
-}
-
 ?>
 <!-- BEGIN OVERVIEW STATISTIC BARS-->
 <div class="row stats-overview-cont">
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<?php $inc=-1*WotClan::currentClan()->increment('ivanner_pos');?>
-			<div class="display stat <?php if($inc>0) echo getPietyClass($inc) ?> huge">
-				<span class="line-chart">
-					<?php echo WotClan::currentClan()->historyValues('ivanner_pos'); ?>
-				</span>
-				<div class="percent">
-					<?php echo ($inc>0)?'+'.$inc:$inc;?>
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Рейтинг клана (Ivanner)
-				</div>
-				<div class="numbers">
-					 <?php echo WotClan::currentClan()->ivanner_pos; ?>
-				</div>
-			</div>
-			<div class="progress">
-				<span style="width: <?php echo (1-WotClan::currentClan()->ivanner_pos/400)*100 ?>%;" class="progress-bar <?php echo getProgressClass((1-WotClan::currentClan()->ivanner_pos/400)*100) ?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_pos; ?>" aria-valuemin="0" aria-valuemax="400">
-					<span class="sr-only">
-						 <?php echo (1-WotClan::currentClan()->ivanner_pos/400)*100?>% Complete
-					</span>
-				</span>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<?php $inc=WotClan::currentClan()->increment('ivanner_strength');?>
-			<div class="display stat <?php if($inc>0) echo getPietyClass($inc); ?> huge">
-				<span class="line-chart">
-					 <?php echo WotClan::currentClan()->historyValues('ivanner_strength'); ?>
-				</span>
-				<div class="percent">
-					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Сила клана (Ivanner)
-				</div>
-				<div class="numbers">
-					 <?php echo WotClan::currentClan()->ivanner_strength; ?>
-				</div>
-			</div>
-			<div class="progress">
-				<span style="width: <?php echo WotClan::currentClan()->ivanner_strength/10; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_strength/10)?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_strength; ?>" aria-valuemin="0" aria-valuemax="1000">
-					<span class="sr-only">
-						 <?php echo WotClan::currentClan()->ivanner_strength/10; ?>% Complete
-					</span>
-				</span>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<?php $inc=WotClan::currentClan()->increment('ivanner_firepower');?>
-			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
-				<span class="line-chart">
-					<?php echo WotClan::currentClan()->historyValues('ivanner_firepower'); ?>
-				</span>
-				<div class="percent">
-					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Огневая мощь (Ivanner)
-				</div>
-				<div class="numbers">
-					 <?php echo WotClan::currentClan()->ivanner_firepower; ?>
-				</div>
-				<div class="progress">
-					<span style="width: <?php echo WotClan::currentClan()->ivanner_firepower; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_firepower);?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_firepower; ?>" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 <?php echo WotClan::currentClan()->ivanner_firepower; ?>% Complete
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<?php $inc=WotClan::currentClan()->increment('ivanner_skill');?>
-			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
-				<span class="bar-chart">
-					<?php echo WotClan::currentClan()->historyValues('ivanner_skill'); ?>
-				</span>
-				<div class="percent">
-					 <?php echo ($inc>0)?'+'.$inc:$inc;?>
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Скил (Ivanner)
-				</div>
-				<div class="numbers">
-					 <?php echo WotClan::currentClan()->ivanner_skill; ?>
-				</div>
-				<div class="progress">
-					<span style="width: <?php echo WotClan::currentClan()->ivanner_skill; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->ivanner_skill)?>" aria-valuenow="<?php echo WotClan::currentClan()->ivanner_skill; ?>" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 <?php echo WotClan::currentClan()->ivanner_skill; ?>% Complete
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<?php $inc=WotClan::currentClan()->increment('players_count');?>
-			<div class="display stat <?php echo getPietyClass($inc); ?> huge">
-				<span class="line-chart">
-					<?php echo WotClan::currentClan()->historyValues('players_count'); ?>
-				</span>
-				<div class="percent">
-					<?php echo ($inc>0)?'+'.$inc:$inc;?>
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Кол-во игроков
-				</div>
-				<div class="numbers">
-					 <?php echo WotClan::currentClan()->players_count; ?>
-				</div>
-				<div class="progress">
-					<span style="width: <?php echo WotClan::currentClan()->players_count; ?>%;" class="progress-bar <?php echo getProgressClass(WotClan::currentClan()->players_count)?>" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 <?php echo WotClan::currentClan()->players_count; ?>% Complete
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2 col-sm-4">
-		<div class="stats-overview stat-block">
-			<div class="display stat bad huge">
-				<span class="line-chart">
-					 1,7,9,11, 14, 12, 6, 7, 4, 2, 9, 8, 11, 12, 14, 12, 10
-				</span>
-				<div class="percent">
-					 +15%
-				</div>
-			</div>
-			<div class="details">
-				<div class="title">
-					 Stock
-				</div>
-				<div class="numbers">
-					 2090
-				</div>
-				<div class="progress">
-					<span style="width: 15%;" class="progress-bar progress-bar-success" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">
-							 15% Complete
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php 
+		$historyValues=WotClan::currentClan()->historyValues('ivanner_pos');
+		foreach ($historyValues as &$value){
+			$value=(1-$value/400)*100;
+		}
+		$this->renderPartial('_stat_block',array(
+			'increment'=>-1*WotClan::currentClan()->increment('ivanner_pos'),
+			'historyValues'=>$historyValues,
+			'tittle'=>'Рейтинг клана (Ivanner)',
+			'position'=>(1-WotClan::currentClan()->ivanner_pos/400)*100,
+			'number'=>WotClan::currentClan()->ivanner_pos,
+		));
+		$this->renderPartial('_stat_block',array(
+			'increment'=>WotClan::currentClan()->increment('ivanner_strength'),
+			'historyValues'=>WotClan::currentClan()->historyValues('ivanner_strength'),
+			'tittle'=>'Сила клана (Ivanner)',
+			'position'=>WotClan::currentClan()->ivanner_strength/10,
+			'number'=>WotClan::currentClan()->ivanner_strength,
+		));
+		$this->renderPartial('_stat_block',array(
+			'increment'=>WotClan::currentClan()->increment('ivanner_firepower'),
+			'historyValues'=>WotClan::currentClan()->historyValues('ivanner_firepower'),
+			'tittle'=>'Огневая мощь (Ivanner)',
+			'position'=>WotClan::currentClan()->ivanner_firepower,
+			'number'=>WotClan::currentClan()->ivanner_firepower,
+		));
+		$this->renderPartial('_stat_block',array(
+			'increment'=>WotClan::currentClan()->increment('ivanner_skill'),
+			'historyValues'=>WotClan::currentClan()->historyValues('ivanner_skill'),
+			'position'=>WotClan::currentClan()->ivanner_skill,
+			'tittle'=>'Скил (Ivanner)',
+			'number'=>WotClan::currentClan()->ivanner_skill,				
+		));
+		$this->renderPartial('_stat_block',array(
+			'increment'=>WotClan::currentClan()->increment('players_count'),
+			'historyValues'=>WotClan::currentClan()->historyValues('players_count'),
+			'position'=>WotClan::currentClan()->players_count,
+			'tittle'=>'Кол-во игроков',
+			'number'=>WotClan::currentClan()->players_count,
+		));
+		$this->renderPartial('_stat_block',array(
+			'increment'=>number_format(WotClan::currentClan()->increment('players_wn8'), 2),
+			'historyValues'=>WotClan::currentClan()->historyValues('players_wn8',2900),
+			'position'=>WotClan::currentClan()->players_wn8/2900*100,
+			'tittle'=>'Wn8 клана',
+			'number'=>WotClan::currentClan()->players_wn8,
+		));
+	?>	
 </div>
 <div class="clearfix">
 </div>

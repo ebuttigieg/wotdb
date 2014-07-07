@@ -159,5 +159,15 @@ SQL;
 			$clan->setAttributes($query,false);
 			$clan->save(false);
 		}
+		$sql=<<<SQL
+UPDATE wot_clan wc
+  JOIN (SELECT wpc.clan_id, SUM(wps.wins)/SUM(wps.battles)*100 players_pp, SUM(wp.wn8)/COUNT(wp.player_id) players_wn8
+          FROM wot_player wp 
+          JOIN wot_player_clan wpc ON wp.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
+          JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id=1
+          GROUP BY wpc.clan_id) a ON a.clan_id=wc.clan_id
+  SET wc.players_pp=a.players_pp, wc.players_wn8=a.players_wn8
+SQL;
+		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
 	}
 }
