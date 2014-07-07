@@ -60,7 +60,7 @@ class WotClan extends CActiveRecord
 			'players'=>array(self::MANY_MANY,'WotPlayer','wot_player_clan(player_id,clan_id)','condition'=>'escape_date is null', 'index'=>'player_id'),
 			'playersRec'=>array(self::HAS_MANY,'WotPlayerClan','clan_id','condition'=>'escape_date is null', 'index'=>'player_id'),
 			'clanProvinces'=>array(self::HAS_MANY,'WotClanProvince','clan_id', 'condition'=>'date_end is null', 'with'=>array('province'), 'index'=>'province_id'),
-			'histories'=>array(self::HAS_MANY, 'WotClanHistory', 'clan_id', 'order'=>'histories.updated_at DESC', 'limit'=>20, 'on'=>'histories.updated_at<curdate()'),
+			'histories'=>array(self::HAS_MANY, 'WotClanHistory', 'clan_id', 'order'=>'histories.updated_at DESC', 'limit'=>50, 'on'=>'histories.updated_at<curdate()'),
 		);
 	}
 
@@ -82,16 +82,15 @@ class WotClan extends CActiveRecord
 			if(!empty($history->$attribute))
 				$result[]=$history->$attribute;
 		}
-		return implode(',', $result);
+		return array_values(array_unique($result));
 	}
 	
 	public function increment($attribute)
 	{
-		if(count($this->histories)>0){
-			$history=$this->histories[0];
-			return $this->$attribute-$history->$attribute; 
+		$values=$this->historyValues($attribute);
+		if(count($values)>1){
+			return $values[0]-$values[1]; 
 		}
 		return 0;
 	}
-	
 }
