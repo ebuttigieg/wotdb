@@ -37,7 +37,7 @@
 <link href="/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
