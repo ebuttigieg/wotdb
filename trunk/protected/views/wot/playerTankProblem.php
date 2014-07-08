@@ -43,7 +43,7 @@ $this->widget('ext.jqgrid.JQGrid',
 		'groupingView'=> array(
 			'groupField'=>array('player_name'),
 			'groupColumnShow'=>array(true),
-			'groupText'=> array('<b>{0}</b> Всего проблемных танков: {b}','{0} Sum of totaly: {b}'),
+			'groupText'=> array('<b>{0}</b> Всего: {b}','{0} Sum of totaly: {b}'),
 			'groupCollapse'=>true,
 			'groupOrder'=>array('asc'),
 		//	'groupSummary'=>array(false, false),
