@@ -11,7 +11,7 @@ class WotService
 
 //	static private $wotApiClanUrl="http://worldoftanks.ru/community/clans/{clanId}/api/1.1/?source_token=WG-WoT_Assistant-1.2.2";
 //	static private $wotApiPlayerUrl="http://worldoftanks.ru/community/accounts/{playerId}/api/1.7/?source_token=WG-WoT_Assistant-1.2.2";
-	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
+//	static private $applicationId='9a86259f976b45dccaacedaae1a5f441';
 	static private $wotApiClanUrl="http://api.worldoftanks.ru/wot/clan/info/?application_id={applicationId}&language=ru&clan_id={clanId}";
 	static private $wotApiPlayerUrl="http://api.worldoftanks.ru/wot/account/info/?application_id={applicationId}&language=ru&account_id={playerId}";
 	static private $wotApiPlayerTankStat="http://api.worldoftanks.ru/wot/tanks/stats/?application_id={applicationId}&language=ru&account_id={playerId}";
@@ -19,6 +19,13 @@ class WotService
 	static private $wotApiAchievments="http://api.worldoftanks.ru/2.0/encyclopedia/achievements/?application_id=9a86259f976b45dccaacedaae1a5f441&language=ru";
 	static private $wotApiPlayerTanks="http://api.worldoftanks.ru/wot/account/tanks/?application_id={applicationId}&language=ru&account_id={playerId}";
 
+	static function getApplicationId()
+	{
+		if(!isset(Yii::app()->params['application_id']))
+			throw new CException('You need specify Wargaming application id. go to http://ru.wargaming.net/developers/ to get it');
+		return Yii::app()->params['application_id'];
+	}
+	
 	static private function tryContent($url)
 	{
 		$ch=curl_init();
@@ -129,7 +136,7 @@ class WotService
 	 */
 	static public function updateClanInfo($clan)
 	{
-		$url=strtr(self::$wotApiClanUrl, array('{applicationId}'=>self::$applicationId, '{clanId}'=>$clan->clan_id));
+		$url=strtr(self::$wotApiClanUrl, array('{applicationId}'=>self::getApplicationId(), '{clanId}'=>$clan->clan_id));
 		$jsonString= self::getContent($url);
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
@@ -207,7 +214,7 @@ class WotService
 	
 	static public function updateTanks()
 	{
-		$jsonString=self::getContent(str_replace('{applicationId}', self::$applicationId, self::$wotApiTanks));
+		$jsonString=self::getContent(str_replace('{applicationId}', self::getApplicationId(), self::$wotApiTanks));
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
 			if($jsonData['status']=='ok'){
@@ -299,7 +306,7 @@ class WotService
 	{
 		$jsonString=self::getContent(strtr(self::$wotApiPlayerTankStat, array(
 				'{playerId}'=>$player->player_id,
-				'{applicationId}'=>self::$applicationId,
+				'{applicationId}'=>self::getApplicationId(),
 		)));
 		if($jsonString!=false){
 			$jsonData=json_decode($jsonString,true);
@@ -358,7 +365,7 @@ class WotService
 	static public function updateClanPlayersInfo($clan)
 	{
 		$url=strtr(self::$wotApiPlayerUrl, array(
-				'{applicationId}'=>self::$applicationId, 
+				'{applicationId}'=>self::getApplicationId(), 
 				'{playerId}'=>implode(',', array_keys($clan->players))
 		));
 		$jsonString= self::getContent($url);
@@ -418,7 +425,7 @@ class WotService
 	static public function updateClanPlayersTanks($clan)
 	{
 		$url=strtr(self::$wotApiPlayerTanks, array(
-				'{applicationId}'=>self::$applicationId,
+				'{applicationId}'=>self::getApplicationId(),
 				'{playerId}'=>implode(',', array_keys($clan->players))
 		));
 		$jsonString= self::getContent($url);
