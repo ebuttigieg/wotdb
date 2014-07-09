@@ -80,7 +80,6 @@ return array(
 			//	'jquery.flot.symbol.js',
 			//	'jquery.flot.threshold.js'
 		),
-		// 'css'=>array('css/font-awesome.min.css'),
 		'depends'=>array('jquery'),
 	),
 	'wysihtml'=>array(
