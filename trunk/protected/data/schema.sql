@@ -1,6 +1,6 @@
 ﻿-- Скрипт сгенерирован Devart dbForge Studio for MySQL, Версия 6.1.166.0
 -- Домашняя страница продукта: http://www.devart.com/ru/dbforge/mysql/studio
--- Дата скрипта: 09.07.2014 13:32:49
+-- Дата скрипта: 09.07.2014 20:36:03
 -- Версия сервера: 5.7.4-m14-log
 -- Версия клиента: 4.1
 
@@ -164,6 +164,24 @@ CREATE TABLE wot_player (
 )
 ENGINE = INNODB
 AVG_ROW_LENGTH = 5576
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+CREATE TABLE wot_player_tank_history2 (
+  updated_at datetime NOT NULL,
+  player_id int(11) NOT NULL,
+  tank_id int(11) NOT NULL,
+  wins int(11) NOT NULL DEFAULT 0,
+  battles int(11) NOT NULL DEFAULT 0,
+  mark_of_mastery int(1) UNSIGNED NOT NULL DEFAULT 0,
+  in_garage tinyint(1) DEFAULT 0,
+  max_frags int(11) DEFAULT NULL,
+  max_xp int(11) DEFAULT NULL,
+  PRIMARY KEY (updated_at, player_id, tank_id),
+  INDEX FK_wot_player_tank_history (player_id, tank_id)
+)
+ENGINE = INNODB
+AVG_ROW_LENGTH = 143
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -713,17 +731,17 @@ CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 CREATE TABLE wot_player_tank_history (
-  updated_at datetime NOT NULL,
   player_id int(11) NOT NULL,
   tank_id int(11) NOT NULL,
+  updated_at date NOT NULL,
   wins int(11) NOT NULL DEFAULT 0,
   battles int(11) NOT NULL DEFAULT 0,
   mark_of_mastery int(1) UNSIGNED NOT NULL DEFAULT 0,
   in_garage tinyint(1) DEFAULT 0,
   max_frags int(11) DEFAULT NULL,
   max_xp int(11) DEFAULT NULL,
-  PRIMARY KEY (updated_at, player_id, tank_id),
-  CONSTRAINT FK_wot_player_tank_history FOREIGN KEY (player_id, tank_id)
+  PRIMARY KEY (player_id, tank_id, updated_at),
+  CONSTRAINT FK_wot_player_tank_history1 FOREIGN KEY (player_id, tank_id)
   REFERENCES wot_player_tank (player_id, tank_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
@@ -898,6 +916,33 @@ $$
 
 CREATE
 DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_player_tank_update
+AFTER UPDATE
+ON wot_player_tank
+FOR EACH ROW
+BEGIN
+  SET @updated_at = (SELECT
+      updated_at
+    FROM wot_player wp
+    WHERE wp.player_id = new.player_id);
+  IF new.battles > old.battles THEN
+    INSERT INTO wot_player_tank_history (updated_at
+    , player_id
+    , tank_id
+    , max_xp
+    , wins
+    , battles
+    , max_frags
+    , mark_of_mastery
+    , in_garage)
+      VALUES (@updated_at, new.player_id, new.tank_id, new.max_xp, new.wins, new.battles, new.max_frags, new.mark_of_mastery, new.in_garage)
+    ON DUPLICATE KEY UPDATE max_xp = new.max_xp, wins = new.wins, battles = new.battles, max_frags = new.max_frags, mark_of_mastery = new.mark_of_mastery, in_garage = new.in_garage;
+  END IF;
+END
+$$
+
+CREATE
+DEFINER = 'root'@'localhost'
 TRIGGER wot_player_tank_statistic_update
 AFTER UPDATE
 ON wot_player_tank_statistic
@@ -941,35 +986,6 @@ BEGIN
   frags = new.frags,
   survived_battles = new.survived_battles,
   dropped_capture_points = new.dropped_capture_points;
-END
-$$
-
-CREATE
-DEFINER = 'root'@'localhost'
-TRIGGER tr_wot_player_tank_update
-AFTER UPDATE
-ON wot_player_tank
-FOR EACH ROW
-BEGIN
-  SET @updated_at = (SELECT
-      updated_at
-    FROM wot_player wp
-    WHERE wp.player_id = old.player_id);
-
-  IF (new.battles <> old.battles
-    AND @updated_at IS NOT NULL) THEN
-    INSERT INTO wot_player_tank_history (updated_at
-    , player_id
-    , tank_id
-    , max_xp
-    , wins
-    , battles
-    , max_frags
-    , mark_of_mastery
-    , in_garage)
-      VALUES (@updated_at, old.player_id, old.tank_id, old.max_xp, old.wins, old.battles, old.max_frags, old.mark_of_mastery, old.in_garage)
-    ON DUPLICATE KEY UPDATE max_xp = old.max_xp, wins = old.wins, battles = old.battles, max_frags = old.max_frags, mark_of_mastery = old.mark_of_mastery, in_garage = old.in_garage;
-  END IF;
 END
 $$
 
