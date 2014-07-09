@@ -29,3 +29,4 @@ FROM wot_player wp
   JOIN wot_player_glory wpg
     ON wp.player_id = wpg.player_id AND wpg.updated_at = mup.updated_at) a
   LEFT JOIN wot_player_glory wpg ON wpg.updated_at = a.updated_prev AND wpg.player_id = a.player_id
+  ORDER BY a.days DESC
