@@ -21,5 +21,5 @@ FROM wot_player_tank_history wpth
   JOIN wot_tank wt ON wt.tank_id = wpth.tank_id
   JOIN wot_player wp ON wp.player_id = wpth.player_id
   WHERE wpth.updated_at = DATE(FROM_UNIXTIME(:date))
-  AND spth.player_id = :player_id
+  AND wpth.player_id = :player_id
 ORDER BY bc DESC
