@@ -4,7 +4,9 @@ class CronCommand extends CConsoleCommand
 {
 	public function actionScan()
 	{
-		WotService::scanClan(WotClan::currentClan()->clan_id);
+		if(!isset(Yii::app()->params['clan']))
+			throw new CException('You need specify clan in config params');
+		WotService::scanClan(Yii::app()->params['clan']);
 	}
 
 	public function actionTanks()
@@ -16,7 +18,7 @@ class CronCommand extends CConsoleCommand
 	{
 		echo 'hellow!';
 	}
-
+/*
 	public function actionTsSync()
 	{
 		$sql=<<<SQLS
@@ -53,7 +55,7 @@ SQL;
 			//	break;
 		}
 	}
-
+*/
 	public function actionPresense()
 	{
 		Yii::import('ext.teamspeak.libraries.TeamSpeak3.*',true);//cFsOcmiR
