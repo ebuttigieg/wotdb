@@ -29,7 +29,7 @@ $this->widget('zii.widgets.grid.CGridView',array(
 					'urlExpression'=>'"javascript:chart(".$data["player_id"].",'."'".'".$data["player_name"]."'."'".')"',
 				),
 		),
-		'htmlOptions'=>array('class'=>'widget-body'),
+		'htmlOptions'=>array('class'=>'portlet-body'),
 		'template'=>"{items}",
 		'hideHeader'=>true,
 ));
@@ -99,11 +99,11 @@ function chart(playerId,playerName){
 		success: function(series){
 			$.each(series,function(index,value){
 				s1.push([value.dd*1000,value.effect]);
-				s2.push([value.dd*1000,value.wn6]);
+				s2.push([value.dd*1000,value.wn8]);
 				s3.push([value.dd*1000,value.wp]);
 			});
 			$.plot($("#chart_1"),
-				[{data: s1, label: "рейтинг Wot-News" }, { data: s2, label: "рейтинг WN6" , yaxis: 2}],
+				[{data: s1, label: "рейтинг Wot-News" }, { data: s2, label: "рейтинг WN8" , yaxis: 2}],
 				{
 					series: {
 						lines: {
@@ -113,7 +113,7 @@ function chart(playerId,playerName){
 							show: true
 						}
 					},
-					xaxis: { mode: "time", timeformat: "%0d.%0m.%y"},
+					xaxis: { mode: "time", timeformat: "%d.%m.%y"},
 					yaxes: [ { color: "#edc240"}, {position: 'right', color: "#afd8f8"} ],
 					grid: {
 						backgroundColor: {
@@ -136,7 +136,7 @@ function chart(playerId,playerName){
 							show: true
 						}
 					},
-					xaxis: { mode: "time", timeformat: "%0d.%0m.%y"},
+					xaxis: { mode: "time", timeformat: "%d.%m.%y"},
 					grid: {
 						backgroundColor: {
 							colors: ["#fff", "#eee"]
