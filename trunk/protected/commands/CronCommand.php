@@ -4,7 +4,7 @@ class CronCommand extends CConsoleCommand
 {
 	public function actionScan()
 	{
-		WotService::scanClan(WotClan::$clanId);
+		WotService::scanClan(WotClan::currentClan()->clan_id);
 	}
 
 	public function actionTanks()
@@ -26,7 +26,7 @@ UPDATE teamspeak.clients c
   SET c.player_id=wp.player_id
   WHERE c.player_id IS NULL
 SQLS;
-		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
+		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::currentClan()->clan_id));
 
 		$clientProperties=ClientProperties::model()->findAll(array(
 				'select'=>'t.*,c.player_id',
@@ -145,10 +145,10 @@ SQL;
 		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
-				'ivanner_pos'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[1]/b',
-				'ivanner_strength'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[5]/b',
-				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[6]',
-				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::$clanId.'"]]/td[7]',
+				'ivanner_pos'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[1]/b',
+				'ivanner_strength'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[5]/b',
+				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[6]',
+				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[7]',
 			));
 			$clan=WotClan::currentClan();
 			$clan->setAttributes($query,false);
@@ -160,7 +160,7 @@ SQL;
 	public function actionArmor()
 	{
 		$url=new CUrlHelper();
-		if($url->execute('http://armor.kiev.ua/wot/clan/'.WotClan::$clanId)){
+		if($url->execute('http://armor.kiev.ua/wot/clan/'.WotClan::currentClan()->clan_id)){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
 					'armor_gk_pos'		=> '//*[@id="main"]/div[4]/div[6]/table[1]//tr[1]/td[2]',
@@ -188,6 +188,6 @@ UPDATE wot_clan wc
           GROUP BY wpc.clan_id) a ON a.clan_id=wc.clan_id
   SET wc.players_pp=a.players_pp, wc.players_wn8=a.players_wn8
 SQL;
-		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));	
+		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::currentClan()->clan_id));	
 	}
 }
