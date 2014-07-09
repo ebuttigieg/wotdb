@@ -144,17 +144,18 @@ SQL;
 	public function actionIvanner()
 	{
 		$url=new CUrlHelper();
-		if($url->execute('http://ivanerr.ru/lt/showclansrating/')){
+		if($url->execute('http://ivanerr.ru/lt/clan/'.WotClan::currentClan()->clan_id)){
 			$xpath=new XmlPath($url->content);
 			$query=$xpath->queryAll(array(
-				'ivanner_pos'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[1]/b',
-				'ivanner_strength'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[5]/b',
-				'ivanner_firepower'	=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[6]',
-				'ivanner_skill'		=> '//tr[td/a[@href="/lt/clan/'.WotClan::currentClan()->clan_id.'"]]/td[7]',
+					'ivanner_pos'		=> '//*[@id="sidebar"]/ul/li/h2/span[1]',
+				//	'ivanner_popularity' => '//*[@id="sidebar"]/ul/li/h2/span[2]',
+					'ivanner_strength'	=> '//*[@id="sidebar"]/ul/li/h2/span[3]/b',
+					'ivanner_firepower'	=> '//*[@id="sidebar"]/ul/li/h2/text()[3]',
+					'ivanner_skill'		=> '//*[@id="sidebar"]/ul/li/h2/text()[2]',
 			));
+			$query=array_map(function($s){ return preg_replace('/\D/', '', $s);}, $query);
 			$clan=WotClan::currentClan();
 			$clan->setAttributes($query,false);
-			$clan->players_count = count($clan->players);
 			$clan->save(false);
 		}		
 	}
@@ -183,12 +184,12 @@ SQL;
 	{
 		$sql=<<<SQL
 UPDATE wot_clan wc
-  JOIN (SELECT wpc.clan_id, SUM(wps.wins)/SUM(wps.battles)*100 players_pp, SUM(wp.wn8)/COUNT(wp.player_id) players_wn8
+  JOIN (SELECT wpc.clan_id, SUM(wps.wins)/SUM(wps.battles)*100 players_pp, SUM(wp.wn8)/COUNT(wp.player_id) players_wn8, count(1) players_count
           FROM wot_player wp
           JOIN wot_player_clan wpc ON wp.player_id = wpc.player_id AND wpc.escape_date IS NULL AND wpc.clan_id=:clan
           JOIN wot_player_statistic wps ON wp.player_id = wps.player_id AND wps.statistic_id=1
           GROUP BY wpc.clan_id) a ON a.clan_id=wc.clan_id
-  SET wc.players_pp=a.players_pp, wc.players_wn8=a.players_wn8
+  SET wc.players_pp=a.players_pp, wc.players_wn8=a.players_wn8, wc.players_count=a.players_count
 SQL;
 		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::currentClan()->clan_id));	
 	}
