@@ -50,7 +50,7 @@ class WotPlayer extends CActiveRecord
 			'statistics'=>array(self::HAS_MANY, 'WotPlayerStatistic', 'player_id', 'index'=>'statisticName', 'with'=>array('statistic')),
 			'achievments'=>array(self::HAS_MANY, 'WotPlayerAchievment', 'player_id', 'index'=>'achievmentName', 'with'=>array('achievment')),
 			'stat'=>array(self::HAS_ONE, 'WotPlayerStatistic','player_id','on'=>'stat.statistic_id=1'),
-			'playerClan'=>array(self::HAS_ONE, 'WotPlayerClan', 'player_id', 'on'=>'playerClan.escape_date is null and playerClan.clan_id=:clan', 'params'=>array('clan'=>WotClan::$clanId)),
+			'playerClan'=>array(self::HAS_ONE, 'WotPlayerClan', 'player_id', 'on'=>'playerClan.escape_date is null and playerClan.clan_id=:clan', 'params'=>array('clan'=>WotClan::currentClan()->clan_id)),
 		);
 	}
 
