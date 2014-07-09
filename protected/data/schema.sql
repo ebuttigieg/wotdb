@@ -1,8 +1,8 @@
--- —ÍËÔÚ Ò„ÂÌÂËÓ‚‡Ì Devart dbForge Studio for MySQL, ¬ÂÒËˇ 6.0.622.0
--- ƒÓÏ‡¯Ìˇˇ ÒÚ‡ÌËˆ‡ ÔÓ‰ÛÍÚ‡: http://www.devart.com/ru/dbforge/mysql/studio
--- ƒ‡Ú‡ ÒÍËÔÚ‡: 27.12.2013 11:32:19
--- ¬ÂÒËˇ ÒÂ‚Â‡: 5.1.49-3
--- ¬ÂÒËˇ ÍÎËÂÌÚ‡: 4.1
+Ôªø-- –°–∫—Ä–∏–ø—Ç —Å–≥–µ–Ω–µ—Ä–∏—Ä–æ–≤–∞–Ω Devart dbForge Studio for MySQL, –í–µ—Ä—Å–∏—è 6.1.166.0
+-- –î–æ–º–∞—à–Ω—è—è —Å—Ç—Ä–∞–Ω–∏—Ü–∞ –ø—Ä–æ–¥—É–∫—Ç–∞: http://www.devart.com/ru/dbforge/mysql/studio
+-- –î–∞—Ç–∞ —Å–∫—Ä–∏–ø—Ç–∞: 09.07.2014 13:32:49
+-- –í–µ—Ä—Å–∏—è —Å–µ—Ä–≤–µ—Ä–∞: 5.7.4-m14-log
+-- –í–µ—Ä—Å–∏—è –∫–ª–∏–µ–Ω—Ç–∞: 4.1
 
 USE wotdb;
 
@@ -53,7 +53,7 @@ CREATE TABLE wf_forum (
   caption varchar(255) NOT NULL,
   ftype enum ('category', 'forum') NOT NULL DEFAULT 'forum',
   ctime datetime NOT NULL,
-  mtime timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  mtime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   status enum ('active', 'deleted', 'closed', 'invisible') NOT NULL DEFAULT 'active',
   is_fixed tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (forum_id),
@@ -78,7 +78,7 @@ CREATE TABLE wot_achievment (
   UNIQUE INDEX UK_wot_achievment_achievment_name (achievment_name)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 220
+AUTO_INCREMENT = 224
 AVG_ROW_LENGTH = 833
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
@@ -116,6 +116,18 @@ CREATE TABLE wot_clan (
   clan_ico varchar(255) DEFAULT NULL,
   clan_motto text DEFAULT NULL,
   clan_descr_html text DEFAULT NULL,
+  clan_owner_id int(11) DEFAULT NULL,
+  ivanner_pos int(11) DEFAULT NULL,
+  ivanner_strength int(11) DEFAULT NULL,
+  ivanner_firepower int(11) DEFAULT NULL,
+  ivanner_skill int(11) DEFAULT NULL,
+  players_count int(11) DEFAULT NULL,
+  players_wn8 decimal(10, 2) DEFAULT NULL,
+  players_pp decimal(5, 2) DEFAULT NULL,
+  armor_gk_pos int(11) DEFAULT NULL,
+  armor_gk_val decimal(10, 2) DEFAULT NULL,
+  armor_random_pos int(11) DEFAULT NULL,
+  armor_random_val decimal(10, 2) DEFAULT NULL,
   PRIMARY KEY (clan_id)
 )
 ENGINE = INNODB
@@ -136,13 +148,18 @@ COLLATE utf8_general_ci;
 CREATE TABLE wot_player (
   player_id int(11) NOT NULL,
   player_name varchar(100) NOT NULL,
-  created_at datetime NOT NULL,
-  updated_at datetime NOT NULL,
+  created_at datetime DEFAULT NULL,
+  updated_at datetime DEFAULT NULL,
   player_fio varchar(255) DEFAULT NULL,
   player_bitrh datetime DEFAULT NULL,
   max_xp int(11) NOT NULL DEFAULT 0,
   effect decimal(10, 2) NOT NULL DEFAULT 0.00,
   wn6 decimal(10, 2) NOT NULL DEFAULT 0.00,
+  wn7 decimal(10, 2) DEFAULT NULL,
+  wn8 decimal(10, 2) DEFAULT NULL,
+  global_rating int(11) DEFAULT NULL,
+  last_battle_time datetime DEFAULT NULL,
+  logout_at datetime DEFAULT NULL,
   PRIMARY KEY (player_id)
 )
 ENGINE = INNODB
@@ -157,7 +174,7 @@ CREATE TABLE wot_statistic (
   UNIQUE INDEX UK_wot_staistic_statistic_name (statistic_name)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 5
 AVG_ROW_LENGTH = 5461
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
@@ -233,7 +250,7 @@ CREATE TABLE wf_moderator (
   player_id int(11) NOT NULL,
   forum_id int(11) NOT NULL,
   ctime datetime NOT NULL,
-  mtime timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  mtime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (player_id, forum_id),
   CONSTRAINT FK_wf_moderator_wf_forum_forum_id FOREIGN KEY (forum_id)
   REFERENCES wf_forum (forum_id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -253,7 +270,7 @@ CREATE TABLE wf_post (
   is_topic tinyint(1) DEFAULT NULL,
   ctime datetime NOT NULL,
   body mediumtext NOT NULL,
-  mtime timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  mtime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   status enum ('active', 'deleted', 'invisible') NOT NULL DEFAULT 'active',
   PRIMARY KEY (post_id),
   UNIQUE INDEX UK_wf_post (forum_id, is_topic),
@@ -262,6 +279,21 @@ CREATE TABLE wf_post (
   CONSTRAINT FK_wf_post_wf_post_post_id FOREIGN KEY (reply_to)
   REFERENCES wf_post (post_id) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT FK_wf_post_wot_player_player_id FOREIGN KEY (user_id)
+  REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE = INNODB
+AUTO_INCREMENT = 1
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+CREATE TABLE wf_request (
+  request_id int(11) NOT NULL AUTO_INCREMENT,
+  player_id int(11) NOT NULL,
+  c_time datetime NOT NULL,
+  status enum ('NEW', 'INPROCESS', 'APPROVED', 'DECLINED') NOT NULL DEFAULT 'NEW',
+  m_time datetime NOT NULL,
+  PRIMARY KEY (request_id),
+  CONSTRAINT FK_wf_request_wot_player_player_id FOREIGN KEY (player_id)
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
@@ -283,6 +315,29 @@ AVG_ROW_LENGTH = 682
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+CREATE TABLE wot_clan_history (
+  updated_at date NOT NULL,
+  clan_id int(11) NOT NULL,
+  ivanner_pos int(11) DEFAULT NULL,
+  ivanner_strength int(11) DEFAULT NULL,
+  ivanner_firepower int(11) DEFAULT NULL,
+  ivanner_skill int(11) DEFAULT NULL,
+  players_count int(11) DEFAULT NULL,
+  players_wn8 decimal(10, 2) DEFAULT NULL,
+  players_pp decimal(5, 2) DEFAULT NULL,
+  armor_gk_pos int(11) DEFAULT NULL,
+  armor_gk_val decimal(10, 2) DEFAULT NULL,
+  armor_random_pos int(11) DEFAULT NULL,
+  armor_random_val decimal(10, 2) DEFAULT NULL,
+  PRIMARY KEY (updated_at, clan_id),
+  CONSTRAINT FK_wot_clan_history_wot_clan_clan_id FOREIGN KEY (clan_id)
+  REFERENCES wot_clan (clan_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE = INNODB
+AVG_ROW_LENGTH = 8192
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
 CREATE TABLE wot_player_achievment (
   player_id int(11) NOT NULL,
   achievment_id int(11) NOT NULL,
@@ -295,7 +350,7 @@ CREATE TABLE wot_player_achievment (
   REFERENCES wot_player (player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 104
+AVG_ROW_LENGTH = 245
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -306,7 +361,6 @@ CREATE TABLE wot_player_clan (
   clan_role_id varchar(50) NOT NULL,
   escape_date date DEFAULT NULL,
   PRIMARY KEY (entry_date, player_id, clan_id),
-  UNIQUE INDEX entry_date (entry_date, player_id, clan_id),
   CONSTRAINT FK_wot_player_clan_wot_clan_clan_id FOREIGN KEY (clan_id)
   REFERENCES wot_clan (clan_id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_wot_player_clan_wot_clan_role_clan_role_id FOREIGN KEY (clan_role_id)
@@ -322,25 +376,27 @@ COLLATE utf8_general_ci;
 CREATE TABLE wot_player_glory (
   updated_at date NOT NULL,
   player_id int(11) NOT NULL,
-  glory_points int(11) NOT NULL,
-  glory_position int(11) NOT NULL,
+  glory_points int(11) DEFAULT NULL,
+  glory_position int(11) DEFAULT NULL,
   PRIMARY KEY (updated_at, player_id),
   CONSTRAINT FK_wot_player_glory_wot_player_player_id FOREIGN KEY (player_id)
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 75
+AVG_ROW_LENGTH = 49
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 CREATE TABLE wot_player_history (
-  updated_at datetime NOT NULL,
+  updated_at date NOT NULL,
   player_id int(11) NOT NULL,
   max_xp int(11) NOT NULL DEFAULT 0,
   effect decimal(10, 2) NOT NULL DEFAULT 0.00,
   wn6 decimal(10, 2) NOT NULL DEFAULT 0.00,
+  wn7 decimal(10, 2) DEFAULT NULL,
+  wn8 decimal(10, 2) DEFAULT NULL,
   PRIMARY KEY (player_id, updated_at),
-  CONSTRAINT FK_wot_player_history_wot_player_player_id FOREIGN KEY (player_id)
+  CONSTRAINT FK_wot_player_history1_wot_player_player_id FOREIGN KEY (player_id)
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
@@ -375,7 +431,7 @@ CREATE TABLE wot_player_statistic (
   REFERENCES wot_statistic (statistic_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 135
+AVG_ROW_LENGTH = 134
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -384,7 +440,7 @@ CREATE TABLE wot_post (
   image varchar(255) NOT NULL,
   text text DEFAULT NULL,
   c_time datetime NOT NULL,
-  m_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  m_time timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   player_id int(11) NOT NULL,
   PRIMARY KEY (post_id),
   CONSTRAINT FK_wot_post_wot_player_player_id FOREIGN KEY (player_id)
@@ -422,7 +478,7 @@ CREATE TABLE wot_tank (
   tank_nation_id varchar(50) NOT NULL,
   tank_level int(11) NOT NULL,
   tank_name varchar(100) NOT NULL,
-  tank_localized_name varchar(255) NOT NULL,
+  tank_name_i18n varchar(255) NOT NULL,
   tank_image varchar(255) DEFAULT NULL,
   is_premium tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (tank_id),
@@ -440,15 +496,15 @@ CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 CREATE TABLE wot_teamspeak (
-  updated_at datetime NOT NULL,
+  client_database_id int(11) NOT NULL AUTO_INCREMENT,
   player_id int(11) NOT NULL,
-  client_id int(11) NOT NULL,
-  PRIMARY KEY (updated_at, player_id),
-  CONSTRAINT FK_wot_teamspeak2_copy_wot_player_player_id FOREIGN KEY (player_id)
+  PRIMARY KEY (client_database_id),
+  CONSTRAINT FK_wot_teamspeak_wot_player_player_id FOREIGN KEY (player_id)
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 81
+AUTO_INCREMENT = 81
+AVG_ROW_LENGTH = 282
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -531,25 +587,25 @@ COLLATE utf8_general_ci;
 CREATE TABLE wot_player_achievment_history (
   player_id int(11) NOT NULL,
   achievment_id int(11) NOT NULL,
-  updated_at datetime NOT NULL,
+  updated_at date NOT NULL,
   cnt int(11) NOT NULL,
   PRIMARY KEY (player_id, achievment_id, updated_at),
   CONSTRAINT FK_wot_player_achievment_histo FOREIGN KEY (player_id, achievment_id)
   REFERENCES wot_player_achievment (player_id, achievment_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 213
+AVG_ROW_LENGTH = 131
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 CREATE TABLE wot_player_clan_history (
-  clan_history_date datetime NOT NULL,
   entry_date date NOT NULL,
   player_id int(11) NOT NULL,
   clan_id int(11) NOT NULL,
+  updated_at date NOT NULL,
   clan_role_id varchar(50) NOT NULL,
-  PRIMARY KEY (clan_history_date, player_id, clan_id, entry_date, clan_role_id),
-  CONSTRAINT FK_wot_player_clan_history FOREIGN KEY (entry_date, player_id, clan_id)
+  PRIMARY KEY (updated_at, player_id, clan_id, entry_date),
+  CONSTRAINT FK_wot_player_clan_history1 FOREIGN KEY (entry_date, player_id, clan_id)
   REFERENCES wot_player_clan (entry_date, player_id, clan_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
@@ -560,7 +616,7 @@ COLLATE utf8_general_ci;
 CREATE TABLE wot_player_statistic_history (
   player_id int(11) NOT NULL,
   statistic_id int(11) NOT NULL,
-  updated_at datetime NOT NULL,
+  updated_at date NOT NULL,
   spotted int(11) NOT NULL DEFAULT 0,
   hits int(11) NOT NULL DEFAULT 0,
   battle_avg_xp int(11) NOT NULL DEFAULT 0,
@@ -582,23 +638,21 @@ CREATE TABLE wot_player_statistic_history (
   REFERENCES wot_player_statistic (player_id, statistic_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 225
+AVG_ROW_LENGTH = 243
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 CREATE TABLE wot_player_tank (
   player_id int(11) NOT NULL,
   tank_id int(11) NOT NULL,
-  updated_at datetime NOT NULL,
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  max_xp int(11) NOT NULL DEFAULT 0,
+  updated_at datetime DEFAULT NULL,
+  created_at datetime NOT NULL,
   wins int(11) NOT NULL DEFAULT 0,
   battles int(11) NOT NULL DEFAULT 0,
-  max_frags int(11) NOT NULL DEFAULT 0,
-  win_and_survived int(11) NOT NULL DEFAULT 0,
-  last_battle_time datetime DEFAULT NULL,
   mark_of_mastery int(1) UNSIGNED NOT NULL DEFAULT 0,
-  in_garage tinyint(1) NOT NULL DEFAULT 0,
+  in_garage tinyint(1) DEFAULT NULL,
+  max_frags int(11) DEFAULT NULL,
+  max_xp int(11) DEFAULT NULL,
   PRIMARY KEY (player_id, tank_id),
   CONSTRAINT FK_wot_player_tank_wot_player_player_id FOREIGN KEY (player_id)
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -607,6 +661,18 @@ CREATE TABLE wot_player_tank (
 )
 ENGINE = INNODB
 AVG_ROW_LENGTH = 150
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+CREATE TABLE wot_presense (
+  client_database_id int(11) NOT NULL,
+  updated_at datetime NOT NULL,
+  PRIMARY KEY (client_database_id, updated_at),
+  CONSTRAINT FK_wot_presense_wot_teamspeak_client_database_id FOREIGN KEY (client_database_id)
+  REFERENCES wot_teamspeak (client_database_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+ENGINE = INNODB
+AVG_ROW_LENGTH = 50
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -626,17 +692,36 @@ ENGINE = INNODB
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+CREATE TABLE wot_wn8_etv (
+  IDNum int(11) NOT NULL,
+  name varchar(255) NOT NULL,
+  frag decimal(10, 2) NOT NULL,
+  dmg decimal(10, 2) NOT NULL,
+  spot decimal(10, 2) NOT NULL,
+  def decimal(10, 2) NOT NULL,
+  win decimal(10, 2) NOT NULL,
+  Tier int(11) NOT NULL,
+  Nation varchar(255) DEFAULT NULL,
+  Class varchar(255) DEFAULT NULL,
+  PRIMARY KEY (IDNum),
+  CONSTRAINT FK_wot_wn8_etv_wot_tank_tank_id FOREIGN KEY (IDNum)
+  REFERENCES wot_tank (tank_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+)
+ENGINE = INNODB
+AVG_ROW_LENGTH = 187
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
 CREATE TABLE wot_player_tank_history (
   updated_at datetime NOT NULL,
   player_id int(11) NOT NULL,
   tank_id int(11) NOT NULL,
-  max_xp int(11) NOT NULL DEFAULT 0,
   wins int(11) NOT NULL DEFAULT 0,
   battles int(11) NOT NULL DEFAULT 0,
-  max_frags int(11) NOT NULL DEFAULT 0,
-  win_and_survived int(11) NOT NULL DEFAULT 0,
   mark_of_mastery int(1) UNSIGNED NOT NULL DEFAULT 0,
-  in_garage tinyint(1) NOT NULL DEFAULT 0,
+  in_garage tinyint(1) DEFAULT 0,
+  max_frags int(11) DEFAULT NULL,
+  max_xp int(11) DEFAULT NULL,
   PRIMARY KEY (updated_at, player_id, tank_id),
   CONSTRAINT FK_wot_player_tank_history FOREIGN KEY (player_id, tank_id)
   REFERENCES wot_player_tank (player_id, tank_id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -650,7 +735,7 @@ CREATE TABLE wot_player_tank_statistic (
   player_id int(11) NOT NULL,
   tank_id int(11) NOT NULL,
   statistic_id int(11) NOT NULL,
-  updated_at datetime NOT NULL,
+  updated_at datetime DEFAULT NULL,
   spotted int(11) NOT NULL DEFAULT 0,
   hits int(11) NOT NULL DEFAULT 0,
   battle_avg_xp int(11) NOT NULL DEFAULT 0,
@@ -674,7 +759,7 @@ CREATE TABLE wot_player_tank_statistic (
   REFERENCES wot_statistic (statistic_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 260
+AVG_ROW_LENGTH = 302
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -682,7 +767,7 @@ CREATE TABLE wot_player_tank_statistic_history (
   player_id int(11) NOT NULL,
   tank_id int(11) NOT NULL,
   statistic_id int(11) NOT NULL,
-  updated_at datetime NOT NULL,
+  updated_at date NOT NULL,
   spotted int(11) DEFAULT NULL,
   hits int(11) DEFAULT NULL,
   battle_avg_xp int(11) DEFAULT NULL,
@@ -704,11 +789,26 @@ CREATE TABLE wot_player_tank_statistic_history (
   REFERENCES wot_player_tank_statistic (player_id, tank_id, statistic_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 142
+AVG_ROW_LENGTH = 106
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 DELIMITER $$
+
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_clan_update
+AFTER UPDATE
+ON wot_clan
+FOR EACH ROW
+BEGIN
+  IF (new.ivanner_pos <> old.ivanner_pos) THEN
+    INSERT INTO wot_clan_history (updated_at, clan_id, ivanner_pos, ivanner_strength, ivanner_firepower, ivanner_skill)
+      VALUES (CURDATE(), old.clan_id, old.ivanner_pos, old.ivanner_strength, old.ivanner_firepower, old.ivanner_skill)
+    ON DUPLICATE KEY UPDATE ivanner_pos = old.ivanner_pos, ivanner_strength = old.ivanner_strength, ivanner_firepower = old.ivanner_firepower, ivanner_skill = old.ivanner_skill;
+  END IF;
+END
+$$
 
 CREATE
 DEFINER = 'root'@'localhost'
@@ -717,21 +817,9 @@ AFTER UPDATE
 ON wot_player
 FOR EACH ROW
 BEGIN
-  IF (new.updated_at <> old.updated_at) THEN
-    IF (EXISTS (SELECT
-          *
-        FROM wot_player_history wph
-        WHERE wph.player_id = old.player_id AND wph.updated_at = old.updated_at)) THEN
-      UPDATE wot_player_history wph
-      SET wph.max_xp = old.max_xp,
-          wph.effect = old.effect,
-          wph.wn6 = old.wn6
-      WHERE wph.updated_at = old.updated_at AND wph.player_id = old.player_id;
-    ELSE
-      INSERT INTO wot_player_history (updated_at, player_id, max_xp, effect, wn6)
-        VALUES (old.updated_at, old.player_id, old.max_xp, old.effect, old.wn6);
-    END IF;
-  END IF;
+  INSERT INTO wot_player_history (updated_at, player_id, max_xp, effect, wn6, wn7, wn8)
+    VALUES (new.updated_at, new.player_id, new.max_xp, new.effect, new.wn6, new.wn7, new.wn8)
+  ON DUPLICATE KEY UPDATE max_xp = new.max_xp, effect = new.effect, wn6 = new.wn6, wn7 = new.wn7, wn8 = new.wn8;
 END
 $$
 
@@ -742,15 +830,9 @@ AFTER UPDATE
 ON wot_player_achievment
 FOR EACH ROW
 BEGIN
-  IF (new.cnt <> old.cnt AND NOT EXISTS (SELECT
-        *
-      FROM wot_player_achievment_history wpah
-      WHERE wpah.player_id = old.player_id
-      AND wpah.updated_at = old.updated_at
-      AND wpah.achievment_id = old.achievment_id)) THEN
-    INSERT INTO wot_player_achievment_history (updated_at, player_id, achievment_id, cnt)
-      VALUES (old.updated_at, old.player_id, old.achievment_id, old.cnt);
-  END IF;
+  INSERT INTO wot_player_achievment_history (updated_at, player_id, achievment_id, cnt)
+    VALUES (new.updated_at, new.player_id, new.achievment_id, new.cnt)
+  ON DUPLICATE KEY UPDATE cnt = new.cnt;
 END
 $$
 
@@ -761,10 +843,9 @@ AFTER UPDATE
 ON wot_player_clan
 FOR EACH ROW
 BEGIN
-  IF (old.clan_role_id <> new.clan_role_id) THEN
-    INSERT INTO wot_player_clan_history (clan_history_date, entry_date, player_id, clan_id, clan_role_id)
-      VALUES (NOW(), old.entry_date, old.player_id, old.clan_id, old.clan_role_id);
-  END IF;
+  INSERT INTO wot_player_clan_history (entry_date, player_id, clan_id, clan_role_id, updated_at)
+    VALUES (old.entry_date, old.player_id, old.clan_id, old.clan_role_id, CURDATE())
+  ON DUPLICATE KEY UPDATE clan_role_id = old.clan_role_id;
 END
 $$
 
@@ -775,33 +856,91 @@ AFTER UPDATE
 ON wot_player_statistic
 FOR EACH ROW
 BEGIN
-  IF (new.battles <> old.battles AND NOT EXISTS (SELECT
-        *
-      FROM wot_player_statistic_history wpsh
-      WHERE wpsh.player_id = old.player_id
-      AND wpsh.statistic_id = old.statistic_id
-      AND wpsh.updated_at = old.updated_at)) THEN
-    INSERT INTO wot_player_statistic_history (player_id
-    , statistic_id
-    , updated_at
-    , spotted
-    , hits
-    , battle_avg_xp
-    , draws
-    , wins
-    , losses
-    , capture_points
-    , battles
-    , damage_dealt
-    , hits_percents
-    , damage_received
-    , shots
-    , xp
-    , frags
-    , survived_battles
-    , dropped_capture_points)
-      VALUES (old.player_id, old.statistic_id, old.updated_at, old.spotted, old.hits, old.battle_avg_xp, old.draws, old.wins, old.losses, old.capture_points, old.battles, old.damage_dealt, old.hits_percents, old.damage_received, old.shots, old.xp, old.frags, old.survived_battles, old.dropped_capture_points);
-  END IF;
+  INSERT INTO wot_player_statistic_history (player_id
+  , statistic_id
+  , updated_at
+  , spotted
+  , hits
+  , battle_avg_xp
+  , draws
+  , wins
+  , losses
+  , capture_points
+  , battles
+  , damage_dealt
+  , hits_percents
+  , damage_received
+  , shots
+  , xp
+  , frags
+  , survived_battles
+  , dropped_capture_points)
+    VALUES (new.player_id, new.statistic_id, new.updated_at, new.spotted, new.hits, new.battle_avg_xp, new.draws, new.wins, new.losses, new.capture_points, new.battles, new.damage_dealt, new.hits_percents, new.damage_received, new.shots, new.xp, new.frags, new.survived_battles, new.dropped_capture_points)
+  ON DUPLICATE KEY UPDATE
+  spotted = new.spotted,
+  hits = new.hits,
+  battle_avg_xp = new.battle_avg_xp,
+  draws = new.draws,
+  wins = new.wins,
+  losses = new.losses,
+  capture_points = new.capture_points,
+  battles = new.battles,
+  damage_dealt = new.damage_dealt,
+  hits_percents = new.hits_percents,
+  damage_received = new.damage_received,
+  shots = new.shots,
+  xp = new.xp,
+  frags = new.frags,
+  survived_battles = new.survived_battles,
+  dropped_capture_points = new.dropped_capture_points;
+END
+$$
+
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER wot_player_tank_statistic_update
+AFTER UPDATE
+ON wot_player_tank_statistic
+FOR EACH ROW
+BEGIN
+  INSERT INTO wot_player_tank_statistic_history (player_id
+  , tank_id
+  , statistic_id
+  , updated_at
+  , spotted
+  , hits
+  , battle_avg_xp
+  , draws
+  , wins
+  , losses
+  , capture_points
+  , battles
+  , damage_dealt
+  , hits_percents
+  , damage_received
+  , shots
+  , xp
+  , frags
+  , survived_battles
+  , dropped_capture_points)
+    VALUES (new.player_id, new.tank_id, new.statistic_id, new.updated_at, new.spotted, new.hits, new.battle_avg_xp, new.draws, new.wins, new.losses, new.capture_points, new.battles, new.damage_dealt, new.hits_percents, new.damage_received, new.shots, new.xp, new.frags, new.survived_battles, new.dropped_capture_points)
+  ON DUPLICATE KEY UPDATE
+  spotted = new.spotted,
+  hits = new.hits,
+  battle_avg_xp = new.battle_avg_xp,
+  draws = new.draws,
+  wins = new.wins,
+  losses = new.losses,
+  capture_points = new.capture_points,
+  battles = new.battles,
+  damage_dealt = new.damage_dealt,
+  hits_percents = new.hits_percents,
+  damage_received = new.damage_received,
+  shots = new.shots,
+  xp = new.xp,
+  frags = new.frags,
+  survived_battles = new.survived_battles,
+  dropped_capture_points = new.dropped_capture_points;
 END
 $$
 
@@ -817,13 +956,8 @@ BEGIN
     FROM wot_player wp
     WHERE wp.player_id = old.player_id);
 
-  IF (new.battles <> old.battles AND @updated_at IS NOT NULL AND NOT EXISTS (SELECT
-        *
-      FROM wot_player_tank_history wpth
-      WHERE wpth.player_id = old.player_id
-      AND wpth.tank_id = old.tank_id
-      AND wpth.updated_at = @updated_at))
-    THEN
+  IF (new.battles <> old.battles
+    AND @updated_at IS NOT NULL) THEN
     INSERT INTO wot_player_tank_history (updated_at
     , player_id
     , tank_id
@@ -831,48 +965,10 @@ BEGIN
     , wins
     , battles
     , max_frags
-    , win_and_survived
     , mark_of_mastery
     , in_garage)
-      VALUES (@updated_at, old.player_id, old.tank_id, old.max_xp, old.wins, old.battles, old.max_frags, old.win_and_survived, old.mark_of_mastery, old.in_garage);
-  END IF;
-END
-$$
-
-CREATE
-DEFINER = 'root'@'localhost'
-TRIGGER wot_player_tank_statistic_update
-AFTER UPDATE
-ON wot_player_tank_statistic
-FOR EACH ROW
-BEGIN
-  IF (new.battles <> old.battles AND NOT EXISTS (SELECT
-        *
-      FROM wot_player_tank_statistic_history wptsh
-      WHERE wptsh.player_id = old.player_id
-      AND wptsh.statistic_id = old.statistic_id
-      AND wptsh.tank_id = old.tank_id
-      AND wptsh.updated_at = old.updated_at)) THEN
-    INSERT INTO wot_player_tank_statistic_history (player_id, tank_id
-    , statistic_id
-    , updated_at
-    , spotted
-    , hits
-    , battle_avg_xp
-    , draws
-    , wins
-    , losses
-    , capture_points
-    , battles
-    , damage_dealt
-    , hits_percents
-    , damage_received
-    , shots
-    , xp
-    , frags
-    , survived_battles
-    , dropped_capture_points)
-      VALUES (old.player_id, old.tank_id, old.statistic_id, old.updated_at, NULLIF(old.spotted, 0), NULLIF(old.hits, 0), NULLIF(old.battle_avg_xp, 0), NULLIF(old.draws, 0), old.wins, NULLIF(old.losses, 0), NULLIF(old.capture_points, 0), old.battles, NULLIF(old.damage_dealt, 0), NULLIF(old.hits_percents, 0), NULLIF(old.damage_received, 0), NULLIF(old.shots, 0), NULLIF(old.xp, 0), NULLIF(old.frags, 0), NULLIF(old.survived_battles, 0), NULLIF(old.dropped_capture_points, 0));
+      VALUES (@updated_at, old.player_id, old.tank_id, old.max_xp, old.wins, old.battles, old.max_frags, old.mark_of_mastery, old.in_garage)
+    ON DUPLICATE KEY UPDATE max_xp = old.max_xp, wins = old.wins, battles = old.battles, max_frags = old.max_frags, mark_of_mastery = old.mark_of_mastery, in_garage = old.in_garage;
   END IF;
 END
 $$
