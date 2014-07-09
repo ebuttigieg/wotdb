@@ -16,29 +16,20 @@ FROM wot_player wp
     COUNT(a.b_gk) gb,
     COUNT(a.b_cm)
   FROM (SELECT
-    s.player_id,
-    s.statistic_id,
-    DATE(s.updated_at) updated_at,
-    MIN(s.battles),
-    CASE s.statistic_id
-      WHEN 1 THEN 1 ELSE NULL
-    END b_all,
-    CASE s.statistic_id
-      WHEN 2 THEN 1 ELSE NULL
-    END b_gk,
-    CASE s.statistic_id
-      WHEN 3 THEN 1 ELSE NULL
-    END b_cm
-  FROM (
-  SELECT
     wpsh.player_id,
     wpsh.statistic_id,
     wpsh.updated_at,
-    wpsh.battles
-  FROM wot_player_statistic_history wpsh) s
-  GROUP BY s.player_id,
-           s.statistic_id,
-           DATE(s.updated_at)) a
+    wpsh.battles,
+    CASE wpsh.statistic_id
+      WHEN 1 THEN 1 ELSE NULL
+    END b_all,
+    CASE wpsh.statistic_id
+      WHEN 2 THEN 1 ELSE NULL
+    END b_gk,
+    CASE wpsh.statistic_id
+      WHEN 3 THEN 1 ELSE NULL
+    END b_cm
+  FROM wot_player_statistic_history wpsh) a
   GROUP BY a.player_id,
            a.updated_at) a ON a.player_id = wp.player_id
   LEFT JOIN (SELECT
