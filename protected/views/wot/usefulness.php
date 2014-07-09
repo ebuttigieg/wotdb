@@ -1,5 +1,5 @@
 <div class="row-fluid">
-	<div class="span4">
+	<table id="jqgrid"></table>
 <?php
 
 $cs = Yii::app()->clientScript;
@@ -13,9 +13,7 @@ FUNCF;
 
 $cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
 
-
-$this->widget('ext.jqgrid.JQGrid',
-	array('options'=>array(
+$options=CJavaScript::encode(array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('usefulness'),
 		'colNames'=>array('Игрок', 'Проц. побед', 'Кол-во топов', '300 боев'),
@@ -39,9 +37,9 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Полезность 300 боев на топах',
 		'viewrecords'=> true,
-	),
-	'theme'=>'conquer',
 ));
+
+$cs->registerScript($this->getId().'jqGrid', "jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');
 ?>
-	</div>
 </div>

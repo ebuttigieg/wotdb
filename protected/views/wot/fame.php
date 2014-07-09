@@ -1,3 +1,4 @@
+<table id="jqgrid"></table>
 <?php
 
 $cs = Yii::app()->clientScript;
@@ -11,8 +12,7 @@ FUNC;
 
 $cs->registerScript(__CLASS__. $this->getId().'1', $cellAttr, CClientScript::POS_READY);
 
-$this->widget('ext.jqgrid.JQGrid', 
-	array('options'=>array(
+$options=CJavaScript::encode(array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('bestAchievments'),
 		'colNames'=>array('Игрок', 'Медаль', 'Достижение'),
@@ -28,6 +28,7 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Достижения',
 		'viewrecords'=> true,
-	),
-	'theme'=>'conquer',
 ));
+
+$cs->registerScript($this->getId().'jqGrid', "jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');

@@ -1,8 +1,8 @@
 <div class="row-fluid">
 	<div class="span4">
+	<table id="jqgrid"></table>
 <?php
-$this->widget('ext.jqgrid.JQGrid',
-	array('options'=>array(
+$options=CJavaScript::encode(array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('players'),
 		'colNames'=>array('Игрок', 'Начал играть', 'Боев', 'Проц. побед','Сред. опыт','Макс. опыт', 'Дамаг','РЭ','WN7','WN8'),
@@ -28,9 +28,11 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Игроки клана',
 		'viewrecords'=> true,
-	),
-	'theme'=>'conquer',
 ));
+
+$cs=Yii::app()->clientScript;
+$cs->registerScript($this->getId().'jqGrid', "jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');
 ?>
 	</div>
 </div>

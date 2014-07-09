@@ -82,6 +82,12 @@ return array(
 		),
 		'depends'=>array('jquery'),
 	),
+	'jqGrid'=>array(
+			'basePath'=>'ext.jqGrid-master',
+			'js'=>array('js/i18n/grid.locale-en.js','js/minified/jquery.jqGrid.min.js'),
+			'css'=>array('css/ui.jqgrid.css', 'css/bootstrap.css'),
+			'depends'=>array('jquery'),
+	),
 	'wysihtml'=>array(
 		'basePath'=>'ext.conquer.plugins.bootstrap-wysihtml5',
 		'js'=>array('wysihtml5-0.3.0.js','bootstrap-wysihtml5.js'),

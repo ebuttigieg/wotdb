@@ -1,8 +1,8 @@
+
+<table id="jqgrid"></table>
 <?php
 
-$this->widget('ext.jqgrid.JQGrid',
-	array('options'=>array(
-		'url'=> $this->createUrl('wot/jqgriddata'),
+$options=CJavaScript::encode(array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('tanks'),
 		'colNames'=>array('Танк', 'Игрок', 'Боев', 'Побед', 'Процент побед'),
@@ -29,6 +29,7 @@ $this->widget('ext.jqgrid.JQGrid',
 			'groupOrder'=>array('asc'),
 		//	'groupSummary'=>array(false, false),
 		),
-	),
-	'theme'=>'conquer',
 ));
+$cs=Yii::app()->clientScript;
+$cs->registerScript($this->getId().'jqGrid', "jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');

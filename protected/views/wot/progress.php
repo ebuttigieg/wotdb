@@ -7,6 +7,7 @@ $this->breadcrumbs=array(
 
 <div class="row-fluid">
 	<div class="span4">
+	<table id="jqgrid"></table>
 <?php
 
 $cs = Yii::app()->clientScript;
@@ -44,9 +45,7 @@ FUNCF;
 	$cs->registerScript(__CLASS__. $this->getId().'2', $formatter, CClientScript::POS_READY);
 
 
-$this->widget('ext.jqgrid.JQGrid',
-	array('options'=>array(
-		'url'=> $this->createUrl('wot/jqgriddata'),
+$options=CJavaScript::encode(array(
 		'datatype'=>'local',
 		'data'=>RptReport::execute('progress'),
 		'colNames'=>array('Игрок', 'Боев', 'РЭ', 'WN8', 'Побед','Опыт','Дамаг','Фраги','Засвет','Захват','Защита','Живучесть','Точность','Макс. опыт'),
@@ -77,9 +76,10 @@ $this->widget('ext.jqgrid.JQGrid',
 		'height'=>'auto',
 		'caption'=>'Прогресс за последние 2 суток',
 		'viewrecords'=> true,
-	),
-	'theme'=>'conquer',
 ));
+
+$cs->registerScript($this->getId().'jqGrid', "jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');
 ?>
 	</div>
 </div>

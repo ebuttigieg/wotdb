@@ -7,6 +7,7 @@ $this->breadcrumbs=array(
 
 <div class="row-fluid">
 	<div class="span4">
+	<table id="jqgrid"></table>
 <?php
 
 $cellAttr=<<<FUNC
@@ -20,9 +21,10 @@ js:function(rowId, val, rawObject, cm, rdata) {
 }
 FUNC;
 
-$this->widget('ext.jqgrid.JQGrid',
-	array('options'=>array(
-		'url'=> $this->createUrl('wot/jqgriddata'),
+
+
+$options=CJavaScript::encode(array(
+	//	'url'=> $this->createUrl('wot/jqgriddata'),
 		'datatype'=>'local',
 		'data'=>RptReport::execute('activity'),
 		'colNames'=>array('Игрок', 'Боев', 'Побед', '% побед', 'Танк', 'Всего боев', 'Всего побед', 'Всего % побед'),
@@ -54,9 +56,12 @@ $this->widget('ext.jqgrid.JQGrid',
 			'groupOrder'=>array('asc'),
 		//	'groupSummary'=>array(false, false),
 		),
-	),
-	'theme'=>'conquer',
+
 ));
+
+$cs=Yii::app()->clientScript;
+$cs->registerScript($this->getId().'jqGrid',"jQuery('#jqgrid').jqGrid($options);", CClientScript::POS_READY);
+$cs->registerPackage('jqGrid');
 ?>
 	</div>
 </div>
