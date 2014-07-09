@@ -80,12 +80,13 @@ $config=CMap::mergeArray($config,array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
-				array(
+		/*		array(
 					'class'=>'CEmailLogRoute',
 					'levels'=>'error',
-					'emails'=>'borodulin@gmail.com',
+					'emails'=>'',
 					'except'=>'exception.CHttpException.*',
 				),
+		*/
 			),
 		),
 		'clientScript' => array(
