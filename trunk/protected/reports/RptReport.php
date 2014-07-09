@@ -6,7 +6,7 @@ class RptReport
 	{
 		$userId= Yii::app()->user->id;
 		return array(
-			'clan'=>WotClan::$clanId,
+			'clan'=>WotClan::currentClan()->clan_id,
 			'player'=>Yii::app()->user->id,
 		);
 	} 

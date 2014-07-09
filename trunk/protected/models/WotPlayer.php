@@ -15,7 +15,7 @@ class WotPlayer extends CActiveRecord
 
 	public static function isClanPlayer($playerId)
 	{
-		$player=WotPlayerClan::model()->findByAttributes(array('clan_id'=>WotClan::$clanId,'player_id'=>$playerId),'escape_date is null');
+		$player=WotPlayerClan::model()->findByAttributes(array('clan_id'=>WotClan::currentClan()->clan_id,'player_id'=>$playerId),'escape_date is null');
 		return !empty($player);
 	}
 

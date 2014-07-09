@@ -10,8 +10,6 @@ class WotClan extends CActiveRecord
 	
 	private static $_clan;
 	
-	public static $clanId=93535;
-
 	/**
 	 * @return WotClan
 	 */
@@ -25,8 +23,11 @@ class WotClan extends CActiveRecord
 	 */
 	public static function currentClan()
 	{
-		if(empty(self::$_clan))
-			self::$_clan=self::model()->findByPk(self::$clanId);
+		if(empty(self::$_clan)){
+			if(!isset(Yii::app()->params['clan']))
+				throw new CException('You need specify clan in config params');
+			self::$_clan=self::model()->findByPk(Yii::app()->params['clan']);
+		}
 		return self::$_clan;
 	}	
 	
