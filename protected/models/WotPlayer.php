@@ -129,7 +129,7 @@ UPDATE wot_player wp
     WHERE wps.statistic_id=1) a ON a.player_id=wp.player_id
   SET wp.wn6=a.wn6, wp.wn7=a.wn7, wp.wn8=a.wn8, wp.effect=a.effect
 SQL;
-		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::$clanId));
+		Yii::app()->db->createCommand($sql)->execute(array('clan'=>WotClan::currentClan()->clan_id));
 	}
 	
 	/**
