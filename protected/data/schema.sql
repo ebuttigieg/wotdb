@@ -1,6 +1,6 @@
 ﻿-- Скрипт сгенерирован Devart dbForge Studio for MySQL, Версия 6.1.166.0
 -- Домашняя страница продукта: http://www.devart.com/ru/dbforge/mysql/studio
--- Дата скрипта: 09.07.2014 20:36:03
+-- Дата скрипта: 10.07.2014 2:10:20
 -- Версия сервера: 5.7.4-m14-log
 -- Версия клиента: 4.1
 
@@ -164,24 +164,6 @@ CREATE TABLE wot_player (
 )
 ENGINE = INNODB
 AVG_ROW_LENGTH = 5576
-CHARACTER SET utf8
-COLLATE utf8_general_ci;
-
-CREATE TABLE wot_player_tank_history2 (
-  updated_at datetime NOT NULL,
-  player_id int(11) NOT NULL,
-  tank_id int(11) NOT NULL,
-  wins int(11) NOT NULL DEFAULT 0,
-  battles int(11) NOT NULL DEFAULT 0,
-  mark_of_mastery int(1) UNSIGNED NOT NULL DEFAULT 0,
-  in_garage tinyint(1) DEFAULT 0,
-  max_frags int(11) DEFAULT NULL,
-  max_xp int(11) DEFAULT NULL,
-  PRIMARY KEY (updated_at, player_id, tank_id),
-  INDEX FK_wot_player_tank_history (player_id, tank_id)
-)
-ENGINE = INNODB
-AVG_ROW_LENGTH = 143
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -352,7 +334,7 @@ CREATE TABLE wot_clan_history (
   REFERENCES wot_clan (clan_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 8192
+AVG_ROW_LENGTH = 5461
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -521,8 +503,8 @@ CREATE TABLE wot_teamspeak (
   REFERENCES wot_player (player_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 81
-AVG_ROW_LENGTH = 282
+AUTO_INCREMENT = 84
+AVG_ROW_LENGTH = 256
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -690,7 +672,7 @@ CREATE TABLE wot_presense (
   REFERENCES wot_teamspeak (client_database_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 50
+AVG_ROW_LENGTH = 42
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -820,24 +802,109 @@ AFTER UPDATE
 ON wot_clan
 FOR EACH ROW
 BEGIN
-  IF (new.ivanner_pos <> old.ivanner_pos) THEN
-    INSERT INTO wot_clan_history (updated_at, clan_id, ivanner_pos, ivanner_strength, ivanner_firepower, ivanner_skill)
-      VALUES (CURDATE(), old.clan_id, old.ivanner_pos, old.ivanner_strength, old.ivanner_firepower, old.ivanner_skill)
-    ON DUPLICATE KEY UPDATE ivanner_pos = old.ivanner_pos, ivanner_strength = old.ivanner_strength, ivanner_firepower = old.ivanner_firepower, ivanner_skill = old.ivanner_skill;
+  INSERT INTO wot_clan_history (updated_at,
+  clan_id,
+  ivanner_pos,
+  ivanner_strength,
+  ivanner_firepower,
+  ivanner_skill,
+  players_count,
+  players_pp,
+  players_wn8,
+  armor_gk_pos,
+  armor_gk_val,
+  armor_random_pos,
+  armor_random_val)
+    VALUES (CURDATE(), new.clan_id, new.ivanner_pos, new.ivanner_strength, new.ivanner_firepower, new.ivanner_skill, new.players_count, new.players_pp, new.players_wn8, new.armor_gk_pos, new.armor_gk_val, new.armor_random_pos, new.armor_random_val)
+  ON DUPLICATE KEY UPDATE
+  ivanner_pos = new.ivanner_pos,
+  ivanner_strength = new.ivanner_strength,
+  ivanner_firepower = new.ivanner_firepower,
+  ivanner_skill = new.ivanner_skill,
+  players_count = new.players_count,
+  players_pp = new.players_pp,
+  players_wn8 = new.players_wn8,
+  armor_gk_pos = new.armor_gk_pos,
+  armor_gk_val = new.armor_gk_val,
+  armor_random_pos = new.armor_random_pos,
+  armor_random_val = new.armor_random_val;
+END
+$$
+
+CREATE
+DEFINER = 'root'@'localhost'
+TRIGGER tr_wot_player_tank_update
+AFTER UPDATE
+ON wot_player_tank
+FOR EACH ROW
+BEGIN
+  SET @updated_at = (SELECT
+    updated_at
+  FROM wot_player wp
+  WHERE wp.player_id = new.player_id);
+  IF new.battles > old.battles THEN
+    INSERT INTO wot_player_tank_history (updated_at
+    , player_id
+    , tank_id
+    , max_xp
+    , wins
+    , battles
+    , max_frags
+    , mark_of_mastery
+    , in_garage)
+      VALUES (@updated_at, new.player_id, new.tank_id, new.max_xp, new.wins, new.battles, new.max_frags, new.mark_of_mastery, new.in_garage)
+    ON DUPLICATE KEY UPDATE max_xp = new.max_xp, wins = new.wins, battles = new.battles, max_frags = new.max_frags, mark_of_mastery = new.mark_of_mastery, in_garage = new.in_garage;
   END IF;
 END
 $$
 
 CREATE
 DEFINER = 'root'@'localhost'
-TRIGGER tr_wot_player_update
+TRIGGER wot_player_tank_statistic_update
 AFTER UPDATE
-ON wot_player
+ON wot_player_tank_statistic
 FOR EACH ROW
 BEGIN
-  INSERT INTO wot_player_history (updated_at, player_id, max_xp, effect, wn6, wn7, wn8)
-    VALUES (new.updated_at, new.player_id, new.max_xp, new.effect, new.wn6, new.wn7, new.wn8)
-  ON DUPLICATE KEY UPDATE max_xp = new.max_xp, effect = new.effect, wn6 = new.wn6, wn7 = new.wn7, wn8 = new.wn8;
+  IF new.battles <> old.battles THEN
+    INSERT INTO wot_player_tank_statistic_history (player_id
+    , tank_id
+    , statistic_id
+    , updated_at
+    , spotted
+    , hits
+    , battle_avg_xp
+    , draws
+    , wins
+    , losses
+    , capture_points
+    , battles
+    , damage_dealt
+    , hits_percents
+    , damage_received
+    , shots
+    , xp
+    , frags
+    , survived_battles
+    , dropped_capture_points)
+      VALUES (new.player_id, new.tank_id, new.statistic_id, new.updated_at, new.spotted, new.hits, new.battle_avg_xp, new.draws, new.wins, new.losses, new.capture_points, new.battles, new.damage_dealt, new.hits_percents, new.damage_received, new.shots, new.xp, new.frags, new.survived_battles, new.dropped_capture_points)
+    ON DUPLICATE KEY UPDATE
+    spotted = new.spotted,
+    hits = new.hits,
+    battle_avg_xp = new.battle_avg_xp,
+    draws = new.draws,
+    wins = new.wins,
+    losses = new.losses,
+    capture_points = new.capture_points,
+    battles = new.battles,
+    damage_dealt = new.damage_dealt,
+    hits_percents = new.hits_percents,
+    damage_received = new.damage_received,
+    shots = new.shots,
+    xp = new.xp,
+    frags = new.frags,
+    survived_battles = new.survived_battles,
+    dropped_capture_points = new.dropped_capture_points;
+  END IF;
 END
 $$
 
@@ -916,76 +983,14 @@ $$
 
 CREATE
 DEFINER = 'root'@'localhost'
-TRIGGER tr_wot_player_tank_update
+TRIGGER tr_wot_player_update
 AFTER UPDATE
-ON wot_player_tank
+ON wot_player
 FOR EACH ROW
 BEGIN
-  SET @updated_at = (SELECT
-      updated_at
-    FROM wot_player wp
-    WHERE wp.player_id = new.player_id);
-  IF new.battles > old.battles THEN
-    INSERT INTO wot_player_tank_history (updated_at
-    , player_id
-    , tank_id
-    , max_xp
-    , wins
-    , battles
-    , max_frags
-    , mark_of_mastery
-    , in_garage)
-      VALUES (@updated_at, new.player_id, new.tank_id, new.max_xp, new.wins, new.battles, new.max_frags, new.mark_of_mastery, new.in_garage)
-    ON DUPLICATE KEY UPDATE max_xp = new.max_xp, wins = new.wins, battles = new.battles, max_frags = new.max_frags, mark_of_mastery = new.mark_of_mastery, in_garage = new.in_garage;
-  END IF;
-END
-$$
-
-CREATE
-DEFINER = 'root'@'localhost'
-TRIGGER wot_player_tank_statistic_update
-AFTER UPDATE
-ON wot_player_tank_statistic
-FOR EACH ROW
-BEGIN
-  INSERT INTO wot_player_tank_statistic_history (player_id
-  , tank_id
-  , statistic_id
-  , updated_at
-  , spotted
-  , hits
-  , battle_avg_xp
-  , draws
-  , wins
-  , losses
-  , capture_points
-  , battles
-  , damage_dealt
-  , hits_percents
-  , damage_received
-  , shots
-  , xp
-  , frags
-  , survived_battles
-  , dropped_capture_points)
-    VALUES (new.player_id, new.tank_id, new.statistic_id, new.updated_at, new.spotted, new.hits, new.battle_avg_xp, new.draws, new.wins, new.losses, new.capture_points, new.battles, new.damage_dealt, new.hits_percents, new.damage_received, new.shots, new.xp, new.frags, new.survived_battles, new.dropped_capture_points)
-  ON DUPLICATE KEY UPDATE
-  spotted = new.spotted,
-  hits = new.hits,
-  battle_avg_xp = new.battle_avg_xp,
-  draws = new.draws,
-  wins = new.wins,
-  losses = new.losses,
-  capture_points = new.capture_points,
-  battles = new.battles,
-  damage_dealt = new.damage_dealt,
-  hits_percents = new.hits_percents,
-  damage_received = new.damage_received,
-  shots = new.shots,
-  xp = new.xp,
-  frags = new.frags,
-  survived_battles = new.survived_battles,
-  dropped_capture_points = new.dropped_capture_points;
+  INSERT INTO wot_player_history (updated_at, player_id, max_xp, effect, wn6, wn7, wn8)
+    VALUES (new.updated_at, new.player_id, new.max_xp, new.effect, new.wn6, new.wn7, new.wn8)
+  ON DUPLICATE KEY UPDATE max_xp = new.max_xp, effect = new.effect, wn6 = new.wn6, wn7 = new.wn7, wn8 = new.wn8;
 END
 $$
 
