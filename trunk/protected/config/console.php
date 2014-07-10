@@ -5,26 +5,23 @@
 
 $config=require(dirname(__FILE__).'/common.php');
 
+$routes=array(
+	array(
+		'logFile'=>'console.log',
+		'class'=>'CFileLogRoute',
+		'levels'=>'error, warning',
+	),
+);
+
+if(file_exists(__DIR__.'/mailroute.php'))
+	$routes[]=require(__DIR__.'/mailroute.php');
+
 $config=CMap::mergeArray($config,array(
 	'name'=>'My Console Application',
 	'components'=>array(
 		'log'=>array(
 			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'logFile'=>'console.log',
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				array(
-					'utf8'=>true,
-					'subject'=>'MUMMI console error',
-					'class'=>'CEmailLogRoute',
-					'levels'=>'error',
-					'emails'=>'borodulin@gmail.com',
-					'except'=>'exception.CHttpException.*',
-				),
-			),
+			'routes'=>$routes,
 		),
 	),
 ));
